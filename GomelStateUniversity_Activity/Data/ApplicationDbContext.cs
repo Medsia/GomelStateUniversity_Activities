@@ -14,9 +14,9 @@ namespace GomelStateUniversity_Activity.Data
         {
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(builder);
         }
         
         public DbSet<Event> Events { get; set; }

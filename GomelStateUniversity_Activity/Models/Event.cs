@@ -17,6 +17,5 @@ namespace GomelStateUniversity_Activity.Models
         public double TicketPrice { get; set; }
 
         public virtual Subdivision Subdivision { get; set; }
-        public List<ApplicationUser> ApplicationUsers { get; set; } = new List<ApplicationUser>();
     }
 }
