@@ -18,7 +18,7 @@ namespace GomelStateUniversity_Activity.Data
         {
             base.OnModelCreating(builder);
         }
-        
+
         public DbSet<Event> Events { get; set; }
         public DbSet<Subdivision> Subdivisions { get; set; }
         public DbSet<Review> Reviews { get; set; }
