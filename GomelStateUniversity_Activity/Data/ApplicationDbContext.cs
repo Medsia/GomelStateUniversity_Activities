@@ -14,9 +14,19 @@ namespace GomelStateUniversity_Activity.Data
         {
         }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(builder);
+            modelBuilder.Entity<EventUsers>()
+                .HasKey(t => new { t.EventId, t.ApplicationUserId});
+            modelBuilder.Entity<EventUsers>()
+                .HasOne(sc => sc.Event)
+                .WithMany(s => s.EventUsers)
+                .HasForeignKey(sc => sc.EventId);
+            modelBuilder.Entity<EventUsers>()
+                .HasOne(sc => sc.ApplicationUser)
+                .WithMany(s => s.EventUsers)
+                .HasForeignKey(sc => sc.ApplicationUserId);
+            base.OnModelCreating(modelBuilder);
         }
         
         public DbSet<Event> Events { get; set; }
