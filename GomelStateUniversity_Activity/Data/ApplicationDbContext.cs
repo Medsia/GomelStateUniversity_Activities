@@ -21,5 +21,6 @@ namespace GomelStateUniversity_Activity.Data
         
         public DbSet<Event> Events { get; set; }
         public DbSet<Subdivision> Subdivisions { get; set; }
+        public DbSet<Review> Reviews { get; set; }
     }
 }
