@@ -14,12 +14,13 @@ namespace GomelStateUniversity_Activity.Data
         {
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(builder);
         }
         
         public DbSet<Event> Events { get; set; }
         public DbSet<Subdivision> Subdivisions { get; set; }
+        public DbSet<Review> Reviews { get; set; }
     }
 }
