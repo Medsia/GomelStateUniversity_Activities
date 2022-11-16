@@ -73,7 +73,7 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account
 
             [DataType(DataType.Password)]
             [Display(Name = "Повторите пароль")]
-            [Compare("Password", ErrorMessage = "Введенный и проверочный пароли не совпадают")]
+            [Compare("Password", ErrorMessage = "Введенные пароли не совпадают")]
             public string ConfirmPassword { get; set; }
 
 
