@@ -4,14 +4,16 @@ using GomelStateUniversity_Activity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GomelStateUniversity_Activity.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221115173542_AppUserExpansion")]
+    partial class AppUserExpansion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -132,21 +134,6 @@ namespace GomelStateUniversity_Activity.Data.Migrations
                     b.HasIndex("SubdivisionId");
 
                     b.ToTable("Events");
-                });
-
-            modelBuilder.Entity("GomelStateUniversity_Activity.Models.EventUsers", b =>
-                {
-                    b.Property<int>("EventId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("EventId", "ApplicationUserId");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("EventUsers");
                 });
 
             modelBuilder.Entity("GomelStateUniversity_Activity.Models.Review", b =>
@@ -332,21 +319,6 @@ namespace GomelStateUniversity_Activity.Data.Migrations
                     b.HasOne("GomelStateUniversity_Activity.Models.Subdivision", "Subdivision")
                         .WithMany("Events")
                         .HasForeignKey("SubdivisionId");
-                });
-
-            modelBuilder.Entity("GomelStateUniversity_Activity.Models.EventUsers", b =>
-                {
-                    b.HasOne("GomelStateUniversity_Activity.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("EventUsers")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GomelStateUniversity_Activity.Models.Event", "Event")
-                        .WithMany("EventUsers")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("GomelStateUniversity_Activity.Models.Review", b =>
