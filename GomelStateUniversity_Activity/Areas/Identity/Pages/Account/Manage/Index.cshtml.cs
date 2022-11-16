@@ -23,6 +23,7 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account.Manage
             _signInManager = signInManager;
         }
 
+        [Display(Name = "Имя пользователя")]
         public string Username { get; set; }
 
         [TempData]
@@ -34,7 +35,7 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account.Manage
         public class InputModel
         {
             [Phone]
-            [Display(Name = "Phone number")]
+            [Display(Name = "Номер телефона")]
             public string PhoneNumber { get; set; }
         }
 
@@ -89,7 +90,7 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account.Manage
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
+            StatusMessage = "Профиль обновлен";
             return RedirectToPage();
         }
     }
