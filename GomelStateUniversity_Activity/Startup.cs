@@ -37,6 +37,7 @@ namespace GomelStateUniversity_Activity
             services.AddRazorPages();
             services.AddSingleton<IEventRepository, EventRepository>();
             services.AddSingleton<ISubdivisionRepository, SubdivisionRepository>();
+            services.AddSingleton<IReviewsRepository, ReviewsRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -134,21 +134,6 @@ namespace GomelStateUniversity_Activity.Data.Migrations
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("GomelStateUniversity_Activity.Models.EventUsers", b =>
-                {
-                    b.Property<int>("EventId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("EventId", "ApplicationUserId");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("EventUsers");
-                });
-
             modelBuilder.Entity("GomelStateUniversity_Activity.Models.Review", b =>
                 {
                     b.Property<int>("Id")
@@ -332,21 +317,6 @@ namespace GomelStateUniversity_Activity.Data.Migrations
                     b.HasOne("GomelStateUniversity_Activity.Models.Subdivision", "Subdivision")
                         .WithMany("Events")
                         .HasForeignKey("SubdivisionId");
-                });
-
-            modelBuilder.Entity("GomelStateUniversity_Activity.Models.EventUsers", b =>
-                {
-                    b.HasOne("GomelStateUniversity_Activity.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("EventUsers")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GomelStateUniversity_Activity.Models.Event", "Event")
-                        .WithMany("EventUsers")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("GomelStateUniversity_Activity.Models.Review", b =>
