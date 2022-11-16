@@ -14,5 +14,7 @@ namespace GomelStateUniversity_Activity.Models
         public string Faculty { get; set; }
         public int Year { get; set; }
         public string Group { get; set; }
+        
+        public IEnumerable<EventUsers> EventUsers { get; set; }
     }
 }

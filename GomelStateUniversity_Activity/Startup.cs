@@ -35,6 +35,8 @@ namespace GomelStateUniversity_Activity
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddSingleton<IEventRepository, EventRepository>();
+            services.AddSingleton<ISubdivisionRepository, SubdivisionRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
