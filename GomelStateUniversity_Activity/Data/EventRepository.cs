@@ -39,13 +39,14 @@ namespace GomelStateUniversity_Activity.Data
         {
             return await db.Events.Include(c => c.EventUsers)
                             .ThenInclude(s => s.ApplicationUser)
-                            .Where(x => x.EventUsers.Any(c => c.ApplicationUser.Id == userId)).ToListAsync(); ;                
+                            .Where(x => x.EventUsers.Any(c => c.ApplicationUser.Id == userId)).ToListAsync();
         }
 
         public async Task UpdateEventAsync(IFormCollection form)
         {
             var eventToUpdate = db.Events.FirstOrDefault(x => x.Id == int.Parse(form["Id"]));
             var subdivision = db.Subdivisions.FirstOrDefault(x => x.Name == form["Subdivision"]);
+
             eventToUpdate.UpdateEvent(form, subdivision);
             db.Entry(eventToUpdate).State = EntityState.Modified;
             await db.SaveChangesAsync();

@@ -37,7 +37,6 @@ namespace GomelStateUniversity_Activity.Controllers
 
         public IActionResult Psychologist() => View();
 
-        public IActionResult Reviews() => View();
 
         public IActionResult Privacy() => View();
 

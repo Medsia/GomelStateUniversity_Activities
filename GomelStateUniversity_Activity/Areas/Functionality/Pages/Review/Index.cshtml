@@ -1,0 +1,42 @@
+﻿@page
+@model GomelStateUniversity_Activity.Areas.Functionality.Pages.Review.IndexModel
+
+@{
+    ViewData["Title"] = "Озывы";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+
+<div class="">
+    <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <h4>Просмотр отзывов.</h4>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                @foreach(var review in Model.reviews)
+                {
+                    <div class="mb-5">
+                        <div class="form-group">
+                            <label>Дата</label>
+                            <p class="form-control">@review.Event.DateTime</p>
+                        </div>
+                        <div class="form-group">
+                            <label>ФИО</label>
+                            <p class="form-control">@review.ApplicationUser.FullName</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Название мероприятия</label>
+                            <p class="form-control">@review.Event.Name</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Отзыв</label>
+                            <p class="form-control">@review.Text</p>
+                        </div>
+                    </div>
+                }
+            </div>
+
+        </div>
+    </form>
+</div>
