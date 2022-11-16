@@ -8,5 +8,7 @@ namespace GomelStateUniversity_Activity.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        public IEnumerable<EventUsers> EventUsers { get; set; }
+        
     }
 }
