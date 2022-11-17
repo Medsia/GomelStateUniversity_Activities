@@ -13,7 +13,8 @@ namespace GomelStateUniversity_Activity.Data
         private ApplicationDbContext db = new ApplicationDbContext();
         public async Task CreateEventAsync(IFormCollection form)
         {
-            Event newEvent = new Event(form, db.Subdivisions.FirstOrDefault(x => x.Name == form["Subdivision"]));
+            var subdivisionName = form["Subdivision"].ToString();
+            Event newEvent = new Event(form, db.Subdivisions.FirstOrDefault(x => x.Name == subdivisionName ));
             db.Events.Add(newEvent);
             await db.SaveChangesAsync();
         }
@@ -27,7 +28,8 @@ namespace GomelStateUniversity_Activity.Data
 
         public async Task<Event> GetEventAsync(int id)
         {
-            return await db.Events.FirstOrDefaultAsync(x => x.Id == id);
+            return await db.Events.Include(x => x.Subdivision)
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<IEnumerable<Event>> GetEventsAsync()
@@ -44,9 +46,11 @@ namespace GomelStateUniversity_Activity.Data
 
         public async Task UpdateEventAsync(IFormCollection form)
         {
-            var eventToUpdate = db.Events.FirstOrDefault(x => x.Id == int.Parse(form["Id"]));
-            var subdivision = db.Subdivisions.FirstOrDefault(x => x.Name == form["Subdivision"]);
 
+            var subdivisionName = form["Subdivision"].ToString();
+            var eventId = int.Parse(form["Event.Id"]);
+            var eventToUpdate = db.Events.FirstOrDefault(x => x.Id == eventId);
+            var subdivision = db.Subdivisions.FirstOrDefault(x => x.Name == subdivisionName);
             eventToUpdate.UpdateEvent(form, subdivision);
             db.Entry(eventToUpdate).State = EntityState.Modified;
             await db.SaveChangesAsync();

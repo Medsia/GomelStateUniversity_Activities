@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\20221116152224_AddReviewsToEvent.cs" />
+    <Compile Remove="Data\Migrations\20221116152224_AddReviewsToEvent.Designer.cs" />
     <Compile Remove="Data\Migrations\20221116184750_AppUser_FullName.cs" />
     <Compile Remove="Data\Migrations\20221116184750_AppUser_FullName.Designer.cs" />
   </ItemGroup>
