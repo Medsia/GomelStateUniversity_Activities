@@ -41,11 +41,12 @@ namespace GomelStateUniversity_Activity.Data
         {
             return await db.Events.Include(c => c.EventUsers)
                             .ThenInclude(s => s.ApplicationUser)
-                            .Where(x => x.EventUsers.Any(c => c.ApplicationUser.Id == userId)).ToListAsync(); ;                
+                            .Where(x => x.EventUsers.Any(c => c.ApplicationUser.Id == userId)).ToListAsync();
         }
 
         public async Task UpdateEventAsync(IFormCollection form)
         {
+
             var subdivisionName = form["Subdivision"].ToString();
             var eventId = int.Parse(form["Event.Id"]);
             var eventToUpdate = db.Events.FirstOrDefault(x => x.Id == eventId);
