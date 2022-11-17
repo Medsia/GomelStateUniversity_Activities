@@ -9,6 +9,8 @@
   <ItemGroup>
     <Compile Remove="Data\Migrations\20221116184750_AppUser_FullName.cs" />
     <Compile Remove="Data\Migrations\20221116184750_AppUser_FullName.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221117172306_Review_DateTime.cs" />
+    <Compile Remove="Data\Migrations\20221117172306_Review_DateTime.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

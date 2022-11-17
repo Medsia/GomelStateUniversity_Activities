@@ -12,6 +12,7 @@ namespace GomelStateUniversity_Activity.Models
         [Key]
         public int Id { get; set; }
         public string Text { get; set; }
+        public DateTime DateTime { get; set; }
         public virtual Event Event { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
 
@@ -19,17 +20,17 @@ namespace GomelStateUniversity_Activity.Models
         {
         }
 
-        public Review(IFormCollection form, Event singleEvent, ApplicationUser applicationUser)
+        public Review(IFormCollection form, DateTime dateTime, Event singleEvent, ApplicationUser applicationUser)
         {
-            Id = int.Parse(form["Id"]);
             Text = form["Text"];
+            DateTime = dateTime;
             Event = singleEvent;
             ApplicationUser = applicationUser;
         }
-        public void UpdateReview(IFormCollection form, Event singleEvent, ApplicationUser applicationUser)
+        public void UpdateReview(IFormCollection form, DateTime dateTime, Event singleEvent, ApplicationUser applicationUser)
         {
-            Id = int.Parse(form["Id"]);
             Text = form["Text"];
+            DateTime = dateTime;
             Event = singleEvent;
             ApplicationUser = applicationUser;
         }
