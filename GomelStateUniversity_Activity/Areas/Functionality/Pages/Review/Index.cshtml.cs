@@ -41,7 +41,7 @@ namespace GomelStateUniversity_Activity.Areas.Functionality.Pages.Review
 
         public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
-            returnUrl = returnUrl ?? Url.Content("~/");
+            ReturnUrl = returnUrl;
 
             reviews = await _reviewsRepository.GetReviewsAsync();
 
@@ -50,7 +50,7 @@ namespace GomelStateUniversity_Activity.Areas.Functionality.Pages.Review
 
         public void OnPost(string returnUrl = null)
         {
-            ReturnUrl = returnUrl;
+            returnUrl = returnUrl ?? Url.Content("~/");
         }
     }
 }

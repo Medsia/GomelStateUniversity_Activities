@@ -32,6 +32,11 @@ namespace GomelStateUniversity_Activity.Data
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<Event> GetEventAsync(string name)
+        {
+            return await db.Events.FirstOrDefaultAsync(x => x.Name == name);
+        }
+
         public async Task<IEnumerable<Event>> GetEventsAsync()
         {
             return await db.Events.ToListAsync();
