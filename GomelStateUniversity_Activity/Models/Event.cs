@@ -26,22 +26,20 @@ namespace GomelStateUniversity_Activity.Models
         }
         public Event(IFormCollection form, Subdivision subdivision)
         {
-            Id = int.Parse(form["Id"]);
-            Name = form["Name"];
-            Description = form["Description"];
-            DateTime = DateTime.Parse(form["DateTime"]);
-            TicketsCount = int.Parse(form["TicketsCount"]);
-            TicketPrice = double.Parse(form["TicketPrice"]);
+            Name = form["Event.Name"].ToString();
+            Description = form["Event.Description"].ToString();
+            DateTime = DateTime.Parse(form["Event.DateTime"].ToString());
+            TicketsCount = int.Parse(form["Event.TicketsCount"].ToString());
+            TicketPrice = double.Parse(form["Event.TicketPrice"].ToString());
             Subdivision = subdivision;
         }
         public void UpdateEvent(IFormCollection form, Subdivision subdivision)
         {
-            Id = int.Parse(form["Id"]);
-            Name = form["Name"];
-            Description = form["Description"];
-            DateTime = DateTime.Parse(form["DateTime"]);
-            TicketsCount = int.Parse(form["TicketsCount"]);
-            TicketPrice = double.Parse(form["TicketPrice"]);
+            Name = form["Event.Name"].ToString();
+            Description = form["Event.Description"].ToString();
+            DateTime = DateTime.Parse(form["Event.DateTime"].ToString());
+            TicketsCount = int.Parse(form["Event.TicketsCount"].ToString());
+            TicketPrice = double.Parse(form["Event.TicketPrice"].ToString());
             Subdivision = subdivision;
         }
     }
