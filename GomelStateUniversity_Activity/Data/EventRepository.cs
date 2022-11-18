@@ -34,7 +34,7 @@ namespace GomelStateUniversity_Activity.Data
 
         public async Task<IEnumerable<Event>> GetEventsAsync()
         {
-            return await db.Events.ToListAsync();
+            return await db.Events.Include(x => x.Subdivision).ToListAsync();
         }
 
         public async Task<IEnumerable<Event>> GetMyEventsAsync(string userId)
