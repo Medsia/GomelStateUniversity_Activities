@@ -11,11 +11,9 @@ namespace GomelStateUniversity_Activity.Controllers
 {
     public class SubdivisionController : Controller
     {
-        private readonly IEventRepository _eventRepository;
         private readonly ISubdivisionRepository _subdivisionRepository;
-        public SubdivisionController(IEventRepository eventRepository, ISubdivisionRepository subdivisionRepository)
+        public SubdivisionController(ISubdivisionRepository subdivisionRepository)
         {
-            _eventRepository = eventRepository;
             _subdivisionRepository = subdivisionRepository;
         }
 

@@ -68,6 +68,10 @@ namespace GomelStateUniversity_Activity
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapControllerRoute(
+                name: "HomeActionOnly",
+                pattern: "{action}/{id?}",
+                defaults: new { controller = "Home", action = "Index" });
             });
         }
     }

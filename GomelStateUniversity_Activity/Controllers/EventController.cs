@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace GomelStateUniversity_Activity.Controllers
 {
+
     public class EventController : Controller
     {
         private readonly IEventRepository _eventRepository;
