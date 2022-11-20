@@ -59,5 +59,10 @@ namespace GomelStateUniversity_Activity.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        public ViewResult PageNotFound()
+        {
+            Response.StatusCode = 404;
+            return View();
+        }
     }
 }
