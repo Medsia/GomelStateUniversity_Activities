@@ -10,7 +10,7 @@ using System.Security.Claims;
 
 namespace GomelStateUniversity_Activity.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -33,7 +33,7 @@ namespace GomelStateUniversity_Activity.Controllers
             ViewData["Events"] = JSONListHelper.GetEventListJSONString(_eventRepository.GetEventsAsync().Result);
             return View();
         }
-        [Authorize]
+        
         public IActionResult MyCalendar()
         {
             var userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
