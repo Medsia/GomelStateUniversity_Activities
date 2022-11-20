@@ -22,13 +22,13 @@ namespace GomelStateUniversity_Activity.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<EventUsers>()
+            modelBuilder.Entity<EventUser>()
                 .HasKey(t => new { t.EventId, t.ApplicationUserId});
-            modelBuilder.Entity<EventUsers>()
+            modelBuilder.Entity<EventUser>()
                 .HasOne(sc => sc.Event)
                 .WithMany(s => s.EventUsers)
                 .HasForeignKey(sc => sc.EventId);
-            modelBuilder.Entity<EventUsers>()
+            modelBuilder.Entity<EventUser>()
                 .HasOne(sc => sc.ApplicationUser)
                 .WithMany(s => s.EventUsers)
                 .HasForeignKey(sc => sc.ApplicationUserId);
@@ -50,6 +50,6 @@ namespace GomelStateUniversity_Activity.Data
         public DbSet<Event> Events { get; set; }
         public DbSet<Subdivision> Subdivisions { get; set; }
         public DbSet<Review> Reviews { get; set; }
-        public DbSet<EventUsers> EventUsers { get; set; }
+        public DbSet<EventUser> EventUsers { get; set; }
     }
 }

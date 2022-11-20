@@ -48,6 +48,11 @@ namespace GomelStateUniversity_Activity.Data
                             .ThenInclude(s => s.ApplicationUser)
                             .Where(x => x.EventUsers.Any(c => c.ApplicationUser.Id == userId)).ToListAsync();
         }
+        public async Task<IEnumerable<Event>> GetEventsBySubdivisionAsync(int subdivisionId)
+        {
+            return await db.Events.Include(c => c.Subdivision)
+                            .Where(c => c.Subdivision.Id == subdivisionId).ToListAsync();
+        }
 
         public async Task UpdateEventAsync(IFormCollection form)
         {
@@ -60,5 +65,6 @@ namespace GomelStateUniversity_Activity.Data
             db.Entry(eventToUpdate).State = EntityState.Modified;
             await db.SaveChangesAsync();
         }
+
     }
 }

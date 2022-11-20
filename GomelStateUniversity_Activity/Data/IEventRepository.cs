@@ -16,6 +16,7 @@ namespace GomelStateUniversity_Activity.Data
         public Task CreateEventAsync(IFormCollection form);
         public Task UpdateEventAsync(IFormCollection form);
         public Task DeleteEventAsync(int id);
+        public Task<IEnumerable<Event>> GetEventsBySubdivisionAsync(int subdivisionId);
 
     }
 }
