@@ -12,9 +12,9 @@ namespace GomelStateUniversity_Activity.Data
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        public async Task CreateReviewAsync(IFormCollection form, DateTime dateTime)
+        public async Task CreateReviewAsync(IFormCollection form)
         {
-            Review newReview = new Review(form, dateTime, db.Events.FirstOrDefault(x => x.Id == int.Parse(form["EventId"])),
+            Review newReview = new Review(form, DateTime.Now, db.Events.FirstOrDefault(x => x.Id == int.Parse(form["EventId"])),
                                                             db.Users.FirstOrDefault(x => x.UserName == form["UserName"].ToString()));
             db.Reviews.Add(newReview);
             await db.SaveChangesAsync();
@@ -49,13 +49,13 @@ namespace GomelStateUniversity_Activity.Data
                                     .OrderByDescending(d => d).ToListAsync();
         }
 
-        public async Task UpdateReviewAsync(IFormCollection form, DateTime dateTime)
+        public async Task UpdateReviewAsync(IFormCollection form)
         {
             var reviewToUpdate = db.Reviews.FirstOrDefault(x => x.Id == int.Parse(form["Id"]));
-            var singleEvent = db.Events.FirstOrDefault(x => x.Name == form["Event"]);
-            var appUser = db.Users.FirstOrDefault(x => x.UserName == form["User"]);
+            var singleEvent = db.Events.FirstOrDefault(x => x.Name == form["Event"].ToString());
+            var appUser = db.Users.FirstOrDefault(x => x.UserName == form["User"].ToString());
 
-            reviewToUpdate.UpdateReview(form, dateTime, singleEvent, appUser);
+            reviewToUpdate.UpdateReview(form, DateTime.Now, singleEvent, appUser);
             db.Entry(reviewToUpdate).State = EntityState.Modified;
             await db.SaveChangesAsync();
         }

@@ -96,7 +96,7 @@ namespace GomelStateUniversity_Activity.Areas.Functionality.Pages.Review
 
                 FormCollection form = new FormCollection(formData);
                 
-                await _reviewsRepository.CreateReviewAsync(form, currentTime);
+                await _reviewsRepository.CreateReviewAsync(form);
 
                 _logger.LogInformation("User created a new review.");
             }
