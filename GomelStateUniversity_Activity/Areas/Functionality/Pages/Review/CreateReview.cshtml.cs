@@ -51,56 +51,37 @@ namespace GomelStateUniversity_Activity.Areas.Functionality.Pages.Review
         [DataType(DataType.DateTime)]
         public DateTime currentTime { get; set; } = DateTime.Now;
 
-        public List<string> eventNames { get; set; } = new List<string>();
+        public IEnumerable<Event> events { get; set; } = Enumerable.Empty<Event>();
 
-        public string knownEventName { get; set; }
+        public Event knownEvent { get; set; }
 
 
         public class InputModel
         {
-            [Required]
-            [DataType(DataType.DateTime)]
-            [Display(Name = "Дата/время")]
-            public DateTime currentTime { get; set; }
-
-            [Required]
-            [StringLength(50, MinimumLength = 1)]
+            [Required(ErrorMessage = "Не выбрано мероприятие")]
             [Display(Name = "Название мероприятия")]
-            public string eventName { get; set; }
+            public int eventId { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Отзыв не должен быть пустым")]
             [StringLength(255, ErrorMessage = "Максимальный размер отзыва {1} символов.")]
             [Display(Name = "Текст отзыва")]
             public string reviewText { get; set; }
         }
 
 
-        private async Task SetValues()
+        public async Task OnGetAsync(int eventId, string returnUrl = null)
         {
+            ReturnUrl = returnUrl;
+            knownEvent = await _eventRepository.GetEventAsync(eventId);
+
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             currentUsersFullName = user.FullName;
 
-            var events = await _eventRepository.GetEventsAsync();
-            foreach (var ev in events)
-            {
-                eventNames.Add(ev.Name);
-            }
-
-            
-            // тестовый кал
-            eventNames.Add("Кал ебаный");
+            events = await _eventRepository.GetEventsAsync();
         }
 
 
-        public async Task OnGetAsync(string eventName, string returnUrl = null)
-        {
-            ReturnUrl = returnUrl;
-            knownEventName = eventName;
-            await SetValues();
-        }
-
-
-        public async Task OnPostAsync(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
 
@@ -109,18 +90,18 @@ namespace GomelStateUniversity_Activity.Areas.Functionality.Pages.Review
                 Dictionary<string, Microsoft.Extensions.Primitives.StringValues> formData = new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>
                 {
                     { "Text", Input.reviewText },
-                    { "EventName", Input.eventName },
+                    { "EventId", Input.eventId.ToString() },
                     { "UserName", User.Identity.Name },
                 };
 
                 FormCollection form = new FormCollection(formData);
                 
-                await _reviewsRepository.CreateReviewAsync(form, Input.currentTime);
+                await _reviewsRepository.CreateReviewAsync(form, currentTime);
 
                 _logger.LogInformation("User created a new review.");
             }
 
-            await SetValues();
+            return LocalRedirect(returnUrl);
         }
     }
 }
