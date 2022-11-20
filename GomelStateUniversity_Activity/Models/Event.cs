@@ -19,7 +19,7 @@ namespace GomelStateUniversity_Activity.Models
 
         public virtual Subdivision Subdivision { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }
-        public IEnumerable<EventUsers> EventUsers { get; set; }
+        public IEnumerable<EventUser> EventUsers { get; set; }
         public Event()
         {
             

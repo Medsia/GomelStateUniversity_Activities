@@ -1,24 +1,27 @@
 ﻿using GomelStateUniversity_Activity.Data;
 using GomelStateUniversity_Activity.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace GomelStateUniversity_Activity.Controllers
 {
-
+    [Authorize]
     public class EventController : Controller
     {
         private readonly IEventRepository _eventRepository;
         private readonly ISubdivisionRepository _subdivisionRepository;
-        public EventController(IEventRepository eventRepository, ISubdivisionRepository subdivisionRepository)
+        private readonly IEventUserRepository _eventUserRepository;
+        public EventController(IEventRepository eventRepository, ISubdivisionRepository subdivisionRepository,
+            IEventUserRepository eventUserRepository)
         {
             _eventRepository = eventRepository;
             _subdivisionRepository = subdivisionRepository;
+            _eventUserRepository = eventUserRepository;
         }
 
         // GET: Event
@@ -140,5 +143,45 @@ namespace GomelStateUniversity_Activity.Controllers
             TempData["Message"] = "Событие удалено.";
             return RedirectToAction(nameof(Index));
         }
+        public async Task<IActionResult> Subscribe(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            await _eventUserRepository.SubscribeUserAsync((int)id, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            TempData["Message"] = "Вы записались.";
+            return RedirectToAction(nameof(Index));
+        }
+        public async Task<IActionResult> UnSubscribe(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            try
+            {
+                await _eventUserRepository.UnSubscribeUserAsync((int)id, User.FindFirstValue(ClaimTypes.NameIdentifier));
+                TempData["Message"] = "Вы отписались.";
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] = "Операция невозможна." + ex.Message;
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+        public async Task<IActionResult> SubscribeGroup(int? id, uint amount)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            await _eventUserRepository.SubscribeUserGroupAsync((int)id, User.FindFirstValue(ClaimTypes.NameIdentifier), amount);
+            TempData["Message"] = "Группа записана.";
+
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }

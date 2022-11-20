@@ -36,6 +36,7 @@ namespace GomelStateUniversity_Activity
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddSingleton<IEventRepository, EventRepository>();
+            services.AddSingleton<IEventUserRepository, EventUserRepository>();
             services.AddSingleton<ISubdivisionRepository, SubdivisionRepository>();
             services.AddSingleton<IReviewsRepository, ReviewsRepository>();
         }
