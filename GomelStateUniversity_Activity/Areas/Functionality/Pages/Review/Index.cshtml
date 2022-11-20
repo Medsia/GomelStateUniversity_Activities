@@ -5,34 +5,31 @@
     ViewData["Title"] = "Озывы";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h4>@ViewData["Title"]</h4>
+<hr />
 
 
 <div class="form-inline">
     <form class="col-md-9" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-        <h4>Просмотр отзывов.</h4>
-        <hr />
-        <div class="box-shadow">
-            @foreach(var review in @Model.reviews)
-            {
+        @foreach(var review in @Model.reviews)
+        {
+            <div class="box-shadow">
                 <div class="mb-5">
-                    <div class="form-group mb-3 mr-3 ml-3">
+                    <div class="form-group mr-3 ml-3">
                         <p>@review.ApplicationUser.FullName</p>
                         <hr>
                         <p>@review.DateTime</p>
                     </div>
                     <div class="mr-3 ml-3">
-                        <p>Название мероприятия</p>
-                        @*<p class="form-control">@review.Event.Name</p>*@
+                        <p class="form-control">@review.Event.Name</p>
                     </div>
                     <div class="mr-3 ml-3">
-                        <p>Отзыв</p>
-                        <textarea readonly rows="3" cols="100" class="form-control text-wrap">@review.Text</textarea>
+                        <textarea readonly rows="3" cols="100" class="form-control text-wrap mb-3" style="min-height: 40px; max-height: 200px;">@review.Text</textarea>
                     </div>
                 </div>
-            }
-        </div>
+            </div>
+        }
     </form>
 
-    <a class="btn btn-outline-primary text-center" asp-area="Functionality" asp-page="/Review/CreateReview">Написать отзыв</a>
+    <a class="btn btn-outline-primary text-center mb-auto mx-5" asp-area="Functionality" asp-page="/Review/CreateReview">Написать отзыв</a>
 </div>

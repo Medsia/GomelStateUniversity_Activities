@@ -14,7 +14,7 @@ namespace GomelStateUniversity_Activity.Data
 
         public async Task CreateReviewAsync(IFormCollection form, DateTime dateTime)
         {
-            Review newReview = new Review(form, dateTime, db.Events.FirstOrDefault(x => x.Name == form["EventName"].ToString()),
+            Review newReview = new Review(form, dateTime, db.Events.FirstOrDefault(x => x.Id == int.Parse(form["EventId"])),
                                                             db.Users.FirstOrDefault(x => x.UserName == form["UserName"].ToString()));
             db.Reviews.Add(newReview);
             await db.SaveChangesAsync();
@@ -29,20 +29,24 @@ namespace GomelStateUniversity_Activity.Data
 
         public async Task<IEnumerable<Review>> GetMyReviewsAsync(string userId)
         {
-            return await db.Reviews.Include(c => c.ApplicationUser)
-                                    .Where(x => x.ApplicationUser.Id == userId).ToListAsync();
+            return await db.Reviews.Include(z => z.Event)
+                                    .Include(c => c.ApplicationUser)
+                                    .Where(x => x.ApplicationUser.Id == userId)
+                                    .OrderByDescending(d => d).ToListAsync();
         }
 
         public async Task<Review> GetReviewAsync(int id)
         {
-            return await db.Reviews.Include(c => c.ApplicationUser)
+            return await db.Reviews.Include(z => z.Event)
+                                    .Include(c => c.ApplicationUser)
                                     .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<IEnumerable<Review>> GetReviewsAsync()
         {
-            return await db.Reviews.Include(c => c.ApplicationUser)
-                                    .ToListAsync();
+            return await db.Reviews.Include(z => z.Event)
+                                    .Include(c => c.ApplicationUser)
+                                    .OrderByDescending(d => d).ToListAsync();
         }
 
         public async Task UpdateReviewAsync(IFormCollection form, DateTime dateTime)
