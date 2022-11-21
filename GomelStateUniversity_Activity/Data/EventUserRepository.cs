@@ -1,4 +1,6 @@
 ﻿using GomelStateUniversity_Activity.Models;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Threading.Tasks;
 
 namespace GomelStateUniversity_Activity.Data
@@ -6,25 +8,57 @@ namespace GomelStateUniversity_Activity.Data
     public class EventUserRepository : IEventUserRepository
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        public async Task SubscribeUserAsync(int EventId, string userId)
+        public async Task SubscribeUserAsync(int eventId, string userId)
         {
-            EventUser eventUser = new EventUser(EventId, userId);
-            db.EventUsers.Add(eventUser);
+            var eventToUpdate = db.Events.Find(eventId);
+            if (eventToUpdate.TicketsCount <= 0)
+            {
+                return;
+            }
+            EventUser eventUser = new EventUser(eventId, userId);
+            db.EventUsers.Add(eventUser);           
+            
+            eventToUpdate.TicketsCount--;
+            db.Entry(eventToUpdate).State = EntityState.Modified;
             await db.SaveChangesAsync();
         }
-        public async Task UnSubscribeUserAsync(int EventId, string userId)
+        public async Task UnSubscribeUserAsync(int eventId, string userId)
         {
-            EventUser eventUser = new EventUser(EventId, userId);
+            var eventToUpdate = db.Events.Find(eventId);
+            var eventUser = db.EventUsers.Find(eventId, userId);
+            try
+            {
+                if (eventToUpdate == null || eventUser == null)
+                    throw new NullReferenceException("Вы не записаны");
+                if (eventToUpdate.TicketsCount <= eventUser.Tickets)
+                {
+                    throw new InvalidOperationException("Кол-во билетов превышает допустимое количество");
+                }
 
-            db.EventUsers.Remove(eventUser);
-            await db.SaveChangesAsync();
+                db.EventUsers.Remove(eventUser);
+                eventToUpdate.TicketsCount += eventUser.Tickets;
+                db.Entry(eventToUpdate).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }         
 
         }
-        public async Task SubscribeUserGroupAsync(int EventId, string userId, int amount)
+        public async Task SubscribeUserGroupAsync(int eventId, string userId, int amount)
         {
-
-            EventUser eventUser = new EventUser(EventId, userId, amount);
+            var eventToUpdate = db.Events.Find(eventId);
+            if(eventToUpdate.TicketsCount < amount)
+            {
+                return;
+            }         
+            
+            EventUser eventUser = new EventUser(eventId, userId, amount);
             db.EventUsers.Add(eventUser);
+            eventToUpdate.TicketsCount -= amount;
+            db.Entry(eventToUpdate).State = EntityState.Modified;
+            
 
             await db.SaveChangesAsync();
         }

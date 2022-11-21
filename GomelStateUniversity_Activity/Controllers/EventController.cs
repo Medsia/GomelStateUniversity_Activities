@@ -140,7 +140,7 @@ namespace GomelStateUniversity_Activity.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _eventRepository.DeleteEventAsync(id);
-            TempData["Message"] = "Событие удалено.";
+            TempData["Message"] = "Событие удалено. ";
             return RedirectToAction(nameof(Index));
         }
         public async Task<IActionResult> Subscribe(int? id)
@@ -149,8 +149,16 @@ namespace GomelStateUniversity_Activity.Controllers
             {
                 return NotFound();
             }
-            await _eventUserRepository.SubscribeUserAsync((int)id, User.FindFirstValue(ClaimTypes.NameIdentifier));
-            TempData["Message"] = "Вы записались.";
+            try
+            {
+                await _eventUserRepository.SubscribeUserAsync((int)id, User.FindFirstValue(ClaimTypes.NameIdentifier));
+                TempData["Message"] = "Вы записались. ";
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] = "Операция невозможна. " + ex.Message;
+            }
+
             return RedirectToAction(nameof(Index));
         }
         public async Task<IActionResult> UnSubscribe(int? id)
@@ -162,11 +170,11 @@ namespace GomelStateUniversity_Activity.Controllers
             try
             {
                 await _eventUserRepository.UnSubscribeUserAsync((int)id, User.FindFirstValue(ClaimTypes.NameIdentifier));
-                TempData["Message"] = "Вы отписались.";
+                TempData["Message"] = "Вы отписались. ";
             }
             catch (Exception ex)
             {
-                TempData["Message"] = "Операция невозможна." + ex.Message;
+                TempData["Message"] = "Операция невозможна. " + ex.Message;
             }
 
             return RedirectToAction(nameof(Index));
@@ -177,9 +185,16 @@ namespace GomelStateUniversity_Activity.Controllers
             {
                 return NotFound();
             }
-            await _eventUserRepository.SubscribeUserGroupAsync((int)id, User.FindFirstValue(ClaimTypes.NameIdentifier), amount);
-            TempData["Message"] = "Группа записана.";
 
+            try
+            {
+                await _eventUserRepository.SubscribeUserGroupAsync((int)id, User.FindFirstValue(ClaimTypes.NameIdentifier), amount);
+                TempData["Message"] = "Группа записана. ";
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] = "Операция невозможна. " + ex.Message;
+            }
             return RedirectToAction(nameof(Index));
         }
 
