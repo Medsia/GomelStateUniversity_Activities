@@ -9,10 +9,10 @@ namespace GomelStateUniversity_Activity.Models
     {
         public string ApplicationUserId { get; set; }
         public int EventId { get; set; }
-        public uint Tickets { get; set; }
+        public int Tickets { get; set; }
         public Event Event { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
-        public EventUser(int eventId, string userId, uint ticket = 1)
+        public EventUser(int eventId, string userId, int ticket = 1)
         {
             EventId = eventId;
             ApplicationUserId = userId;

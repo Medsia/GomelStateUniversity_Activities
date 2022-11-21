@@ -20,7 +20,7 @@ namespace GomelStateUniversity_Activity.Data
             await db.SaveChangesAsync();
 
         }
-        public async Task SubscribeUserGroupAsync(int EventId, string userId, uint amount)
+        public async Task SubscribeUserGroupAsync(int EventId, string userId, int amount)
         {
 
             EventUser eventUser = new EventUser(EventId, userId, amount);

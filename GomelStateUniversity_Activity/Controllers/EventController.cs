@@ -171,7 +171,7 @@ namespace GomelStateUniversity_Activity.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-        public async Task<IActionResult> SubscribeGroup(int? id, uint amount)
+        public async Task<IActionResult> SubscribeGroup(int? id, int amount)
         {
             if (id == null)
             {

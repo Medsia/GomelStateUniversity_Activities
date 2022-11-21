@@ -9,7 +9,7 @@ namespace GomelStateUniversity_Activity.Data
     {
         public Task SubscribeUserAsync(int EventId, string userId);
         public Task UnSubscribeUserAsync(int EventId, string userId);
-        public Task SubscribeUserGroupAsync(int EventId, string userId, uint amount);
+        public Task SubscribeUserGroupAsync(int EventId, string userId, int amount);
 
     }
 }
