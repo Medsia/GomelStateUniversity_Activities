@@ -1,5 +1,8 @@
-﻿@{
-    ViewData["Title"] = "Volunteers";
+﻿@model IEnumerable<GomelStateUniversity_Activity.Models.Event>
+
+@{
+    ViewData["Title"] = "MassEventsCalendar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <script>
@@ -20,7 +23,9 @@
       });
 
 </script>
-
+<div class="col-md-6">
+    <a href="/Event"><h3>Перейти к списку</h3></a>
+</div>
 <div class="text-center">
     <h1 class="display-4">Гомельский Государственный Университет Имени Франциска Скорины</h1>
     <a href="/MyCalendar">Показать мой календарь</a>

@@ -1,12 +1,11 @@
-﻿using GomelStateUniversity_Activity.Models;
-using Microsoft.AspNetCore.Authorization;
 ﻿using GomelStateUniversity_Activity.Data;
+using GomelStateUniversity_Activity.Helpers;
+using GomelStateUniversity_Activity.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
-using GomelStateUniversity_Activity.Helpers;
-using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
 
 namespace GomelStateUniversity_Activity.Controllers
 {
@@ -33,45 +32,7 @@ namespace GomelStateUniversity_Activity.Controllers
             ViewData["Events"] = JSONListHelper.GetEventListJSONString(_eventRepository.GetEventsAsync().Result);
             return View();
         }
-        
-        public IActionResult MyCalendar()
-        {
-            var userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            ViewData["Resources"] = JSONListHelper.GetResourceListJSONString(_subdivisionRepository.GetSubdivisionsAsync().Result);
-            ViewData["Events"] = JSONListHelper.GetEventListJSONString(_eventRepository.GetMyEventsAsync(userid).Result);
-            return View();
-        }
-        public IActionResult Culture()
-        {
-            int CultureSubdivisionId = 2;
-            ViewData["Resources"] = JSONListHelper.GetResourceListJSONString(_subdivisionRepository.GetSubdivisionsAsync().Result);
-            ViewData["Events"] = JSONListHelper.GetEventListJSONString(_eventRepository.GetEventsBySubdivisionAsync(CultureSubdivisionId).Result);
-            return View();
-        }
 
-        public IActionResult Sport()
-        {
-            int SportSubdivisionId = 3;
-            ViewData["Resources"] = JSONListHelper.GetResourceListJSONString(_subdivisionRepository.GetSubdivisionsAsync().Result);
-            ViewData["Events"] = JSONListHelper.GetEventListJSONString(_eventRepository.GetEventsBySubdivisionAsync(SportSubdivisionId).Result);
-            return View();
-        }
-
-        public IActionResult MassEvents()
-        {
-            int MassEventsSubdivisionId = 4;
-            ViewData["Resources"] = JSONListHelper.GetResourceListJSONString(_subdivisionRepository.GetSubdivisionsAsync().Result);
-            ViewData["Events"] = JSONListHelper.GetEventListJSONString(_eventRepository.GetEventsBySubdivisionAsync(MassEventsSubdivisionId).Result);
-            return View();
-        }
-
-        public IActionResult Volunteers()
-        {
-            int VolunteersSubdivisionId = 12;
-            ViewData["Resources"] = JSONListHelper.GetResourceListJSONString(_subdivisionRepository.GetSubdivisionsAsync().Result);
-            ViewData["Events"] = JSONListHelper.GetEventListJSONString(_eventRepository.GetEventsBySubdivisionAsync(VolunteersSubdivisionId).Result);
-            return View();
-        }
 
         public IActionResult Psychologist() => View();
 
