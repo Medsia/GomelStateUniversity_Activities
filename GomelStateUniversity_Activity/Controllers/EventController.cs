@@ -140,7 +140,7 @@ namespace GomelStateUniversity_Activity.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _eventRepository.DeleteEventAsync(id);
-            TempData["Message"] = "Событие удалено.";
+            TempData["Message"] = "Событие удалено. ";
             return RedirectToAction(nameof(Index));
         }
         public async Task<IActionResult> Subscribe(int? id)
@@ -149,8 +149,16 @@ namespace GomelStateUniversity_Activity.Controllers
             {
                 return NotFound();
             }
-            await _eventUserRepository.SubscribeUserAsync((int)id, User.FindFirstValue(ClaimTypes.NameIdentifier));
-            TempData["Message"] = "Вы записались.";
+            try
+            {
+                await _eventUserRepository.SubscribeUserAsync((int)id, User.FindFirstValue(ClaimTypes.NameIdentifier));
+                TempData["Message"] = "Вы записались. ";
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] = "Операция невозможна. " + ex.Message;
+            }
+
             return RedirectToAction(nameof(Index));
         }
         public async Task<IActionResult> UnSubscribe(int? id)
@@ -162,11 +170,11 @@ namespace GomelStateUniversity_Activity.Controllers
             try
             {
                 await _eventUserRepository.UnSubscribeUserAsync((int)id, User.FindFirstValue(ClaimTypes.NameIdentifier));
-                TempData["Message"] = "Вы отписались.";
+                TempData["Message"] = "Вы отписались. ";
             }
             catch (Exception ex)
             {
-                TempData["Message"] = "Операция невозможна." + ex.Message;
+                TempData["Message"] = "Операция невозможна. " + ex.Message;
             }
 
             return RedirectToAction(nameof(Index));
@@ -177,11 +185,62 @@ namespace GomelStateUniversity_Activity.Controllers
             {
                 return NotFound();
             }
-            await _eventUserRepository.SubscribeUserGroupAsync((int)id, User.FindFirstValue(ClaimTypes.NameIdentifier), amount);
-            TempData["Message"] = "Группа записана.";
 
+            try
+            {
+                await _eventUserRepository.SubscribeUserGroupAsync((int)id, User.FindFirstValue(ClaimTypes.NameIdentifier), amount);
+                TempData["Message"] = "Группа записана. ";
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] = "Операция невозможна. " + ex.Message;
+            }
             return RedirectToAction(nameof(Index));
         }
-
+        public async Task<IActionResult>MyEvents()
+        {
+            if (TempData["Message"] != null)
+            {
+                ViewData["Message"] = TempData["Message"];
+            }
+            return View(await _eventRepository.GetMyEventsAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)));
+        }
+        public async Task<IActionResult> Culture()
+        {
+            if (TempData["Message"] != null)
+            {
+                ViewData["Message"] = TempData["Message"];
+            }
+            int CultureSubdivisionId = 2;
+            return View(await _eventRepository.GetEventsBySubdivisionAsync(CultureSubdivisionId));
+        }
+        public async Task<IActionResult> Sport()
+        {
+            if (TempData["Message"] != null)
+            {
+                ViewData["Message"] = TempData["Message"];
+            }
+            int SportSubdivisionId = 3;
+            return View(await _eventRepository.GetEventsBySubdivisionAsync(SportSubdivisionId));
+        }
+        public async Task<IActionResult> MassEvents()
+        {
+            
+            if (TempData["Message"] != null)
+            {
+                ViewData["Message"] = TempData["Message"];
+            }
+            int MassEventsSubdivisionId = 4;
+            return View(await _eventRepository.GetEventsBySubdivisionAsync(MassEventsSubdivisionId));
+        }
+        public async Task<IActionResult> Volunteers()
+        {
+            if (TempData["Message"] != null)
+            {
+                ViewData["Message"] = TempData["Message"];
+            }
+            int VolunteersSubdivisionId = 12;
+            return View(await _eventRepository.GetEventsBySubdivisionAsync(VolunteersSubdivisionId));
+        }
     }
 }
