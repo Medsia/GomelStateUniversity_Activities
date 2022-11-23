@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<GomelStateUniversity_Activity.Models.Event>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Volunteers";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -13,7 +13,7 @@
             }
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Создать</a>
     <a asp-controller="Calendar" asp-action="VolunteersCalendar">Показать календарь</a>
     <div id='calendar'></div>
 </p>
@@ -21,19 +21,19 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Название
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                Описание
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateTime)
+                Дата
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TicketsCount)
+                Количество мест(билетов)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TicketPrice)
+                Цена билета
             </th>
             <th></th>
         </tr>
@@ -60,14 +60,14 @@
                 <a asp-action="Subscribe" asp-route-id="@item.Id">Записаться</a> |
                 <a asp-action="UnSubscribe" asp-route-id="@item.Id">Отписаться</a> |
                 @*<p>
-                    <label>Количество:</label><br />
-                    <input type="number" name="amount" />
+                        <label>Количество:</label><br />
+                        <input type="number" name="amount" />
                 </p>*@
                 <a asp-action="SubscribeGroup" asp-route-id="@item.Id" asp-route-amount="5">Записать группу</a> |
                 <a asp-action="UnSubscribe" asp-route-id="@item.Id">Отписать группу</a> |
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Подробнее</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
             </td>
         </tr>
 }
