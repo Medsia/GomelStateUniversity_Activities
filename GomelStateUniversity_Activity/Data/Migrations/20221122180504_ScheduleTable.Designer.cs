@@ -4,14 +4,16 @@ using GomelStateUniversity_Activity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GomelStateUniversity_Activity.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221122180504_ScheduleTable")]
+    partial class ScheduleTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,15 +189,18 @@ namespace GomelStateUniversity_Activity.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsFree")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("SubdivisionId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("SubdivisionId");
 
                     b.ToTable("Schedule");
                 });
@@ -388,9 +393,9 @@ namespace GomelStateUniversity_Activity.Data.Migrations
 
             modelBuilder.Entity("GomelStateUniversity_Activity.Models.ScheduleItem", b =>
                 {
-                    b.HasOne("GomelStateUniversity_Activity.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("GomelStateUniversity_Activity.Models.Subdivision", "Subdivision")
                         .WithMany()
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("SubdivisionId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
