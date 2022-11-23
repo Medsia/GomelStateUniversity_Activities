@@ -6,7 +6,8 @@
 
       document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
+          var calendar = new FullCalendar.Calendar(calendarEl, {
+            locale: 'ru',
             initialView: 'dayGridMonth',
             events: @Html.Raw(ViewData["Events"]),
             //resources: @Html.Raw(ViewData["Resources"]),

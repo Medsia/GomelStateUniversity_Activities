@@ -9,7 +9,8 @@
 
       document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
+          var calendar = new FullCalendar.Calendar(calendarEl, {
+            locale: 'ru',
             initialView: 'dayGridMonth',
             events: @Html.Raw(ViewData["Events"]),
             resources: @Html.Raw(ViewData["Resources"]),
@@ -26,6 +27,6 @@
 
 <div class="text-center">
     <h1 class="display-4">Гомельский Государственный Университет Имени Франциска Скорины</h1>
-    <a href="/MyCalendar">Показать мой календарь</a>
+    <a asp-controller="Event" asp-action="MyEvents">Мои мероприятия</a>
     <div id='calendar'></div>
 </div>

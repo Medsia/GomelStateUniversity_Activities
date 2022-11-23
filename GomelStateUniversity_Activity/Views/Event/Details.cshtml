@@ -5,38 +5,38 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<h1>Подробнее</h1>
 
 <div>
-    <h4>Event</h4>
+    <h4>Мероприятие</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+            Название
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
+            Описание
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DateTime)
+            Дата
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.DateTime)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.TicketsCount)
+            Количество мест(билетов)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.TicketsCount)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.TicketPrice)
+            Цена билета
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.TicketPrice)
@@ -50,6 +50,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Редактировать</a> |
+    <a asp-action="Index">Вернуться к списку</a>
 </div>
