@@ -22,52 +22,41 @@
                 Название
             </th>
             <th>
-                Описание
-            </th>
-            <th>
                 Дата
             </th>
             <th>
                 Количество мест(билетов)
             </th>
-            <th>
-                Цена билета
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TicketsCount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TicketPrice)
-            </td>
-            <td>
-                <a asp-action="Subscribe" asp-route-id="@item.Id">Записаться</a> |
-                <a asp-action="UnSubscribe" asp-route-id="@item.Id">Отписаться</a> |
-                @*<p>
-                        <label>Количество:</label><br />
-                        <input type="number" name="amount" />
-                </p>*@
-                <a asp-action="SubscribeGroup" asp-route-id="@item.Id" asp-route-amount="5">Записать группу</a> |
-                <a asp-action="UnSubscribe" asp-route-id="@item.Id">Отписать группу</a> |
-                <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Подробнее</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TicketsCount)
+                </td>
+                <td>
+                    <a asp-action="Subscribe" asp-route-id="@item.Id">Записаться</a> |
+                    <a asp-action="UnSubscribe" asp-route-id="@item.Id">Отписаться</a> |
+                    @*<p>
+                                <label>Количество:</label><br />
+                                <input type="number" name="amount" />
+                        </p>*@
+                    <a asp-action="SubscribeGroup" asp-route-id="@item.Id" asp-route-amount="5">Записать группу</a> |
+                    <a asp-action="UnSubscribe" asp-route-id="@item.Id">Отписать группу</a> |
+                    <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Подробнее</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

@@ -6,7 +6,10 @@
 }
 
 <h1>Подробнее</h1>
-
+@if (ViewData["Message"] != null)
+{
+    <h3>@ViewData["Message"]</h3>
+}
 <div>
     <h4>Мероприятие</h4>
     <hr />
@@ -16,12 +19,6 @@
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-2">
-            Описание
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
         </dd>
         <dt class="col-sm-2">
             Дата
@@ -46,10 +43,24 @@
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Subdivision.Name)
+            (@Html.DisplayFor(model => model.Subdivision.Contacts))
+        </dd>
+        <dt class="col-sm-2">
+            Описание
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Редактировать</a> |
+    <a asp-action="Subscribe" asp-route-id="@Model.Id">Записаться</a> |
+    <a asp-action="UnSubscribe" asp-route-id="@Model.Id">Отписаться</a> |
+    @*<p>
+                <label>Количество:</label><br />
+                <input type="number" name="amount" />
+        </p>*@
+    <a asp-action="SubscribeGroup" asp-route-id="@Model.Id" asp-route-amount="5">Записать группу</a> |
+    <a asp-action="UnSubscribe" asp-route-id="@Model.Id">Отписать группу</a> |
     <a asp-action="Index">Вернуться к списку</a>
 </div>
