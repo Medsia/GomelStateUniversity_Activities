@@ -14,8 +14,9 @@
 
 <p>
     <a asp-action="Create">Создать</a>
-    <a asp-controller="Calendar" asp-action="VolunteersCalendar">Показать календарь</a>
+    <a asp-controller="Calendar">Показать календарь</a>
     <div id='calendar'></div>
+    <a asp-action="IrrelevantEventsBySubdivision" asp-route-subdivisionId="12">Ранее</a>
 </p>
 <table class="table">
     <thead>
@@ -33,7 +34,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Where(x => x.DateTime > DateTime.Now))
         {
             <tr>
                 <td>
@@ -49,9 +50,9 @@
                     <a asp-action="Subscribe" asp-route-id="@item.Id">Записаться</a> |
                     <a asp-action="UnSubscribe" asp-route-id="@item.Id">Отписаться</a> |
                     @*<p>
-                                <label>Количество:</label><br />
-                                <input type="number" name="amount" />
-                        </p>*@
+                            <label>Количество:</label><br />
+                            <input type="number" name="amount" />
+                    </p>*@
                     <a asp-action="SubscribeGroup" asp-route-id="@item.Id" asp-route-amount="5">Записать группу</a> |
                     <a asp-action="UnSubscribe" asp-route-id="@item.Id">Отписать группу</a> |
                     <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |

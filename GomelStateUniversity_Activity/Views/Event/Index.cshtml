@@ -15,6 +15,7 @@
 <p>
     <a asp-action="Create">Создать мероприятие</a>
 </p>
+<a asp-action="IrrelevantEvents">Ранее</a>
 <table class="table">
     <thead>
         <tr>
@@ -31,7 +32,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Where(x => x.DateTime > DateTime.Now))
         {
             <tr>
                 <td>

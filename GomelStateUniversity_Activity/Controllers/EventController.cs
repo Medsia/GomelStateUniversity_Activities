@@ -1,9 +1,11 @@
 ﻿using GomelStateUniversity_Activity.Data;
+using GomelStateUniversity_Activity.Models;
 using GomelStateUniversity_Activity.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -241,6 +243,15 @@ namespace GomelStateUniversity_Activity.Controllers
             }
             int VolunteersSubdivisionId = 12;
             return View(await _eventRepository.GetEventsBySubdivisionAsync(VolunteersSubdivisionId));
+        }
+        
+        public async Task<IActionResult> IrrelevantEvents()
+        {           
+            return View(await _eventRepository.GetEventsAsync());
+        }
+        public async Task<IActionResult> IrrelevantEventsBySubdivision(int subdivisionId)
+        {
+            return View("IrrelevantEvents", await _eventRepository.GetEventsBySubdivisionAsync(subdivisionId));
         }
     }
 }
