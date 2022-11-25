@@ -14,9 +14,10 @@
 
 <p>
     <a asp-action="Create">Создать мероприятие</a>
-    <a asp-controller="Calendar" asp-action="SportCalendar">Показать календарь</a>
+    <a asp-controller="Calendar">Показать календарь</a>
     <div id='calendar'></div>
 </p>
+<a asp-action="IrrelevantEventsBySubdivision" asp-route-subdivisionId="3">Ранее</a>
 <table class="table">
     <thead>
         <tr>
@@ -24,38 +25,26 @@
                 Название
             </th>
             <th>
-                Описание
-            </th>
-            <th>
                 Дата
             </th>
             <th>
                 Количество мест(билетов)
             </th>
-            <th>
-                Цена билета
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Where(x => x.DateTime > DateTime.Now))
         {
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.DateTime)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.TicketsCount)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TicketPrice)
                 </td>
                 <td>
                     <a asp-action="Subscribe" asp-route-id="@item.Id">Записаться</a> |
