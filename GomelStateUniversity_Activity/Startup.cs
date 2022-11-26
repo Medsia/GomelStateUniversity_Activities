@@ -35,7 +35,7 @@ namespace GomelStateUniversity_Activity
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
-            services.AddSingleton<IEventRepository, EventRepository>();
+            services.AddScoped<IEventRepository, EventRepository>();
             services.AddScoped<IEventUserRepository, EventUserRepository>();
             services.AddSingleton<ISubdivisionRepository, SubdivisionRepository>();
             services.AddSingleton<IReviewsRepository, ReviewsRepository>();
