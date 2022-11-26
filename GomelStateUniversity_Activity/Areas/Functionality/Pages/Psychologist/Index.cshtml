@@ -1,53 +1,71 @@
 ﻿@page
 @model GomelStateUniversity_Activity.Areas.Functionality.Pages.Psychologist.IndexModel
 
-@using Microsoft.JSInterop
-@inject IJSRuntime JS
-
 @{
     ViewData["Title"] = "Консультации психолога";
+
+    var date = @Model.PrevDate.Date;
+    string correctPrevDate = $"{date.Year}-{date.Month}-{date.Day}";
 }
 
-<h4>Консультация у #ПсихологНейм</h4>
+<h4>Запись на консультацию</h4>
 <hr />
 
 <form class="col-md-9" asp-route-returnUrl="@Model.ReturnUrl" method="post">
     <div class="form-group">
         <div class="mb-5">
             <div class="form-group">
-                <label asp-for="Input.Date"></label>
-                <div class="row">
-                    <input asp-for="Input.Date" class="form-control col-md-4" />
+                <label asp-for="Input.NewDate"></label>
+                <div class="form-inline">
+                    <input asp-for="Input.NewDate" class="form-control col-md-4" />
                     <button asp-route-dateUpdated="@true" class="btn btn-outline-primary mx-5" type="submit">Проверить</button>
                 </div>
-                <span asp-validation-for="Input.Date" class="text-danger"></span>
+                <span asp-validation-for="Input.NewDate" class="text-danger"></span>
             </div>
 
             @if (@Model.isDateValid)
             {
-                <div class="form-group">
-                    <label asp-for="Input.Time"></label>
-                    <input asp-for="Input.Time" step="3600" list="timeList" class="form-control col-md-4" />
-                    <span asp-validation-for="Input.Time" class="text-danger"></span>
+                <hr class="mb-4 col-md-6 ml-0"/>
+                <div class="ml-3">
+                    <div class="form-group">
+                        <label asp-for="@Model.PrevDate"></label>
+                        <input disabled value="@Model.PrevDate" class="form-control col-md-4" />
+                        <input asp-for="Input.PrevDate" value="@correctPrevDate"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Input.Hour"></label>
+                        <select asp-for="Input.Hour" class="form-control col-md-4" >
+                            @if(@Model.PrevDate.Date > DateTime.Now.Date){
+                                @for(int i = 9; i < 17; i++)
+                                {
+                                    @if (@Model.PrevDate.Date == DateTime.Now.Date && (i+1) < DateTime.Now.TimeOfDay.Hours) continue;
+
+                                    string time = i.ToString("00") + ":00";
+                                    @if (!(@Model.daySchedule.Select(s => s.DateTime.Hour).AsEnumerable()).Contains(i))
+                                    {
+                                        <option value="@i">@time</option>
+                                    }
+                                    else
+                                    {
+                                        if (@Model.daySchedule.Single(x => x.DateTime.TimeOfDay.Hours == i && x.ApplicationUser.UserName == User.Identity.Name) != null)
+                                        {
+                                            <option disabled class="bg-success text-light">@time</option>
+                                        }
+                                        else
+                                        {
+                                            <option disabled class="bg-warning text-light">@time</option>
+                                        }
+                                    }
+                                }
+                            }
+                        </select>
+                    </div>
+                    <button asp-route-timeSelected="@true" class="btn btn-primary" type="submit">Записаться</button>
                 </div>
-                <button asp-route-timeSelected="@true" class="btn btn-primary" type="submit">Записаться</button>
             }
         </div>
     </div>
 </form>
 
-
-@if (@Model.isDateValid)
-{
-    <datalist id="timeList" >
-        @for(int i = 9; i < 17; i++)
-        {
-            if (!(@Model.scheduledHours.Select(s => s.Hour).AsEnumerable()).Contains(i))
-            {
-                string time = i.ToString("00") + ":00";
-                <option value="@time" datatype="time" />
-            }
-        }
-    </datalist>
-}
 

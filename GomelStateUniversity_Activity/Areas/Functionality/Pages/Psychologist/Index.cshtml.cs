@@ -41,19 +41,26 @@ namespace GomelStateUniversity_Activity.Areas.Functionality.Pages.Psychologist
         public string ReturnUrl { get; set; }
 
         public bool isDateValid { get; set; } = false;
-        public IEnumerable<DateTime> scheduledHours { get; set; } = Enumerable.Empty<DateTime>();
+        public IEnumerable<ScheduleItem> daySchedule { get; set; } = Enumerable.Empty<ScheduleItem>();
 
+
+        [Display(Name = "Выбранная дата")]
+        [DataType(DataType.Date)]
+        public DateTime PrevDate { get; set; }
 
         public class InputModel
         {
             [Required(ErrorMessage = "Не выбрана дата")]
-            [Display(Name = "Дата записи")]
+            [Display(Name = "Выбор даты")]
             [DataType(DataType.Date)]
-            public DateTime Date { get; set; }
+            public DateTime NewDate { get; set; }
+
+            [HiddenInput]
+            [DataType(DataType.Date)]
+            public DateTime PrevDate { get; set; }
 
             [Display(Name = "Время записи")]
-            [DataType(DataType.Time)]
-            public DateTime Time { get; set; }
+            public int Hour { get; set; }
         }
 
 
@@ -67,17 +74,16 @@ namespace GomelStateUniversity_Activity.Areas.Functionality.Pages.Psychologist
         {
             returnUrl = returnUrl ?? Url.Content("~/");
 
-
             if (ModelState.IsValid)
             {
                 if (dateUpdated)
                 {
                     isDateValid = true;
+                    PrevDate = Input.NewDate;
 
-                    var schedule = await _scheduleRepository.GetItemsAsync();
-                    scheduledHours = schedule.Select(s => s.DateTime)
-                                             .Where(d => d.Date == Input.Date.Date)
-                                             .AsEnumerable();
+                    var schedule = _scheduleRepository.GetItemsAsync().Result;
+                    daySchedule = schedule.Where(d => d.DateTime.Date == Input.NewDate.Date)
+                                           .AsEnumerable();
                 }
 
                 if (timeSelected)
@@ -87,8 +93,8 @@ namespace GomelStateUniversity_Activity.Areas.Functionality.Pages.Psychologist
                         { "UserName", User.Identity.Name },
                     };
 
-                    var selectedDateTime = Input.Date;
-                    selectedDateTime.AddHours(Input.Time.TimeOfDay.Hours);
+                    var selectedDateTime = Input.PrevDate;
+                    selectedDateTime = selectedDateTime.AddHours(Input.Hour);
 
                     FormCollection form = new FormCollection(formData);
 
