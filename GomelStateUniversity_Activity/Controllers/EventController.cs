@@ -213,7 +213,7 @@ namespace GomelStateUniversity_Activity.Controllers
             {
                 ViewData["Message"] = TempData["Message"];
             }
-            int CultureSubdivisionId = 2;
+            int CultureSubdivisionId = 1;
             return View(await _eventRepository.GetEventsBySubdivisionAsync(CultureSubdivisionId));
         }
         public async Task<IActionResult> Sport()
@@ -222,7 +222,7 @@ namespace GomelStateUniversity_Activity.Controllers
             {
                 ViewData["Message"] = TempData["Message"];
             }
-            int SportSubdivisionId = 3;
+            int SportSubdivisionId = 2;
             return View(await _eventRepository.GetEventsBySubdivisionAsync(SportSubdivisionId));
         }
         public async Task<IActionResult> MassEvents()
@@ -232,7 +232,7 @@ namespace GomelStateUniversity_Activity.Controllers
             {
                 ViewData["Message"] = TempData["Message"];
             }
-            int MassEventsSubdivisionId = 4;
+            int MassEventsSubdivisionId = 3;
             return View(await _eventRepository.GetEventsBySubdivisionAsync(MassEventsSubdivisionId));
         }
         public async Task<IActionResult> Volunteers()
@@ -241,7 +241,7 @@ namespace GomelStateUniversity_Activity.Controllers
             {
                 ViewData["Message"] = TempData["Message"];
             }
-            int VolunteersSubdivisionId = 12;
+            int VolunteersSubdivisionId = 4;
             return View(await _eventRepository.GetEventsBySubdivisionAsync(VolunteersSubdivisionId));
         }
         
