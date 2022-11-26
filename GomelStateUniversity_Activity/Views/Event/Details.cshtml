@@ -56,11 +56,7 @@
 <div>
     <a asp-action="Subscribe" asp-route-id="@Model.Id">Записаться</a> |
     <a asp-action="UnSubscribe" asp-route-id="@Model.Id">Отписаться</a> |
-    @*<p>
-                <label>Количество:</label><br />
-                <input type="number" name="amount" />
-        </p>*@
     <a asp-action="SubscribeGroup" asp-route-id="@Model.Id" asp-route-amount="5">Записать группу</a> |
     <a asp-action="UnSubscribe" asp-route-id="@Model.Id">Отписать группу</a> |
-    <a asp-action="Index">Вернуться к списку</a>
+    <a href="javascript:history.back()">Вернуться</a>
 </div>
