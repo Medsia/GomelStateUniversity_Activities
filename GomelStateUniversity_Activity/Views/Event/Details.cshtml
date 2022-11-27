@@ -1,62 +1,85 @@
 ﻿@model GomelStateUniversity_Activity.Models.Event
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Подробности мероприятия";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Подробнее</h1>
+<h4 class="text-center">@ViewData["Title"]</h4>
+<hr />
+
 @if (ViewData["Message"] != null)
 {
     <h3>@ViewData["Message"]</h3>
 }
-<div>
-    <h4>Мероприятие</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
+
+<div class="row box-shadow mb-3">
+    <br>
+    <dl class="row col-sm-9 mx-auto">
+        <dt class="col-sm-4">
             Название
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-8">
             @Html.DisplayFor(model => model.Name)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-4">
             Дата
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-8">
             @Html.DisplayFor(model => model.DateTime)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-4">
             Количество мест(билетов)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-8">
             @Html.DisplayFor(model => model.TicketsCount)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-4">
             Цена билета
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-8">
             @Html.DisplayFor(model => model.TicketPrice)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-4">
             Подразделение
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-8">
             @Html.DisplayFor(model => model.Subdivision.Name)
             (@Html.DisplayFor(model => model.Subdivision.Contacts))
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-4">
             Описание
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-8">
             @Html.DisplayFor(model => model.Description)
         </dd>
     </dl>
+    
+    <div class="form-group text-center col-sm-3 mt-4 mx-auto">
+        <a asp-action="Subscribe" asp-route-id="@Model.Id" class="text-info">Записаться</a><br>
+        <a asp-action="UnSubscribe" asp-route-id="@Model.Id" class="text-info">Отписаться</a><br>
+        <div id="GroupSubUnfoldable" style="display: none;">
+            <form asp-action="SubscribeGroup" method="post">
+                <input type="hidden" name="id" value="@Model.Id"/>
+                <br><input type="number" min="1" name="amount" placeholder="Количество" class="text-center col-md-7" /><br>
+                <a onclick="SubmitEvent" class="text-info">Записать группу</a><br>
+            </form>
+        </div>
+        <a id="UnfoldBtn" style="" class="text-info" onclick="Unfold()">Записать группу</a><br>
+        <a asp-action="UnSubscribe" asp-route-id="@Model.Id" class="text-info">Отписать группу</a>
+    </div>
+    <br>
 </div>
+
 <div>
-    <a asp-action="Subscribe" asp-route-id="@Model.Id">Записаться</a> |
-    <a asp-action="UnSubscribe" asp-route-id="@Model.Id">Отписаться</a> |
-    <a asp-action="SubscribeGroup" asp-route-id="@Model.Id" asp-route-amount="5">Записать группу</a> |
-    <a asp-action="UnSubscribe" asp-route-id="@Model.Id">Отписать группу</a> |
-    <a href="javascript:history.back()">Вернуться</a>
+    <a class="btn btn-outline-danger" href="javascript:history.back()">Вернуться</a>
 </div>
+
+
+<script type="text/javascript">
+    
+    function Unfold() {
+        document.getElementById('GroupSubUnfoldable').setAttribute('style', '');
+        document.getElementById('UnfoldBtn').setAttribute('style', 'display: none;');
+    }
+</script>

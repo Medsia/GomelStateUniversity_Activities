@@ -1,5 +1,7 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿
+@{
+    ViewData["Title"] = "Календарь мероприятий";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <script>
@@ -10,7 +12,7 @@
             locale: 'ru',
             initialView: 'dayGridMonth',
             events: @Html.Raw(ViewData["Events"]),
-            //resources: @Html.Raw(ViewData["Resources"]),
+            resources: @Html.Raw(ViewData["Resources"]),
             headerToolbar: {
                 left: 'today prev,next',
                 center: 'title',
@@ -23,16 +25,19 @@
 </script>
 
 <div class="text-center">
-    <h1 class="display-4">Гомельский Государственный Университет Имени Франциска Скорины</h1>
-    <a asp-controller="Event" asp-action="MyEvents">Мои мероприятия</a>
-    <div id='calendar'></div>
+    <h4 class="display-4">Гомельский Государственный Университет Имени Франциска Скорины</h4><br>
 </div>
 
-<div class="row">
-    <div class="col-md-6">
-        <a href="/Event"><h3>Мероприятия</h3></a>
+<div>
+    <a asp-controller="Event" asp-action="MyEvents" class="btn btn-outline-info ml-3 mb-3">Мои мероприятия</a>
+    <div id='calendar' class="text-center"></div>
+</div>
+
+<div class="form-inline">
+    <div class="ml-5 mr-auto">
+        <a href="/Event"><h4>Мероприятия</h4></a>
     </div>
-    <div class="col-md-6">
-        <a href="/Subdivision"><h3>Подразделения</h3></a>
+    <div class="ml-auto mr-5">
+        <a href="/Subdivision"><h4>Подразделения</h4></a>
     </div>
 </div>
