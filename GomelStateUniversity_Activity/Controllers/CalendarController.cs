@@ -16,6 +16,7 @@ namespace GomelStateUniversity_Activity.Controllers
         private readonly ISubdivisionRepository _subdivisionRepository;
         private readonly UserManager<ApplicationUser> _usermanager;
 
+
         public CalendarController(IEventRepository eventRepository, ISubdivisionRepository subdivisionRepository,
             UserManager<ApplicationUser> usermanager)
         {
@@ -24,6 +25,7 @@ namespace GomelStateUniversity_Activity.Controllers
             _usermanager = usermanager;
         }
 
+
         public IActionResult Index()
         {
             ViewData["Resources"] = JSONListHelper.GetResourceListJSONString(_subdivisionRepository.GetSubdivisionsAsync().Result);
@@ -31,52 +33,29 @@ namespace GomelStateUniversity_Activity.Controllers
             return View();
         }
 
-        public async Task<IActionResult> MyEventsCalendar()
+
+        public IActionResult MyEventsCalendar()
         {
-            if (TempData["Message"] != null)
-            {
-                ViewData["Message"] = TempData["Message"];
-            }
             var userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            ViewBag.PageName = "Мой календарь";
+
             ViewData["Resources"] = JSONListHelper.GetResourceListJSONString(_subdivisionRepository.GetSubdivisionsAsync().Result);
             ViewData["Events"] = JSONListHelper.GetEventListJSONString(_eventRepository.GetMyEventsAsync(userid).Result);
-            //return View();
-            return View(await _eventRepository.GetMyEventsAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)));
-        }
-        public IActionResult CultureCalendar()
-        {
-
-            int CultureSubdivisionId = 2;
-            ViewData["Resources"] = JSONListHelper.GetResourceListJSONString(_subdivisionRepository.GetSubdivisionsAsync().Result);
-            ViewData["Events"] = JSONListHelper.GetEventListJSONString(_eventRepository.GetEventsBySubdivisionAsync(CultureSubdivisionId).Result);
-            return View();
+            return View("Calendar");
         }
 
-        public IActionResult SportCalendar()
+
+        public async Task<IActionResult> CalendarForSubdiv(int subdivId)
         {
+            if (subdivId == 0) return RedirectToAction("MyEventsCalendar");
 
-            int SportSubdivisionId = 3;
+            var subdiv = await _subdivisionRepository.GetSubdivisionAsync(subdivId);
+            ViewBag.PageName = "Календарь мероприятий - " + subdiv.Name;
+
             ViewData["Resources"] = JSONListHelper.GetResourceListJSONString(_subdivisionRepository.GetSubdivisionsAsync().Result);
-            ViewData["Events"] = JSONListHelper.GetEventListJSONString(_eventRepository.GetEventsBySubdivisionAsync(SportSubdivisionId).Result);
-            return View();
-        }
-
-        public IActionResult MassEventsCalendar()
-        {
-
-            int MassEventsSubdivisionId = 4;
-            ViewData["Resources"] = JSONListHelper.GetResourceListJSONString(_subdivisionRepository.GetSubdivisionsAsync().Result);
-            ViewData["Events"] = JSONListHelper.GetEventListJSONString(_eventRepository.GetEventsBySubdivisionAsync(MassEventsSubdivisionId).Result);
-            return View();
-        }
-
-        public IActionResult VolunteersCalendar()
-        {
-
-            int VolunteersSubdivisionId = 12;
-            ViewData["Resources"] = JSONListHelper.GetResourceListJSONString(_subdivisionRepository.GetSubdivisionsAsync().Result);
-            ViewData["Events"] = JSONListHelper.GetEventListJSONString(_eventRepository.GetEventsBySubdivisionAsync(VolunteersSubdivisionId).Result);
-            return View();
+            ViewData["Events"] = JSONListHelper.GetEventListJSONString(_eventRepository.GetEventsBySubdivisionAsync(subdivId).Result);
+            return View("Calendar");
         }
     }
 }

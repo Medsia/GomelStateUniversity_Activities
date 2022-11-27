@@ -26,38 +26,34 @@ namespace GomelStateUniversity_Activity.Controllers
             _eventUserRepository = eventUserRepository;
         }
 
+
         // GET: Event
         public async Task<IActionResult> Index()
         {
-            if (TempData["Message"] != null)
-            {
-                ViewData["Message"] = TempData["Message"];
-            }
+            if (TempData["Message"] != null) ViewData["Message"] = TempData["Message"];
+
+            ViewBag.PageName = "Список мероприятий";
+            ViewBag.Irrelevant = false;
+
             return View(await _eventRepository.GetEventsAsync());
         }
+
 
         // GET: Event/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var @event = await _eventRepository.GetEventAsync((int)id);
-            if (@event == null)
-            {
-                return NotFound();
-            }
+            if (@event == null) return NotFound();
 
             return View(@event);
         }
 
+
         // GET: Event/Create
-        public IActionResult Create()
-        {
-            return View(new EventViewModel(_subdivisionRepository.GetSubdivisionsAsync().Result.ToList()));
-        }
+        public IActionResult Create() => View(new EventViewModel(_subdivisionRepository.GetSubdivisionsAsync().Result.ToList()));
+
 
         // POST: Event/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
@@ -79,22 +75,19 @@ namespace GomelStateUniversity_Activity.Controllers
             }
         }
 
+
         // GET: Event/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var @event = await _eventRepository.GetEventAsync((int)id);
-            if (@event == null)
-            {
-                return NotFound();
-            }
+            if (@event == null) return NotFound();
+
             var viewModel = new EventViewModel(@event, _subdivisionRepository.GetSubdivisionsAsync().Result.ToList());
             return View(viewModel);
         }
+
 
         // POST: Event/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
@@ -103,7 +96,6 @@ namespace GomelStateUniversity_Activity.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, IFormCollection form)
         {
-
             try
             {
                 await _eventRepository.UpdateEventAsync(form);
@@ -119,22 +111,18 @@ namespace GomelStateUniversity_Activity.Controllers
             }
         }
 
+
         // GET: Event/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var @event = await _eventRepository.GetEventAsync((int)id);
-            if (@event == null)
-            {
-                return NotFound();
-            }
+            if (@event == null) return NotFound();
 
             return View(@event);
         }
+
 
         // POST: Event/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -145,12 +133,12 @@ namespace GomelStateUniversity_Activity.Controllers
             TempData["Message"] = "Событие удалено. ";
             return RedirectToAction(nameof(Index));
         }
+
+
         public async Task<IActionResult> Subscribe(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
+
             try
             {
                 await _eventUserRepository.SubscribeUserAsync((int)id, User.FindFirstValue(ClaimTypes.NameIdentifier));
@@ -163,12 +151,11 @@ namespace GomelStateUniversity_Activity.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+
         public async Task<IActionResult> UnSubscribe(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
             try
             {
                 await _eventUserRepository.UnSubscribeUserAsync((int)id, User.FindFirstValue(ClaimTypes.NameIdentifier));
@@ -181,16 +168,16 @@ namespace GomelStateUniversity_Activity.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-        public async Task<IActionResult> SubscribeGroup(int? id, int amount)
+
+
+        [HttpPost]
+        public async Task<IActionResult> SubscribeGroup(int? id, int ticketsAmount)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             try
             {
-                await _eventUserRepository.SubscribeUserGroupAsync((int)id, User.FindFirstValue(ClaimTypes.NameIdentifier), amount);
+                await _eventUserRepository.SubscribeUserGroupAsync((int)id, User.FindFirstValue(ClaimTypes.NameIdentifier), ticketsAmount);
                 TempData["Message"] = "Группа записана. ";
             }
             catch (Exception ex)
@@ -199,59 +186,49 @@ namespace GomelStateUniversity_Activity.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+
+
         public async Task<IActionResult>MyEvents()
         {
-            if (TempData["Message"] != null)
-            {
-                ViewData["Message"] = TempData["Message"];
-            }
-            return View(await _eventRepository.GetMyEventsAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)));
+            if (TempData["Message"] != null) ViewData["Message"] = TempData["Message"];
+
+            ViewBag.PageName = "Мой список мероприятий";
+
+            return View("Index", await _eventRepository.GetMyEventsAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)));
         }
-        public async Task<IActionResult> Culture()
+
+
+        public async Task<IActionResult> EventsListForSubdiv(int subdivId, bool Irrelevant = false)
         {
-            if (TempData["Message"] != null)
-            {
-                ViewData["Message"] = TempData["Message"];
-            }
-            int CultureSubdivisionId = 2;
-            return View(await _eventRepository.GetEventsBySubdivisionAsync(CultureSubdivisionId));
+            if (TempData["Message"] != null) ViewData["Message"] = TempData["Message"];
+
+            var subdiv = await _subdivisionRepository.GetSubdivisionAsync(subdivId);
+
+            if(Irrelevant) ViewBag.PageName = "Список прошлых мероприятий - " + subdiv.Name;
+            else ViewBag.PageName = "Список мероприятий - " + subdiv.Name;
+
+            ViewBag.SubdivId = subdivId;
+            ViewBag.Irrelevant = Irrelevant;
+
+            return View("Index", await _eventRepository.GetEventsBySubdivisionAsync(subdivId));
         }
-        public async Task<IActionResult> Sport()
+
+
+        public IActionResult Culture() => RedirectToAction("EventsListForSubdiv", new { subdivId = 5 });
+        public IActionResult Sport() => RedirectToAction("EventsListForSubdiv", new { subdivId = 7 });
+        public IActionResult MassEvents() => RedirectToAction("EventsListForSubdiv", new { subdivId = 8 });
+        public IActionResult Volunteers() => RedirectToAction("EventsListForSubdiv", new { subdivId = 9 });
+
+
+        public IActionResult IrrelevantEvents()
         {
-            if (TempData["Message"] != null)
-            {
-                ViewData["Message"] = TempData["Message"];
-            }
-            int SportSubdivisionId = 3;
-            return View(await _eventRepository.GetEventsBySubdivisionAsync(SportSubdivisionId));
+            return RedirectToAction("Index");
         }
-        public async Task<IActionResult> MassEvents()
+
+
+        public IActionResult IrrelevantEventsBySubdivision(int subdivId)
         {
-            
-            if (TempData["Message"] != null)
-            {
-                ViewData["Message"] = TempData["Message"];
-            }
-            int MassEventsSubdivisionId = 4;
-            return View(await _eventRepository.GetEventsBySubdivisionAsync(MassEventsSubdivisionId));
-        }
-        public async Task<IActionResult> Volunteers()
-        {
-            if (TempData["Message"] != null)
-            {
-                ViewData["Message"] = TempData["Message"];
-            }
-            int VolunteersSubdivisionId = 12;
-            return View(await _eventRepository.GetEventsBySubdivisionAsync(VolunteersSubdivisionId));
-        }
-        
-        public async Task<IActionResult> IrrelevantEvents()
-        {           
-            return View(await _eventRepository.GetEventsAsync());
-        }
-        public async Task<IActionResult> IrrelevantEventsBySubdivision(int subdivisionId)
-        {
-            return View("IrrelevantEvents", await _eventRepository.GetEventsBySubdivisionAsync(subdivisionId));
+            return RedirectToAction("EventsListForSubdiv", new { subdivId = subdivId, Irrelevant = true });
         }
     }
 }

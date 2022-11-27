@@ -1,7 +1,6 @@
-﻿@model IEnumerable<GomelStateUniversity_Activity.Models.Event>
-
+﻿
 @{
-    ViewData["Title"] = "CultureCalendar";
+    ViewData["Title"] = @ViewBag.PageName;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -26,7 +25,9 @@
 </script>
 
 <div class="text-center">
-    <h1 class="display-4">Гомельский Государственный Университет Имени Франциска Скорины</h1>
-    <a asp-controller="Event" asp-action="MyEvents">Мои мероприятия</a>
-    <div id='calendar'></div>
+    <h4 class="display-4">@ViewBag.PageName</h4><br>
+</div>
+
+<div>
+    <div id='calendar' class="text-center"></div>
 </div>

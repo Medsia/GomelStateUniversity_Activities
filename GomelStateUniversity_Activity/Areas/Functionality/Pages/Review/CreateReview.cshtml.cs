@@ -72,7 +72,8 @@ namespace GomelStateUniversity_Activity.Areas.Functionality.Pages.Review
         public async Task OnGetAsync(int eventId, string returnUrl = null)
         {
             ReturnUrl = returnUrl;
-            knownEvent = await _eventRepository.GetEventAsync(eventId);
+            if(eventId != 0)
+                knownEvent = await _eventRepository.GetEventAsync(eventId);
 
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             currentUsersFullName = user.FullName;

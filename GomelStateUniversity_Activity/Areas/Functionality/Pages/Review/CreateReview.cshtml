@@ -21,7 +21,7 @@
         <label asp-for="Input.eventId"></label>
         @if (@Model.knownEvent != null)
         {
-            <input type="hidden" name="eventId" value="@Model.knownEvent.Id" />
+            <input asp-for="Input.eventId" type="hidden" value="@Model.knownEvent.Id" />
             <input disabled value="@Model.knownEvent.Name" class="form-control" />
         }
         else

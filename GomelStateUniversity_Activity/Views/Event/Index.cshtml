@@ -1,63 +1,90 @@
 ﻿@model IEnumerable<GomelStateUniversity_Activity.Models.Event>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = @ViewBag.PageName;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Мероприятия</h1>
+<h4 class="text-center">@ViewBag.PageName</h4>
+<hr />
 
 @if(ViewData["Message"] != null)
-            {
-                <h3>@ViewData["Message"]</h3>
-            }
+{
+    <p class="text-center text-info">@ViewData["Message"]</p>
+}
 
-<p>
-    <a asp-action="Create">Создать мероприятие</a>
-</p>
-<a asp-action="IrrelevantEvents">Ранее</a>
+<div class="form-inline mb-3">
+    @if (@ViewBag.SubdivId != null)
+    {
+        @if (!@ViewBag.Irrelevant)
+        {
+            <a asp-action="IrrelevantEventsBySubdivision" asp-route-subdivId="@ViewBag.SubdivId" class="btn btn-outline-info ml-3 mr-3">Ранее</a>
+        }
+        <a asp-controller="Calendar" asp-action="CalendarForSubdiv" asp-route-subdivId="@ViewBag.SubdivId" class="btn btn-outline-info ml-3 mr-auto">Показать календарь</a>
+    }
+    <a asp-action="Create" class="btn btn-outline-info ml-auto mr-3">Создать мероприятие</a>
+    <div id='calendar'></div>
+</div>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                Название
+                <div class="text-center">Название</div>
             </th>
             <th>
-                Дата
+                <div class="text-center">Дата</div>
             </th>
             <th>
-                Количество мест(билетов)
+                <div class="text-center">Количество мест(билетов)</div>
             </th>
-            <th></th>
+            <th>
+                <div class="text-center">Функции</div>
+            </th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model.Where(x => x.DateTime > DateTime.Now))
         {
-            <tr>
+            <tr class="box-shadow">
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    <div class="text-center">@item.Name</div>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.DateTime)
+                    <div class="text-center">@item.DateTime</div>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.TicketsCount)
+                    <div class="text-center">@item.TicketsCount</div>
                 </td>
-                <td>
-                    <a asp-action="Subscribe" asp-route-id="@item.Id">Записаться</a> |
-                    <a asp-action="UnSubscribe" asp-route-id="@item.Id">Отписаться</a> |
-                    @*<p>
-                                <label>Количество:</label><br />
-                                <input type="number" name="amount" />
-                        </p>*@
-                    <a asp-action="SubscribeGroup" asp-route-id="@item.Id" asp-route-amount="5">Записать группу</a> |
-                    <a asp-action="UnSubscribe" asp-route-id="@item.Id">Отписать группу</a> |
-                    <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Подробнее</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                <td class="text-center">
+                    @if (!@ViewBag.Irrelevant)
+                    {
+                        <a asp-action="Subscribe" asp-route-id="@item.Id" class="text-info">Записаться</a><br>
+                        <a asp-action="UnSubscribe" asp-route-id="@item.Id" class="text-info">Отписаться</a><br>
+                        <div id="GroupSubUnfoldable" style="display: none;">
+                            <form asp-action="SubscribeGroup" method="post">
+                                <input type="hidden" name="id" value="@item.Id"/>
+                                <br><input type="number" min="1" name="ticketsAmount" placeholder="Количество" class="text-center col-md-5" /><br>
+                                <a onclick="SubmitEvent" class="text-info">Записать группу</a><br>
+                            </form>
+                        </div>
+                        <a id="UnfoldBtn" style="" class="text-info" onclick="Unfold()">Записать группу</a><br>
+                        <a asp-action="UnSubscribe" asp-route-id="@item.Id" class="text-info">Отписать группу</a><br>
+                    }
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="text-info">Редактировать</a><br>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="text-info">Подробнее</a><br>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="text-info">Удалить</a><br>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+
+<script type="text/javascript">
+    
+    function Unfold() {
+        document.getElementById('GroupSubUnfoldable').setAttribute('style', '');
+        document.getElementById('UnfoldBtn').setAttribute('style', 'display: none;');
+    }
+</script>
