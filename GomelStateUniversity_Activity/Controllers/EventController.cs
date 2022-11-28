@@ -193,52 +193,17 @@ namespace GomelStateUniversity_Activity.Controllers
         }
 
 
-        public async Task<IActionResult>MyEvents()
+        public async Task<IActionResult> MyEvents()
         {
-            if (TempData["Message"] != null)
-            {
-                ViewData["Message"] = TempData["Message"];
-            }
-            return View(await _eventRepository.GetMyEventsAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)));
-        }
-        public async Task<IActionResult> Culture()
-        {
-            if (TempData["Message"] != null)
-            {
-                ViewData["Message"] = TempData["Message"];
-            }
-            int CultureSubdivisionId = 2;
-            return View(await _eventRepository.GetEventsBySubdivisionAsync(CultureSubdivisionId));
-        }
-        public async Task<IActionResult> Sport()
-        {
-            if (TempData["Message"] != null)
-            {
-                ViewData["Message"] = TempData["Message"];
-            }
-            int SportSubdivisionId = 3;
-            return View(await _eventRepository.GetEventsBySubdivisionAsync(SportSubdivisionId));
-        }
-        public async Task<IActionResult> MassEvents()
-        {
-            
-            if (TempData["Message"] != null)
-            {
-                ViewData["Message"] = TempData["Message"];
-            }
-            int MassEventsSubdivisionId = 4;
-            return View(await _eventRepository.GetEventsBySubdivisionAsync(MassEventsSubdivisionId));
-        }
-        public async Task<IActionResult> Volunteers()
-        {
-            if (TempData["Message"] != null)
-            {
-                ViewData["Message"] = TempData["Message"];
-            }
-            int VolunteersSubdivisionId = 12;
-            return View(await _eventRepository.GetEventsBySubdivisionAsync(VolunteersSubdivisionId));
-        }
+            if (TempData["Message"] != null) ViewData["Message"] = TempData["Message"];
 
+            ViewBag.PageName = "Мой список мероприятий";
+            ViewBag.Irrelevant = true;
+
+            var events = await _eventRepository.GetMyEventsAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            return View("Index", events.Where(x => x.DateTime > DateTime.Now));
+        }
 
         public async Task<IActionResult> EventsListForSubdiv(int subdivId, bool Irrelevant = false)
         {
