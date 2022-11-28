@@ -13,8 +13,9 @@ namespace GomelStateUniversity_Activity.Data
             var eventToUpdate = db.Events.Find(eventId);
             if (eventToUpdate.TicketsCount <= 0)
             {
-                return;
+                throw new InvalidOperationException("Кол-во билетов превышает допустимое количество");
             }
+
             EventUser eventUser = new EventUser(eventId, userId);
             db.EventUsers.Add(eventUser);           
             
@@ -29,11 +30,7 @@ namespace GomelStateUniversity_Activity.Data
             try
             {
                 if (eventToUpdate == null || eventUser == null)
-                    throw new NullReferenceException("Вы не записаны");
-                if (eventToUpdate.TicketsCount <= eventUser.Tickets)
-                {
-                    throw new InvalidOperationException("Кол-во билетов превышает допустимое количество");
-                }
+                    throw new InvalidOperationException("Вы не записаны");
 
                 db.EventUsers.Remove(eventUser);
                 eventToUpdate.TicketsCount += eventUser.Tickets;
@@ -51,7 +48,7 @@ namespace GomelStateUniversity_Activity.Data
             var eventToUpdate = db.Events.Find(eventId);
             if(eventToUpdate.TicketsCount < amount)
             {
-                return;
+                throw new InvalidOperationException("Кол-во билетов превышает допустимое количество");
             }         
             
             EventUser eventUser = new EventUser(eventId, userId, amount);

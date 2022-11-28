@@ -28,14 +28,19 @@ namespace GomelStateUniversity_Activity.Controllers
 
 
         // GET: Event
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(bool Irrelevant = false)
         {
             if (TempData["Message"] != null) ViewData["Message"] = TempData["Message"];
 
-            ViewBag.PageName = "Список мероприятий";
-            ViewBag.Irrelevant = false;
+            if (Irrelevant) ViewBag.PageName = "Cписок прошлых мероприятий";
+            else ViewBag.PageName = "Cписок мероприятий";
 
-            return View(await _eventRepository.GetEventsAsync());
+            ViewBag.Irrelevant = Irrelevant;
+            var events = await _eventRepository.GetEventsAsync();
+            if (Irrelevant)
+                return View(events.Where(x => x.DateTime < DateTime.Now));
+            else
+                return View(events.Where(x => x.DateTime > DateTime.Now));
         }
 
 
@@ -149,7 +154,7 @@ namespace GomelStateUniversity_Activity.Controllers
                 TempData["Message"] = "Операция невозможна. " + ex.Message;
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(MyEvents));
         }
 
 
@@ -166,7 +171,7 @@ namespace GomelStateUniversity_Activity.Controllers
                 TempData["Message"] = "Операция невозможна. " + ex.Message;
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(MyEvents));
         }
 
 
@@ -184,17 +189,20 @@ namespace GomelStateUniversity_Activity.Controllers
             {
                 TempData["Message"] = "Операция невозможна. " + ex.Message;
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(MyEvents));
         }
 
 
         public async Task<IActionResult>MyEvents()
         {
             if (TempData["Message"] != null) ViewData["Message"] = TempData["Message"];
-
+            
             ViewBag.PageName = "Мой список мероприятий";
+            ViewBag.Irrelevant = true;
 
-            return View("Index", await _eventRepository.GetMyEventsAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)));
+            var events = await _eventRepository.GetMyEventsAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            return View("Index", events.Where(x => x.DateTime > DateTime.Now));
         }
 
 
@@ -204,31 +212,19 @@ namespace GomelStateUniversity_Activity.Controllers
 
             var subdiv = await _subdivisionRepository.GetSubdivisionAsync(subdivId);
 
-            if(Irrelevant) ViewBag.PageName = "Список прошлых мероприятий - " + subdiv.Name;
+            var events = await _eventRepository.GetEventsBySubdivisionAsync(subdivId);
+
+            if (Irrelevant) ViewBag.PageName = "Список прошлых мероприятий - " + subdiv.Name;
             else ViewBag.PageName = "Список мероприятий - " + subdiv.Name;
 
             ViewBag.SubdivId = subdivId;
             ViewBag.Irrelevant = Irrelevant;
 
-            return View("Index", await _eventRepository.GetEventsBySubdivisionAsync(subdivId));
+            if (Irrelevant)
+                return View("Index", events.Where(x => x.DateTime < DateTime.Now));
+            else
+                return View("Index", events.Where(x => x.DateTime > DateTime.Now));
         }
 
-
-        public IActionResult Culture() => RedirectToAction("EventsListForSubdiv", new { subdivId = 5 });
-        public IActionResult Sport() => RedirectToAction("EventsListForSubdiv", new { subdivId = 7 });
-        public IActionResult MassEvents() => RedirectToAction("EventsListForSubdiv", new { subdivId = 8 });
-        public IActionResult Volunteers() => RedirectToAction("EventsListForSubdiv", new { subdivId = 9 });
-
-
-        public IActionResult IrrelevantEvents()
-        {
-            return RedirectToAction("Index");
-        }
-
-
-        public IActionResult IrrelevantEventsBySubdivision(int subdivId)
-        {
-            return RedirectToAction("EventsListForSubdiv", new { subdivId = subdivId, Irrelevant = true });
-        }
     }
 }

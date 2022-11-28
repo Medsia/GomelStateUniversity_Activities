@@ -39,21 +39,26 @@ namespace GomelStateUniversity_Activity.Data
 
         public async Task<IEnumerable<Event>> GetEventsAsync()
         {
-            return await db.Events.OrderByDescending(x => x.DateTime).Include(x => x.Subdivision).ToListAsync();
+            return await db.Events
+                .OrderByDescending(x => x.DateTime)
+                .Include(x => x.Subdivision)
+                .ToListAsync();
         }
-
         public async Task<IEnumerable<Event>> GetMyEventsAsync(string userId)
         {
-            return await db.Events.Include(c => c.EventUsers)
-                            .ThenInclude(s => s.ApplicationUser)
-                            .Where(x => x.EventUsers.Any(c => c.ApplicationUser.Id == userId))
-                            .OrderByDescending(x => x.DateTime).ToListAsync();
+            return await db.Events
+                .Where(x => x.DateTime > DateTime.Now)
+                .Include(c => c.EventUsers)
+                .ThenInclude(s => s.ApplicationUser)
+                .Where(x => x.EventUsers.Any(c => c.ApplicationUser.Id == userId))
+                .OrderByDescending(x => x.DateTime).ToListAsync();
         }
         public async Task<IEnumerable<Event>> GetEventsBySubdivisionAsync(int subdivisionId)
         {
-            return await db.Events.Include(c => c.Subdivision)
-                            .Where(c => c.Subdivision.Id == subdivisionId)
-                            .OrderByDescending(x => x.DateTime).ToListAsync();
+            return await db.Events
+                .Include(c => c.Subdivision)
+                .Where(c => c.Subdivision.Id == subdivisionId)
+                .OrderByDescending(x => x.DateTime).ToListAsync();
         }
 
         public async Task UpdateEventAsync(IFormCollection form)
