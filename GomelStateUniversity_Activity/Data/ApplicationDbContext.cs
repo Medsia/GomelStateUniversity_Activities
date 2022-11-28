@@ -22,8 +22,21 @@ namespace GomelStateUniversity_Activity.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            BuildEventUsers(modelBuilder);
+            BuildSubdivisions(modelBuilder);
+            base.OnModelCreating(modelBuilder);
+        }
+        private void BuildSubdivisions(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Subdivision>(action =>
+            {
+                action.HasData(Data.SubdivisionDtoList);
+            });
+        }
+        private void BuildEventUsers(ModelBuilder modelBuilder)
+        {
             modelBuilder.Entity<EventUser>()
-                .HasKey(t => new { t.EventId, t.ApplicationUserId});
+                .HasKey(t => new { t.EventId, t.ApplicationUserId });
             modelBuilder.Entity<EventUser>()
                 .HasOne(sc => sc.Event)
                 .WithMany(s => s.EventUsers)
@@ -32,7 +45,6 @@ namespace GomelStateUniversity_Activity.Data
                 .HasOne(sc => sc.ApplicationUser)
                 .WithMany(s => s.EventUsers)
                 .HasForeignKey(sc => sc.ApplicationUserId);
-            base.OnModelCreating(modelBuilder);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

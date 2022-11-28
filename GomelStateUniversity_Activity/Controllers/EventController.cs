@@ -193,10 +193,10 @@ namespace GomelStateUniversity_Activity.Controllers
         }
 
 
-        public async Task<IActionResult>MyEvents()
+        public async Task<IActionResult> MyEvents()
         {
             if (TempData["Message"] != null) ViewData["Message"] = TempData["Message"];
-            
+
             ViewBag.PageName = "Мой список мероприятий";
             ViewBag.Irrelevant = true;
 
@@ -204,7 +204,6 @@ namespace GomelStateUniversity_Activity.Controllers
 
             return View("Index", events.Where(x => x.DateTime > DateTime.Now));
         }
-
 
         public async Task<IActionResult> EventsListForSubdiv(int subdivId, bool Irrelevant = false)
         {
