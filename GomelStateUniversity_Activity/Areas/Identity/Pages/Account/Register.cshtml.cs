@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using UnidecodeSharpFork;
 
 namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account
 {
@@ -104,7 +105,7 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account
             {
                 string username = Input.Name.Normalize().Substring(0, 1) + Input.Patronym.Normalize().Substring(0, 1) + Input.Surname.Normalize();
                 var user = new ApplicationUser { 
-                    UserName = username,
+                    UserName = username.Unidecode(),
 
                     Surname = Input.Surname,
                     Name = Input.Name,

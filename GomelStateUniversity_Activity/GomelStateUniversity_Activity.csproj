@@ -17,6 +17,16 @@
     <Compile Remove="Data\Migrations\20221120160712_abs.Designer.cs" />
     <Compile Remove="Data\Migrations\20221126123126_SubdivisionData.cs" />
     <Compile Remove="Data\Migrations\20221126123126_SubdivisionData.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221129153052_RoleData.cs" />
+    <Compile Remove="Data\Migrations\20221129153052_RoleData.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221129163047_AdminAccountData.cs" />
+    <Compile Remove="Data\Migrations\20221129163047_AdminAccountData.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221129163922_AdminAccountData.cs" />
+    <Compile Remove="Data\Migrations\20221129163922_AdminAccountData.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221129165255_AdminAccountData.cs" />
+    <Compile Remove="Data\Migrations\20221129165255_AdminAccountData.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221129165439_AdminAccountData.cs" />
+    <Compile Remove="Data\Migrations\20221129165439_AdminAccountData.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +40,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.24" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+    <PackageReference Include="UnidecodeSharpFork" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>

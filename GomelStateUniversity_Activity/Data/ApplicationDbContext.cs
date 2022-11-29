@@ -1,4 +1,5 @@
 ﻿using GomelStateUniversity_Activity.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -24,8 +25,11 @@ namespace GomelStateUniversity_Activity.Data
         {
             BuildEventUsers(modelBuilder);
             BuildSubdivisions(modelBuilder);
+            BuildRoles(modelBuilder);
+            BuildAccount(modelBuilder);
             base.OnModelCreating(modelBuilder);
         }
+
         private void BuildSubdivisions(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Subdivision>(action =>
@@ -33,6 +37,28 @@ namespace GomelStateUniversity_Activity.Data
                 action.HasData(Data.SubdivisionDtoList);
             });
         }
+
+        private void BuildRoles(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<IdentityRole>(action =>
+            {
+                action.HasData(Data.RoleDtoList);
+            });
+        }
+
+        private void BuildAccount(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ApplicationUser>(action =>
+            {
+                action.HasData(Data.UserDtoList);
+            });
+
+            modelBuilder.Entity<IdentityUserRole<string>>(action =>
+            {
+                action.HasData(Data.UserRoleDtoList);
+            });
+        }
+
         private void BuildEventUsers(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<EventUser>()
@@ -46,6 +72,7 @@ namespace GomelStateUniversity_Activity.Data
                 .WithMany(s => s.EventUsers)
                 .HasForeignKey(sc => sc.ApplicationUserId);
         }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

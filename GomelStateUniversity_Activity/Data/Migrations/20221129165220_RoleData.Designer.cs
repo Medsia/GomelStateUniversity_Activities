@@ -4,14 +4,16 @@ using GomelStateUniversity_Activity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GomelStateUniversity_Activity.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221129165220_RoleData")]
+    partial class RoleData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,23 +102,6 @@ namespace GomelStateUniversity_Activity.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "e9c84823-8e52-4bce-aeab-5c3435059c5c",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "23d875e1-2d80-4905-a52d-8584ecb37f37",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedUserName = "ADMINISTRATOR",
-                            PasswordHash = "AQAAAAEAACcQAAAAEC9RVRfJpeULnDo9YKJBBIQpty/59BsyI14YA74+l5fcDOA/qCtcZUNBMpRDN/cokQ==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "d434d335-e0c7-4433-b3b7-3dfba101a15f",
-                            TwoFactorEnabled = false,
-                            UserName = "Administrator",
-                            Year = 0
-                        });
                 });
 
             modelBuilder.Entity("GomelStateUniversity_Activity.Models.Event", b =>
@@ -420,13 +405,6 @@ namespace GomelStateUniversity_Activity.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "e9c84823-8e52-4bce-aeab-5c3435059c5c",
-                            RoleId = "6aedd11d-510d-4017-b685-1c6b6fa92b91"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
