@@ -60,13 +60,15 @@
         <a asp-action="UnSubscribe" asp-route-id="@Model.Id" class="text-info">Отписаться</a><br>
         <div id="GroupSubUnfoldable" style="display: none;">
             <form asp-action="SubscribeGroup" method="post">
-                <input type="hidden" name="id" value="@Model.Id"/>
+                <input type="hidden" name="id" value="@Model.Id" />
                 <br><input type="number" min="1" name="ticketsAmount" placeholder="Количество" class="text-center col-md-7" /><br>
                 <a onclick="SubmitEvent" class="text-info">Записать группу</a><br>
             </form>
         </div>
         <a id="UnfoldBtn" style="" class="text-info" onclick="Unfold()">Записать группу</a><br>
         <a asp-action="UnSubscribe" asp-route-id="@Model.Id" class="text-info">Отписать группу</a>
+        <a class="btn btn-outline-primary text-center mb-auto mx-5" asp-route-eventId="@Model.Id"
+           asp-area="Functionality" asp-page="/Review/CreateReview">Написать отзыв</a>
     </div>
     <br>
 </div>

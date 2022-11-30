@@ -42,6 +42,8 @@ namespace GomelStateUniversity_Activity.Data
             return await db.Events
                 .OrderByDescending(x => x.DateTime)
                 .Include(x => x.Subdivision)
+                .Include(x => x.EventUsers)
+                .ThenInclude(s => s.ApplicationUser)
                 .ToListAsync();
         }
         public async Task<IEnumerable<Event>> GetMyEventsAsync(string userId)
@@ -57,6 +59,8 @@ namespace GomelStateUniversity_Activity.Data
         {
             return await db.Events
                 .Include(c => c.Subdivision)
+                .Include(x => x.EventUsers)
+                .ThenInclude(s => s.ApplicationUser)
                 .Where(c => c.Subdivision.Id == subdivisionId)
                 .OrderByDescending(x => x.DateTime).ToListAsync();
         }

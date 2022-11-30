@@ -53,29 +53,39 @@
                 <div class="text-center">Количество мест(билетов)</div>
             </th>
             <th>
-                <div class="text-center">Функции</div>
+                <div class="text-center"></div>
             </th>
         </tr>
     </thead>
     <tbody>
             @foreach (var item in Model)
             {
-                <tr class="box-shadow">
+        <tr class="box-shadow">
+            <td>
+                <div class="text-center">@item.Name</div>
+            </td>
+            <td>
+                <div class="text-center">@item.DateTime</div>
+            </td>
+            <td>
+                <div class="text-center">@item.TicketsCount</div>
+            </td>
+            @foreach (var eventsUsers in item.EventUsers.Where(x => x.EventId == item.Id))
+            {
+                @if (eventsUsers.ApplicationUser.UserName == User.Identity.Name)
+                {
                     <td>
-                        <div class="text-center">@item.Name</div>
+                        <div class="text-center">Вы записаны✅</div>
                     </td>
-                    <td>
-                        <div class="text-center">@item.DateTime</div>
-                    </td>
-                    <td>
-                        <div class="text-center">@item.TicketsCount</div>
-                    </td>
-                    <td class="text-center">
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="text-info">Редактировать</a><br>
-                        <a asp-action="Details" asp-route-id="@item.Id" class="text-info">Подробнее</a><br>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="text-info">Удалить</a><br>
-                    </td>
-                </tr>
+                }
+            }
+
+            <td class="text-center">
+                <a asp-action="Edit" asp-route-id="@item.Id" class="text-info">Редактировать</a><br>
+                <a asp-action="Details" asp-route-id="@item.Id" class="text-info">Подробнее</a><br>
+                <a asp-action="Delete" asp-route-id="@item.Id" class="text-info">Удалить</a><br>
+            </td>
+        </tr>
             }
     </tbody>
 </table>
