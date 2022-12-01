@@ -24,7 +24,6 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
 
         private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
 
@@ -32,12 +31,10 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender,
             IPasswordHasher<ApplicationUser> passwordHasher)
         {
             _userManager = userManager;
             _logger = logger;
-            _emailSender = emailSender;
             _roleManager = roleManager;
             _passwordHasher = passwordHasher;
         }
@@ -139,13 +136,19 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account
                 
                 var result = await _userManager.UpdateAsync(user);
 
-                if(!_userManager.IsInRoleAsync(user, Input.RoleName).Result)
+                if(Input.RoleName != "student")
                 {
+                    await _userManager.RemoveFromRoleAsync(user, "student");
                     await _userManager.AddToRoleAsync(user, Input.RoleName);
-                    foreach (var role in roles)
+                    await _userManager.AddToRoleAsync(user, "supervisor");
+                }
+                else
+                {
+                    foreach(var role in roles)
                     {
-                        if(role.Name != Input.RoleName) await _userManager.RemoveFromRoleAsync(user, role.Name);
+                        await _userManager.RemoveFromRoleAsync(user, role.Name);
                     }
+                    await _userManager.AddToRoleAsync(user, "student");
                 }
 
                 return RedirectToPage("AccountManager");

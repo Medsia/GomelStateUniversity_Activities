@@ -27,6 +27,8 @@
     <Compile Remove="Data\Migrations\20221129165255_AdminAccountData.Designer.cs" />
     <Compile Remove="Data\Migrations\20221129165439_AdminAccountData.cs" />
     <Compile Remove="Data\Migrations\20221129165439_AdminAccountData.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221201222639_SubdivisionRolesData.cs" />
+    <Compile Remove="Data\Migrations\20221201222639_SubdivisionRolesData.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

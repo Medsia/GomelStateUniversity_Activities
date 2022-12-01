@@ -24,7 +24,7 @@
                 <select asp-for="Input.RoleName" class="form-control">
                     @foreach (var role in @Model.roles)
                     {
-                        if (role.Name == "admin") continue;
+                        if (role.Name == "admin" || role.Name == "supervisor") continue;
                         if (UserManager.IsInRoleAsync(Model.user, role.Name).Result)
                         {
                             <option selected value="@role.Name">@role.Name</option>
