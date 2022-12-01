@@ -26,16 +26,20 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
+        private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
+
         public UserDetailsModel(
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IPasswordHasher<ApplicationUser> passwordHasher)
         {
             _userManager = userManager;
             _logger = logger;
             _emailSender = emailSender;
             _roleManager = roleManager;
+            _passwordHasher = passwordHasher;
         }
 
         [BindProperty]
@@ -48,32 +52,26 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
             [Display(Name = "Роль в системе")]
-            public string RoleId { get; set; }
+            public string RoleName { get; set; }
 
-            [Required]
             [StringLength(30, ErrorMessage = "{0} должна быть минимум {2} символа.", MinimumLength = 3)]
             [Display(Name = "Фамилия")]
             public string Surname { get; set; }
 
-            [Required]
             [StringLength(30, ErrorMessage = "{0} должно быть минимум {2} символа.", MinimumLength = 3)]
             [Display(Name = "Имя")]
             public string Name { get; set; }
 
-            [Required]
             [StringLength(30, ErrorMessage = "{0} должно быть минимум {2} символа.", MinimumLength = 3)]
             [Display(Name = "Отчество")]
             public string Patronym { get; set; }
 
-            [Required]
             [DataType(DataType.PhoneNumber)]
             [Display(Name = "Номер телефона")]
             public string PhoneNumber { get; set; }
 
 
-            [Required]
             [StringLength(16, ErrorMessage = "{0} должен быть от {2} до {1} символов.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Пароль")]
@@ -98,6 +96,10 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account
 
             [Display(Name = "Группа")]
             public string Group { get; set; }
+
+
+            [HiddenInput]
+            public string UserId { get; set; }
         }
 
 
@@ -110,13 +112,46 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account
         }
 
 
-        public void OnPost(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
+                user = _userManager.FindByIdAsync(Input.UserId).Result;
+                roles = _roleManager.Roles.ToArray();
 
+                string username = Input.Name.Normalize().Substring(0, 1) + Input.Patronym.Normalize().Substring(0, 1) + Input.Surname.Normalize();
+
+                if(user.Name != Input.Name) user.Name = Input.Name;
+                if (user.Surname != Input.Surname) user.Surname = Input.Surname;
+                if (user.Patronym != Input.Patronym) user.Patronym = Input.Patronym;
+                if (user.Group != Input.Group) user.Group = Input.Group;
+                if (user.Year != Input.Year) user.Year = Input.Year;
+                if (user.Faculty != Input.Faculty) user.Faculty = Input.Faculty;
+                if (user.PhoneNumber != Input.PhoneNumber) user.PhoneNumber = Input.PhoneNumber;
+                if (user.Email != Input.Email) user.Email = Input.Email;
+
+                if (!string.IsNullOrWhiteSpace(Input.Password))
+                {
+                    string hashedPass = _passwordHasher.HashPassword(user, Input.Password);
+                    if (user.PasswordHash != hashedPass) user.PasswordHash = hashedPass;
+                }
+                
+                var result = await _userManager.UpdateAsync(user);
+
+                if(!_userManager.IsInRoleAsync(user, Input.RoleName).Result)
+                {
+                    await _userManager.AddToRoleAsync(user, Input.RoleName);
+                    foreach (var role in roles)
+                    {
+                        if(role.Name != Input.RoleName) await _userManager.RemoveFromRoleAsync(user, role.Name);
+                    }
+                }
+
+                return RedirectToPage("AccountManager");
             }
+
+            return Page();
         }
     }
 }
