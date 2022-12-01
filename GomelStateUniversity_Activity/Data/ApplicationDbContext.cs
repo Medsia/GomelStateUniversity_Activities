@@ -24,6 +24,9 @@ namespace GomelStateUniversity_Activity.Data
         {
             BuildEventUsers(modelBuilder);
             BuildSubdivisions(modelBuilder);
+            BuildCreativityTypes(modelBuilder);
+            BuildLaborDirections(modelBuilder);
+            BuildSportTypes(modelBuilder);
             base.OnModelCreating(modelBuilder);
         }
         private void BuildSubdivisions(ModelBuilder modelBuilder)
