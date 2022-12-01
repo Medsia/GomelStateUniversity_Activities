@@ -51,5 +51,54 @@ namespace GomelStateUniversity_Activity.Data
                 Contacts = "osnach@gsu.by" },
 
         };
+
+        public static readonly List<CreativityType> CreativityTypesDtoList = new List<CreativityType>
+        {
+             new CreativityType{
+                Id = 1,
+                Name = "Песня" },
+
+             new CreativityType{
+                Id = 2,
+                Name = "Танец" },
+
+             new CreativityType{
+                Id = 3,
+                Name = "Другое" },
+        };
+
+        public static readonly List<SportType> SportTypesDtoList = new List<SportType>
+        {
+             new SportType{
+                Id = 1,
+                Name = "Карате" },
+
+             new SportType{
+                Id = 2,
+                Name = "Бадминтон" },
+
+             new SportType{
+                Id = 3,
+                Name = "Гиревой спорт" },
+
+             new SportType{
+                Id = 4,
+                Name = "Волейбол" },
+        };
+
+        public static readonly List<LaborDirection> LaborDirectionsDtoList = new List<LaborDirection>
+        {
+             new LaborDirection{
+                Id = 1,
+                Name = "Педагогический отряд" },
+
+             new LaborDirection{
+                Id = 2,
+                Name = "Сельскохозяйственные работы" },
+
+              new LaborDirection{
+                Id = 3,
+                Name = "Лесник" },
+        };
     }
 }
