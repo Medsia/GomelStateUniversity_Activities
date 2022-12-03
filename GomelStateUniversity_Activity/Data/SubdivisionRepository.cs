@@ -10,16 +10,9 @@ namespace GomelStateUniversity_Activity.Data
     public class SubdivisionRepository : ISubdivisionRepository
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        public async Task CreateSubdivisionAsync(Subdivision subdivision)
+        public async Task UpdateSubdivisionAsync(Subdivision subdivision)
         {
-            db.Subdivisions.Add(subdivision);
-            await db.SaveChangesAsync();
-        }
-
-        public async Task DeleteSubdivisionAsync(int id)
-        {
-            var subdivisionToDelete = db.Subdivisions.FirstOrDefault(x => x.Id == id);
-            db.Subdivisions.Remove(subdivisionToDelete);
+            db.Subdivisions.Update(subdivision);
             await db.SaveChangesAsync();
         }
 
