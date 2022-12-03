@@ -4,14 +4,16 @@ using GomelStateUniversity_Activity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GomelStateUniversity_Activity.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221202144010_ApplicationForms")]
+    partial class ApplicationForms
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -397,58 +399,6 @@ namespace GomelStateUniversity_Activity.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("GomelStateUniversity_Activity.Models.SubdivisionActivityType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SubdivisionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SubdivisionId");
-
-                    b.ToTable("subdivisionActivityTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Организатор мероприятия ",
-                            SubdivisionId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Артист ",
-                            SubdivisionId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Спорт ",
-                            SubdivisionId = 2
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Вступление в организацию ",
-                            SubdivisionId = 4
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Работа в студенческом отряде ",
-                            SubdivisionId = 4
-                        });
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -633,15 +583,6 @@ namespace GomelStateUniversity_Activity.Data.Migrations
                     b.HasOne("GomelStateUniversity_Activity.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId");
-                });
-
-            modelBuilder.Entity("GomelStateUniversity_Activity.Models.SubdivisionActivityType", b =>
-                {
-                    b.HasOne("GomelStateUniversity_Activity.Models.Subdivision", "Subdivision")
-                        .WithMany()
-                        .HasForeignKey("SubdivisionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -1,4 +1,5 @@
 ﻿using GomelStateUniversity_Activity.Models;
+using GomelStateUniversity_Activity.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -100,5 +101,57 @@ namespace GomelStateUniversity_Activity.Data
                 Id = 3,
                 Name = "Лесник" },
         };
+
+        public static readonly List<SubdivisionActivityType> SubdivisionActivityTypesDtoList = new List<SubdivisionActivityType>
+        {
+             new SubdivisionActivityType{
+                Id = 1,
+                Name = "Организатор ",
+                SubdivisionId = 1},             
+
+             new SubdivisionActivityType{
+                Id = 2,
+                Name = "Артист ",
+                SubdivisionId = 1 },
+
+              new SubdivisionActivityType{
+                Id = 3,
+                Name = "Спорт ",
+                SubdivisionId = 2 },
+
+              new SubdivisionActivityType{
+                Id = 4,
+                Name = "Вступление в организацию ",
+                SubdivisionId = 4 },
+
+              new SubdivisionActivityType{
+                Id = 5,
+                Name = "Работа в студенческом отряде ",
+                SubdivisionId = 4 },
+        };
+
+        public class Organization : ISubdivActivityType
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public static readonly List<Organization> organizationsData = new List<Organization>
+            {
+                new Organization{
+                    Id = 1,
+                    Name = "БРСМ" },
+
+                new Organization{
+                    Id = 2,
+                    Name = "Студенческий совет" },
+
+                new Organization{
+                    Id = 3,
+                    Name = "Профсоюз" },
+
+                new Organization{
+                    Id = 4,
+                    Name = "Волонтерская деятельность" },
+            };
+        }
     }
 }
