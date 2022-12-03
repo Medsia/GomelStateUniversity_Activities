@@ -36,7 +36,11 @@
 
     }
 
-    <a asp-action="Create" class="btn btn-outline-info ml-auto mr-3">Создать мероприятие</a>
+    @if (!User.IsInRole("student"))
+    {
+        <a asp-action="Create" class="btn btn-outline-info ml-auto mr-3">Создать мероприятие</a>
+    }
+
     <div id='calendar'></div>
 </div>
 
@@ -81,20 +85,15 @@
             }
 
             <td class="text-center">
-                <a asp-action="Edit" asp-route-id="@item.Id" class="text-info">Редактировать</a><br>
                 <a asp-action="Details" asp-route-id="@item.Id" class="text-info">Подробнее</a><br>
-                <a asp-action="Delete" asp-route-id="@item.Id" class="text-info">Удалить</a><br>
+                @if (!User.IsInRole("student"))
+                {
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="text-info">Редактировать</a><br>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="text-info">Удалить</a><br>
+                }
             </td>
         </tr>
             }
     </tbody>
 </table>
 
-
-<script type="text/javascript">
-    
-    function Unfold() {
-        document.getElementById('GroupSubUnfoldable').setAttribute('style', '');
-        document.getElementById('UnfoldBtn').setAttribute('style', 'display: none;');
-    }
-</script>

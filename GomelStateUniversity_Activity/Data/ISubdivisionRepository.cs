@@ -11,7 +11,6 @@ namespace GomelStateUniversity_Activity.Data
     {
         public Task<IEnumerable<Subdivision>> GetSubdivisionsAsync();
         public Task<Subdivision> GetSubdivisionAsync(int id);
-        public Task CreateSubdivisionAsync(Subdivision subdivision);
-        public Task DeleteSubdivisionAsync(int id);
+        public Task UpdateSubdivisionAsync(Subdivision subdivision);
     }
 }

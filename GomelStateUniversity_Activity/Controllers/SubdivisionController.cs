@@ -1,5 +1,6 @@
 ﻿using GomelStateUniversity_Activity.Data;
 using GomelStateUniversity_Activity.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -17,7 +18,7 @@ namespace GomelStateUniversity_Activity.Controllers
             _subdivisionRepository = subdivisionRepository;
         }
 
-        // GET: Subdivision
+
         public async Task<IActionResult> Index()
         {
             if (TempData["Message"] != null)
@@ -27,42 +28,25 @@ namespace GomelStateUniversity_Activity.Controllers
             return View(await _subdivisionRepository.GetSubdivisionsAsync());
         }
 
-        // GET: Subdivision/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var subdivision = await _subdivisionRepository.GetSubdivisionAsync((int)id);
-            if (subdivision == null)
-            {
-                return NotFound();
-            }
-
-            return View(subdivision);
-        }
-
-        // GET: Subdivision/Create
-        public IActionResult Create()
+        [Authorize(Roles = "admin, supervisor")]
+        public IActionResult Edit()
         {
             return View();
         }
 
-        // POST: Subdivision/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+        [Authorize(Roles = "admin, supervisor")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Contacts")] Subdivision subdivision)
+        public async Task<IActionResult> Edit([Bind("Id,Name,Contacts")] Subdivision subdivision)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await _subdivisionRepository.CreateSubdivisionAsync(subdivision);
-                    TempData["Message"] = "Подразделение добавлено: " + subdivision.Name;
+                    await _subdivisionRepository.UpdateSubdivisionAsync(subdivision);
+                    TempData["Message"] = "Контакты отдела обновлениы: " + subdivision.Name;
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
@@ -74,33 +58,5 @@ namespace GomelStateUniversity_Activity.Controllers
             }
             return View(subdivision);
         }
-
-        // GET: Subdivision/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var subdivision = await _subdivisionRepository.GetSubdivisionAsync((int)id);
-            if (subdivision == null)
-            {
-                return NotFound();
-            }
-
-            return View(subdivision);
-        }
-
-        // POST: Subdivision/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            await _subdivisionRepository.DeleteSubdivisionAsync(id);
-            TempData["Message"] = "Подразделение удалено.";
-            return RedirectToAction(nameof(Index));
-        }
-
     }
 }

@@ -3,8 +3,21 @@
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
 <ul class="nav nav-pills flex-column">
+    <li class="nav-item"><h5 class="nav-link">Редактирование профиля</h5></li>
     <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Профиль</a></li>
     <li class="nav-item"><a class="nav-link @ManageNavPages.EmailNavClass(ViewContext)" id="email" asp-page="./Email">Почта</a></li>
     <li class="nav-item"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Пароль</a></li>
     <li class="nav-item"><a class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData">Персональные данные</a></li>
+    
+    @if (User.IsInRole("supervisor") || User.IsInRole("admin"))
+    {
+        <li class="nav-item mt-3"><h5 class="nav-link">Функционал руководителя</h5></li>
+        <li class="nav-item"><p class="nav-link">Нот имплементед</p></li>
+    }
+
+    @if (User.IsInRole("admin"))
+    {
+        <li class="nav-item mt-3"><h5 class="nav-link">Функционал администратора</h5></li>
+        <li class="nav-item"><a class="nav-link @ManageNavPages.AccountManagerNavClass(ViewContext)" id="account-manager" asp-page="./AccountManager">Управление аккаунтами</a></li>
+    }
 </ul>

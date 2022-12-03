@@ -57,6 +57,7 @@ namespace GomelStateUniversity_Activity.Controllers
 
 
         // GET: Event/Create
+        [Authorize(Roles = "admin, supervisor")]
         public IActionResult Create() => View(new EventViewModel(_subdivisionRepository.GetSubdivisionsAsync().Result.ToList()));
 
 
@@ -64,6 +65,7 @@ namespace GomelStateUniversity_Activity.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "admin, supervisor")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(EventViewModel viewModel, IFormCollection form)
         {
@@ -82,6 +84,7 @@ namespace GomelStateUniversity_Activity.Controllers
 
 
         // GET: Event/Edit/5
+        [Authorize(Roles = "admin, supervisor")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -98,6 +101,7 @@ namespace GomelStateUniversity_Activity.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "admin, supervisor")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, IFormCollection form)
         {
@@ -118,6 +122,7 @@ namespace GomelStateUniversity_Activity.Controllers
 
 
         // GET: Event/Delete/5
+        [Authorize(Roles = "admin, supervisor")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -131,6 +136,7 @@ namespace GomelStateUniversity_Activity.Controllers
 
         // POST: Event/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "admin, supervisor")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

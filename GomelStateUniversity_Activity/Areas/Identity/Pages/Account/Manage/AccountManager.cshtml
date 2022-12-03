@@ -1,0 +1,29 @@
+﻿@page
+@model AccountManagerModel
+@{
+    ViewData["Title"] = "Управление аккаунтами";
+    ViewData["ActivePage"] = ManageNavPages.AccountManager;
+}
+
+
+<div class="row">
+    <div class="col-md-6">
+        <label asp-for="@Model.Students"></label>
+        @foreach(var student in @Model.Students)
+        {
+            <a asp-page="UserDetails" asp-route-userId="@student.Id" class="page-link">@student.UserName</a><br>
+        }
+    </div>
+    <div class="col-md-6">
+        <label asp-for="@Model.Supervisors"></label>
+        @foreach(var supervisor in @Model.Supervisors)
+        {
+            <a asp-page="UserDetails" asp-route-userId="@supervisor.Id" class="page-link">@supervisor.UserName</a><br>
+        }
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

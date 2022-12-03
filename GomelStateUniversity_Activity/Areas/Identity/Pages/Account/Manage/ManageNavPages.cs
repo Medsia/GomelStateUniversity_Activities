@@ -18,6 +18,8 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account.Manage
 
         public static string PersonalData => "PersonalData";
 
+        public static string AccountManager => "AccountManager";
+
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
 
         public static string EmailNavClass(ViewContext viewContext) => PageNavClass(viewContext, Email);
@@ -27,6 +29,8 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account.Manage
         public static string DeletePersonalDataNavClass(ViewContext viewContext) => PageNavClass(viewContext, DeletePersonalData);
 
         public static string PersonalDataNavClass(ViewContext viewContext) => PageNavClass(viewContext, PersonalData);
+
+        public static string AccountManagerNavClass(ViewContext viewContext) => PageNavClass(viewContext, AccountManager);
 
         private static string PageNavClass(ViewContext viewContext, string page)
         {
