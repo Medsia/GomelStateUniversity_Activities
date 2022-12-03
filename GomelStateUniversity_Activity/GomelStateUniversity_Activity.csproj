@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -17,6 +17,14 @@
     <Compile Remove="Data\Migrations\20221120160712_abs.Designer.cs" />
     <Compile Remove="Data\Migrations\20221126123126_SubdivisionData.cs" />
     <Compile Remove="Data\Migrations\20221126123126_SubdivisionData.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221201171549_SubdivisionActivities.cs" />
+    <Compile Remove="Data\Migrations\20221201171549_SubdivisionActivities.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221202140856_ApplicationForms.cs" />
+    <Compile Remove="Data\Migrations\20221202140856_ApplicationForms.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221202142827_ApplicationForms.cs" />
+    <Compile Remove="Data\Migrations\20221202142827_ApplicationForms.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221202142917_ApplicationForms.cs" />
+    <Compile Remove="Data\Migrations\20221202142917_ApplicationForms.Designer.cs" />
     <Compile Remove="Data\Migrations\20221129153052_RoleData.cs" />
     <Compile Remove="Data\Migrations\20221129153052_RoleData.Designer.cs" />
     <Compile Remove="Data\Migrations\20221129163047_AdminAccountData.cs" />
