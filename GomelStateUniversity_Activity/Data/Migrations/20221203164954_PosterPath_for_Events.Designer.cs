@@ -4,48 +4,22 @@ using GomelStateUniversity_Activity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GomelStateUniversity_Activity.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221203164954_PosterPath_for_Events")]
+    partial class PosterPath_for_Events
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.30")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("GomelStateUniversity_Activity.Models.ApplicationForm", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ApplicationParameters")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("RecipientContacts")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("SubdivisionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("SubdivisionId");
-
-                    b.ToTable("ApplicationForms");
-                });
 
             modelBuilder.Entity("GomelStateUniversity_Activity.Models.ApplicationUser", b =>
                 {
@@ -147,38 +121,6 @@ namespace GomelStateUniversity_Activity.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("GomelStateUniversity_Activity.Models.CreativityType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CreativityTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Песня"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Танец"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Другое"
-                        });
-                });
-
             modelBuilder.Entity("GomelStateUniversity_Activity.Models.Event", b =>
                 {
                     b.Property<int>("Id")
@@ -232,38 +174,6 @@ namespace GomelStateUniversity_Activity.Data.Migrations
                     b.ToTable("EventUsers");
                 });
 
-            modelBuilder.Entity("GomelStateUniversity_Activity.Models.LaborDirection", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("LaborDirections");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Педагогический отряд"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Сельскохозяйственные работы"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Лесник"
-                        });
-                });
-
             modelBuilder.Entity("GomelStateUniversity_Activity.Models.Review", b =>
                 {
                     b.Property<int>("Id")
@@ -310,43 +220,6 @@ namespace GomelStateUniversity_Activity.Data.Migrations
                     b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Schedule");
-                });
-
-            modelBuilder.Entity("GomelStateUniversity_Activity.Models.SportType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SportTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Карате"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Бадминтон"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Гиревой спорт"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Волейбол"
-                        });
                 });
 
             modelBuilder.Entity("GomelStateUniversity_Activity.Models.Subdivision", b =>
@@ -414,58 +287,6 @@ namespace GomelStateUniversity_Activity.Data.Migrations
                             Id = 8,
                             Contacts = "osnach@gsu.by",
                             Name = "Отзывы"
-                        });
-                });
-
-            modelBuilder.Entity("GomelStateUniversity_Activity.Models.SubdivisionActivityType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SubdivisionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SubdivisionId");
-
-                    b.ToTable("subdivisionActivityTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Организатор мероприятия ",
-                            SubdivisionId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Артист ",
-                            SubdivisionId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Спорт ",
-                            SubdivisionId = 2
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Вступление в организацию ",
-                            SubdivisionId = 4
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Работа в студенческом отряде ",
-                            SubdivisionId = 4
                         });
                 });
 
@@ -676,17 +497,6 @@ namespace GomelStateUniversity_Activity.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("GomelStateUniversity_Activity.Models.ApplicationForm", b =>
-                {
-                    b.HasOne("GomelStateUniversity_Activity.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("GomelStateUniversity_Activity.Models.Subdivision", "Subdivision")
-                        .WithMany()
-                        .HasForeignKey("SubdivisionId");
-                });
-
             modelBuilder.Entity("GomelStateUniversity_Activity.Models.Event", b =>
                 {
                     b.HasOne("GomelStateUniversity_Activity.Models.Subdivision", "Subdivision")
@@ -725,15 +535,6 @@ namespace GomelStateUniversity_Activity.Data.Migrations
                     b.HasOne("GomelStateUniversity_Activity.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId");
-                });
-
-            modelBuilder.Entity("GomelStateUniversity_Activity.Models.SubdivisionActivityType", b =>
-                {
-                    b.HasOne("GomelStateUniversity_Activity.Models.Subdivision", "Subdivision")
-                        .WithMany()
-                        .HasForeignKey("SubdivisionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

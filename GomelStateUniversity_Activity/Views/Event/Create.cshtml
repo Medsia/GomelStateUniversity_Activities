@@ -5,15 +5,25 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@{
+    string posterPath = @Model.Event.PosterPath;
+    if (string.IsNullOrWhiteSpace(posterPath)) posterPath = "/Img/Empty.jpg";
+}
+
 
 <h4 class="text-center">@ViewData["Title"]</h4>
 <hr />
 
 
-<form asp-action="Create" id="create-event">
+<form asp-action="Create" id="create-event" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row mb-3">
         <div class="col-md-5 col-md-auto mx-auto">
+            <div class="form-group">
+                <label class="control-label">Постер/Афиша</label><br />
+                <img class="img-thumbnail mb-2" height="200" width="200" src="@posterPath"/>
+                <input type="file" name="PosterImage" placeholder="Выберите изображение" class="form-control-file" required/>
+            </div>
             <div class="form-group">
                 <label asp-for="Event.Name" class="control-label">Название</label>
                 <input asp-for="Event.Name" placeholder="Введите название" class="form-control" required/>
