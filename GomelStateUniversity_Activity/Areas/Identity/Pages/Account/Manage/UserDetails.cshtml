@@ -1,0 +1,114 @@
+﻿@page
+@inject UserManager<ApplicationUser> UserManager
+@model UserDetailsModel
+@{
+    ViewData["Title"] = "Подробности аккаунта - " + @Model.user.UserName;
+    ViewData["ActivePage"] = ManageNavPages.AccountManager;
+}
+
+<h4>@Model.user.FullName</h4>
+<hr />
+
+
+<form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+    <div class="mb-5">
+        <h5>Параметры аккаунта</h5>
+        <input asp-for="Input.UserId" value="@Model.user.Id"/>
+        <div>
+            <div class="form-group">
+                <label class="">Имя пользователя</label>
+                <input disabled value="@Model.user.UserName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.RoleName"></label>
+                <select asp-for="Input.RoleName" class="form-control">
+                    @foreach (var role in @Model.roles)
+                    {
+                        if (role.Name == "admin" || role.Name == "supervisor") continue;
+                        if (UserManager.IsInRoleAsync(Model.user, role.Name).Result)
+                        {
+                            <option selected value="@role.Name">@role.Name</option>
+                            continue;
+                        }
+                        <option value="@role.Name">@role.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="Input.RoleName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Password"></label>
+                <input asp-for="Input.Password" class="form-control" />
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.ConfirmPassword"></label>
+                <input asp-for="Input.ConfirmPassword" class="form-control" />
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    
+    
+    <h5>Параметры аккаунта</h5>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Input.Surname"></label>
+                <input asp-for="Input.Surname" value="@Model.user.Surname" class="form-control" />
+                <span asp-validation-for="Input.Surname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Name"></label>
+                <input asp-for="Input.Name" value="@Model.user.Name" class="form-control" />
+                <span asp-validation-for="Input.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Patronym"></label>
+                <input asp-for="Input.Patronym" value="@Model.user.Patronym" class="form-control" />
+                <span asp-validation-for="Input.Patronym" class="text-danger"></span>
+            </div>
+    
+            <div class="form-group">
+                <label asp-for="Input.PhoneNumber"></label>
+                <input asp-for="Input.PhoneNumber" value="@Model.user.PhoneNumber" class="form-control" />
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Email"></label>
+                <input asp-for="Input.Email" value="@Model.user.Email" class="form-control" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Input.Faculty"></label>
+                <input asp-for="Input.Faculty" value="@Model.user.Faculty" class="form-control" />
+                <span asp-validation-for="Input.Faculty" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Year"></label>
+                <input asp-for="Input.Year" value="@Model.user.Year" class="form-control" />
+                <span asp-validation-for="Input.Year" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Group"></label>
+                <input asp-for="Input.Group" value="@Model.user.Group" class="form-control" />
+                <span asp-validation-for="Input.Group" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </div>
+        <div class="col-md-6 mx-auto">
+            <a class="btn btn-outline-danger" href="javascript:history.back()">Вернуться</a>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

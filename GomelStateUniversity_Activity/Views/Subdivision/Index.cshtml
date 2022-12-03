@@ -3,25 +3,25 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string subdivName = "";
 }
 
-<h1>Подразделения</h1>
+<h4>Контакты отделов</h4>
 
 @if (ViewData["Message"] != null)
 {
     <h3>@ViewData["Message"]</h3>
 }
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+
+<table class="table mt-3">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                <div class="">Название отдела</div>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Contacts)
+                <div class="">Контакты</div>
             </th>
             <th></th>
         </tr>
@@ -31,16 +31,23 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    @if(subdivName != item.Name)
+                    {
+                        <div class="">@item.Name</div>
+                    }
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Contacts)
+                    <div class="">@item.Contacts</div>
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a>
+                    }
                 </td>
             </tr>
+            
+            subdivName = item.Name;
         }
     </tbody>
 </table>

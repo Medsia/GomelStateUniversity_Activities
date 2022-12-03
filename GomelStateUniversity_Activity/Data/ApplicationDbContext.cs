@@ -1,4 +1,5 @@
 ﻿using GomelStateUniversity_Activity.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -32,8 +33,11 @@ namespace GomelStateUniversity_Activity.Data
             BuildSportTypes(modelBuilder);
             BuildApplicationForms(modelBuilder);
             BuildSubdivisionActivityTypes(modelBuilder);
+            BuildRoles(modelBuilder);
+            BuildAccount(modelBuilder);
             base.OnModelCreating(modelBuilder);
         }
+
         private void BuildSubdivisions(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Subdivision>(action =>
@@ -41,6 +45,28 @@ namespace GomelStateUniversity_Activity.Data
                 action.HasData(Data.SubdivisionDtoList);
             });
         }
+
+        private void BuildRoles(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<IdentityRole>(action =>
+            {
+                action.HasData(Data.RoleDtoList);
+            });
+        }
+
+        private void BuildAccount(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ApplicationUser>(action =>
+            {
+                action.HasData(Data.UserDtoList);
+            });
+
+            modelBuilder.Entity<IdentityUserRole<string>>(action =>
+            {
+                action.HasData(Data.UserRoleDtoList);
+            });
+        }
+
         private void BuildEventUsers(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<EventUser>()
@@ -103,6 +129,7 @@ namespace GomelStateUniversity_Activity.Data
                     (a, p) => HashCode.Combine(HashCode.Combine(a, p.Key.GetHashCode()), p.Value.GetHashCode())
                 )
             );
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
