@@ -48,6 +48,9 @@
     <thead>
         <tr>
             <th>
+                <div class="ml-5">Постер/Афиша</div>
+            </th>
+            <th>
                 <div class="text-center">Название</div>
             </th>
             <th>
@@ -62,9 +65,15 @@
         </tr>
     </thead>
     <tbody>
-            @foreach (var item in Model)
-            {
+        @foreach (var item in Model)
+        {
+        string posterPath = @item.PosterPath;
+        if (string.IsNullOrWhiteSpace(posterPath)) posterPath = "/Img/Empty.jpg";
+
         <tr class="box-shadow">
+            <td>
+                <img class="img-thumbnail" height="200" width="200" src="@posterPath" />
+            </td>
             <td>
                 <div class="text-center">@item.Name</div>
             </td>
@@ -93,7 +102,7 @@
                 }
             </td>
         </tr>
-            }
+        }
     </tbody>
 </table>
 

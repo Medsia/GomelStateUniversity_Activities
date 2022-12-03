@@ -2,6 +2,7 @@
 using GomelStateUniversity_Activity.Models;
 using GomelStateUniversity_Activity.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -18,16 +19,21 @@ namespace GomelStateUniversity_Activity.Controllers
         private readonly IEventRepository _eventRepository;
         private readonly ISubdivisionRepository _subdivisionRepository;
         private readonly IEventUserRepository _eventUserRepository;
+        private readonly IImageRepository _imageRepository;
+        public string WebRootPath { private get; set; }
+
         public EventController(IEventRepository eventRepository, ISubdivisionRepository subdivisionRepository,
-            IEventUserRepository eventUserRepository)
+            IEventUserRepository eventUserRepository, IImageRepository imageRepository,
+            IWebHostEnvironment appEnvironment)
         {
             _eventRepository = eventRepository;
             _subdivisionRepository = subdivisionRepository;
             _eventUserRepository = eventUserRepository;
+            _imageRepository = imageRepository;
+            WebRootPath = appEnvironment.WebRootPath;
         }
 
 
-        // GET: Event
         public async Task<IActionResult> Index(bool Irrelevant = false)
         {
             if (TempData["Message"] != null) ViewData["Message"] = TempData["Message"];
@@ -44,7 +50,6 @@ namespace GomelStateUniversity_Activity.Controllers
         }
 
 
-        // GET: Event/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
@@ -56,22 +61,23 @@ namespace GomelStateUniversity_Activity.Controllers
         }
 
 
-        // GET: Event/Create
         [Authorize(Roles = "admin, supervisor")]
         public IActionResult Create() => View(new EventViewModel(_subdivisionRepository.GetSubdivisionsAsync().Result.ToList()));
 
 
-        // POST: Event/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
         [Authorize(Roles = "admin, supervisor")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(EventViewModel viewModel, IFormCollection form)
+        public async Task<IActionResult> Create(EventViewModel viewModel, IFormCollection form, IFormFile PosterImage)
         {
             try
             {
-                await _eventRepository.CreateEventAsync(form);
+                string imgPath = "/Img/" + Guid.NewGuid().ToString() + PosterImage.FileName;
+                string fullPath = WebRootPath + imgPath;
+                await _imageRepository.SaveImageAsync(PosterImage, WebRootPath + fullPath);
+
+                await _eventRepository.CreateEventAsync(form, imgPath);
+
                 TempData["Message"] = "Событие добавлено: " + form["Event.Name"];
                 return RedirectToAction("Index");
             }
@@ -83,7 +89,6 @@ namespace GomelStateUniversity_Activity.Controllers
         }
 
 
-        // GET: Event/Edit/5
         [Authorize(Roles = "admin, supervisor")]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -97,17 +102,19 @@ namespace GomelStateUniversity_Activity.Controllers
         }
 
 
-        // POST: Event/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
         [Authorize(Roles = "admin, supervisor")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, IFormCollection form)
+        public async Task<IActionResult> Edit(int id, IFormCollection form, IFormFile PosterImage)
         {
             try
             {
-                await _eventRepository.UpdateEventAsync(form);
+                string imgPath = "/Img/" + Guid.NewGuid().ToString() + PosterImage.FileName;
+                string fullPath = WebRootPath + imgPath;
+                await _imageRepository.EditImageAsync(PosterImage, fullPath);
+
+                await _eventRepository.UpdateEventAsync(form, imgPath);
+
                 TempData["Message"] = "Данные для: " + form["Event.Name "] + "изменены.";
                 return RedirectToAction("Index");
             }
@@ -121,7 +128,6 @@ namespace GomelStateUniversity_Activity.Controllers
         }
 
 
-        // GET: Event/Delete/5
         [Authorize(Roles = "admin, supervisor")]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -134,9 +140,8 @@ namespace GomelStateUniversity_Activity.Controllers
         }
 
 
-        // POST: Event/Delete/5
-        [HttpPost, ActionName("Delete")]
         [Authorize(Roles = "admin, supervisor")]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

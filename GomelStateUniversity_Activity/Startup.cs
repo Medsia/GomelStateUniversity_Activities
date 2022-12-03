@@ -41,6 +41,7 @@ namespace GomelStateUniversity_Activity
             services.AddSingleton<ISubdivisionRepository, SubdivisionRepository>();
             services.AddSingleton<IReviewsRepository, ReviewsRepository>();
             services.AddSingleton<IScheduleRepository, ScheduleRepository>();
+            services.AddSingleton<IImageRepository, ImageRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
