@@ -1,0 +1,41 @@
+﻿@model GomelStateUniversity_Activity.ViewModels.ApplicationFormViewModel
+
+@{
+    ViewData["Title"] = "Заявка";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>@ViewData["Title"]</h4>
+
+@if (ViewData["Ошибка"] != null)
+{
+    <h3>@ViewData["Ошибка"]</h3>
+}
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label class="control-label">@Model.ActivityTypeName</label>
+                @{
+                    if (Model.ActivityTypes.Count != 0)
+                        @Html.DropDownList("ActivityType", Model.ActivityTypes, "Выберите", new { @class = "form-control required" })
+                    else Html.Hidden("ActivityType", Model.ActivityTypeName, new { @class = "form-control" });
+                }
+
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Отправить" class="btn btn-primary" asp-route-subdivId="@Model.SubdivId" asp-route-activityId="@Model.ActivityId" asp-route-activityTypeName="@Model.ActivityTypeName" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a href="javascript:history.back()" class="btn btn-outline-info ml-3 mr-3">Вернуться</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

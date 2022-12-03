@@ -39,6 +39,11 @@ namespace GomelStateUniversity_Activity
             services.AddScoped<IEventRepository, EventRepository>();
             services.AddScoped<IEventUserRepository, EventUserRepository>();
             services.AddSingleton<ISubdivisionRepository, SubdivisionRepository>();
+            services.AddSingleton<ICreativityTypeRepository, CreativityTypeRepository>();
+            services.AddSingleton<ISportTypeRepository, SportTypeRepository>();
+            services.AddSingleton<ILaborDirectionRepository, LaborDirectionRepository>();
+            services.AddSingleton<IApplicationFormRepository, ApplicationFormRepository>();
+            services.AddSingleton<ISubdivisionActivityTypeRepository, SubdivisionActivityTypeRepository>();
             services.AddSingleton<IReviewsRepository, ReviewsRepository>();
             services.AddSingleton<IScheduleRepository, ScheduleRepository>();
             services.AddSingleton<IImageRepository, ImageRepository>();

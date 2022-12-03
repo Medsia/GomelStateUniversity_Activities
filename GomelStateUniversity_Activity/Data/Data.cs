@@ -1,4 +1,5 @@
 ﻿using GomelStateUniversity_Activity.Models;
+using GomelStateUniversity_Activity.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -51,6 +52,83 @@ namespace GomelStateUniversity_Activity.Data
                 Name = "Отзывы",
                 Contacts = "osnach@gsu.by" },
 
+        };
+
+        public static readonly List<CreativityType> CreativityTypesDtoList = new List<CreativityType>
+        {
+             new CreativityType{
+                Id = 1,
+                Name = "Песня" },
+
+             new CreativityType{
+                Id = 2,
+                Name = "Танец" },
+
+             new CreativityType{
+                Id = 3,
+                Name = "Другое" },
+        };
+
+        public static readonly List<SportType> SportTypesDtoList = new List<SportType>
+        {
+             new SportType{
+                Id = 1,
+                Name = "Карате" },
+
+             new SportType{
+                Id = 2,
+                Name = "Бадминтон" },
+
+             new SportType{
+                Id = 3,
+                Name = "Гиревой спорт" },
+
+             new SportType{
+                Id = 4,
+                Name = "Волейбол" },
+        };
+
+        public static readonly List<LaborDirection> LaborDirectionsDtoList = new List<LaborDirection>
+        {
+             new LaborDirection{
+                Id = 1,
+                Name = "Педагогический отряд" },
+
+             new LaborDirection{
+                Id = 2,
+                Name = "Сельскохозяйственные работы" },
+
+              new LaborDirection{
+                Id = 3,
+                Name = "Лесник" },
+        };
+
+        public static readonly List<SubdivisionActivityType> SubdivisionActivityTypesDtoList = new List<SubdivisionActivityType>
+        {
+             new SubdivisionActivityType{
+                Id = 1,
+                Name = "Организатор ",
+                SubdivisionId = 1},             
+
+             new SubdivisionActivityType{
+                Id = 2,
+                Name = "Артист ",
+                SubdivisionId = 1 },
+
+              new SubdivisionActivityType{
+                Id = 3,
+                Name = "Спорт ",
+                SubdivisionId = 2 },
+
+              new SubdivisionActivityType{
+                Id = 4,
+                Name = "Вступление в организацию ",
+                SubdivisionId = 4 },
+
+              new SubdivisionActivityType{
+                Id = 5,
+                Name = "Работа в студенческом отряде ",
+                SubdivisionId = 4 },
         };
 
         public static readonly List<IdentityRole> RoleDtoList = new List<IdentityRole>
@@ -129,5 +207,29 @@ namespace GomelStateUniversity_Activity.Data
                     RoleId = "6aedd11d-510d-4017-b685-1c6b6fa92b91"
                 }
         };
+
+        public class Organization : ISubdivActivityType
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public static readonly List<Organization> organizationsData = new List<Organization>
+            {
+                new Organization{
+                    Id = 1,
+                    Name = "БРСМ" },
+
+                new Organization{
+                    Id = 2,
+                    Name = "Студенческий совет" },
+
+                new Organization{
+                    Id = 3,
+                    Name = "Профсоюз" },
+
+                new Organization{
+                    Id = 4,
+                    Name = "Волонтерская деятельность" },
+            };
+        }
     }
 }

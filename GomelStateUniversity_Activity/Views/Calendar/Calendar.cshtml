@@ -3,7 +3,7 @@
     ViewData["Title"] = @ViewBag.PageName;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<a asp-controller="Event" asp-action="EventsListForSubdiv" asp-route-subdivId="@ViewBag.SubdivId" class="btn btn-outline-info ml-3 mr-auto">Перейти к списку</a>
 <script>
 
       document.addEventListener('DOMContentLoaded', function() {

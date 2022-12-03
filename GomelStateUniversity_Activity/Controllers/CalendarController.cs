@@ -52,6 +52,7 @@ namespace GomelStateUniversity_Activity.Controllers
 
             var subdiv = await _subdivisionRepository.GetSubdivisionAsync(subdivId);
             ViewBag.PageName = "Календарь мероприятий - " + subdiv.Name;
+            ViewBag.SubdivId = subdivId;
 
             ViewData["Resources"] = JSONListHelper.GetResourceListJSONString(_subdivisionRepository.GetSubdivisionsAsync().Result);
             ViewData["Events"] = JSONListHelper.GetEventListJSONString(_eventRepository.GetEventsBySubdivisionAsync(subdivId).Result);

@@ -35,6 +35,25 @@
         }
 
     }
+    @if (@ViewBag.SubdivId == 1)
+    {
+
+        <a asp-controller="ApplicationForm" asp-action="Create" asp-route-subdivId=@ViewBag.SubdivId asp-route-activityId=1 class="btn btn-outline-info ml-3 mb-3">Стать организатором</a>
+        <a asp-controller="ApplicationForm" asp-action="Create" asp-route-subdivId=@ViewBag.SubdivId asp-route-activityId=2 class="btn btn-outline-info ml-3 mb-3">Стать артистом</a>
+
+    }
+    @if (@ViewBag.SubdivId == 2)
+    {
+
+        <a asp-controller="ApplicationForm" asp-action="Create" asp-route-subdivId=@ViewBag.SubdivId asp-route-activityId=3 class="btn btn-outline-info ml-3 mb-3">Записаться в секцию</a>
+
+    }
+    @if (@ViewBag.SubdivId == 4)
+    {
+        <a asp-controller="ApplicationForm" asp-action="Create" asp-route-subdivId=@ViewBag.SubdivId asp-route-activityId=4 class="btn btn-outline-info ml-3 mb-3">Заявка на вступление в организацию</a>
+        <a asp-controller="ApplicationForm" asp-action="Create" asp-route-subdivId=@ViewBag.SubdivId asp-route-activityId=5 class="btn btn-outline-info ml-3 mb-3">Заявка на работу в студенческом отряде</a>
+
+    }
 
     @if (!User.IsInRole("student"))
     {
