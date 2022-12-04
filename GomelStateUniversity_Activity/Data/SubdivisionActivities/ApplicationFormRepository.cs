@@ -10,26 +10,36 @@ namespace GomelStateUniversity_Activity.Data
     public class ApplicationFormRepository : IApplicationFormRepository
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        public async Task CreateApplicationFormAsync(IFormCollection form, int subdivId, int activityId)
+        public async Task CreateApplicationFormAsync(IFormCollection form, int subdivId, int activityId, string applicationUserId)
         {
             var ActivityTypeName = form["ActivityType"].ToString();
             ApplicationForm applicationForm = new ApplicationForm();
             if (subdivId == 1)
             {
                 if(activityId == 1)
-                    applicationForm = new ApplicationForm(form, db.subdivisionActivityTypes.FirstOrDefault(x => x.Id == activityId));
+                    applicationForm = new ApplicationForm(form,
+                        db.subdivisionActivityTypes.FirstOrDefault(x => x.Id == activityId),
+                        applicationUserId, subdivId, activityId);
                 else if(activityId == 2)
-                    applicationForm = new ApplicationForm(form, db.CreativityTypes.FirstOrDefault(x => x.Name == ActivityTypeName));
+                    applicationForm = new ApplicationForm(form,
+                        db.CreativityTypes.FirstOrDefault(x => x.Name == ActivityTypeName),
+                        applicationUserId, subdivId, activityId);
             }
                 
             else if (subdivId == 2)
-                applicationForm = new ApplicationForm(form, db.SportTypes.FirstOrDefault(x => x.Name == ActivityTypeName));
+                applicationForm = new ApplicationForm(form,
+                    db.SportTypes.FirstOrDefault(x => x.Name == ActivityTypeName),
+                    applicationUserId, subdivId, activityId);
             else if (subdivId == 4)
             {
                 if (activityId == 4)
-                    applicationForm = new ApplicationForm(form, Data.Organization.organizationsData.FirstOrDefault(x => x.Name == ActivityTypeName));
+                    applicationForm = new ApplicationForm(form,
+                        Data.Organization.organizationsData.FirstOrDefault(x => x.Name == ActivityTypeName),
+                        applicationUserId, subdivId, activityId);
                 else if(activityId == 5)
-                    applicationForm = new ApplicationForm(form, db.LaborDirections.FirstOrDefault(x => x.Name == ActivityTypeName));
+                    applicationForm = new ApplicationForm(form,
+                        db.LaborDirections.FirstOrDefault(x => x.Name == ActivityTypeName),
+                        applicationUserId, subdivId, activityId);
             }
                 
             db.ApplicationForms.Add(applicationForm);

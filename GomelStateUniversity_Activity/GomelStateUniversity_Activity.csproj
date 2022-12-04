@@ -37,6 +37,24 @@
     <Compile Remove="Data\Migrations\20221129165439_AdminAccountData.Designer.cs" />
     <Compile Remove="Data\Migrations\20221201222639_SubdivisionRolesData.cs" />
     <Compile Remove="Data\Migrations\20221201222639_SubdivisionRolesData.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221204125954_ApplicationFormActivityTypeId.cs" />
+    <Compile Remove="Data\Migrations\20221204125954_ApplicationFormActivityTypeId.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221204130102_ApplicationFormActivityTypeId.cs" />
+    <Compile Remove="Data\Migrations\20221204130102_ApplicationFormActivityTypeId.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221204130434_ApplicationFormActivityTypes.cs" />
+    <Compile Remove="Data\Migrations\20221204130434_ApplicationFormActivityTypes.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221204131206_ApplicationFormActivityTypes.cs" />
+    <Compile Remove="Data\Migrations\20221204131206_ApplicationFormActivityTypes.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221204132841_ApplicationFormActivities.cs" />
+    <Compile Remove="Data\Migrations\20221204132841_ApplicationFormActivities.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221204133240_ApplicationFormActivities.cs" />
+    <Compile Remove="Data\Migrations\20221204133240_ApplicationFormActivities.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221204134608_ApplicationFormActivityTypes.cs" />
+    <Compile Remove="Data\Migrations\20221204134608_ApplicationFormActivityTypes.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221204142210_ApplicationFormActivityTypeId.cs" />
+    <Compile Remove="Data\Migrations\20221204142210_ApplicationFormActivityTypeId.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221204142509_ApplicationFormActivityTypeId.cs" />
+    <Compile Remove="Data\Migrations\20221204142509_ApplicationFormActivityTypeId.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -14,18 +14,23 @@ namespace GomelStateUniversity_Activity.Models
         [Key]
         public int Id { get; set; }
         public string RecipientContacts { get; set; }
+        public string ApplicationUserId { get; set; }
+        public int SubdivisionId { get; set; }
+        public int SubdivisionActivityTypeId { get; set; }
 
         [NotMapped]
         public ISubdivActivityType SubdivActivityType { get; set; }
         public Dictionary<string, string> ApplicationParameters { get; set; } = new Dictionary<string, string>();
         public virtual ApplicationUser ApplicationUser { get; set; }
         public virtual Subdivision Subdivision { get; set; }
+        public virtual SubdivisionActivityType SubdivisionActivityType { get; set; }     
 
         public ApplicationForm()
         {
 
         }
-        public ApplicationForm(IFormCollection form, ISubdivActivityType subdivActivityType)
+        public ApplicationForm(IFormCollection form, ISubdivActivityType subdivActivityType,
+            string applicationUserId, int subdivisionId, int activityId)
         {
             if(subdivActivityType is SportType)
                 ApplicationParameters.Add("Спорт: ", form["ActivityType"]);
@@ -38,6 +43,9 @@ namespace GomelStateUniversity_Activity.Models
             else if (subdivActivityType is Data.Data.Organization)
                 ApplicationParameters.Add("Организация : ", form["ActivityType"]);
             SubdivActivityType = subdivActivityType;
+            ApplicationUserId = applicationUserId;
+            SubdivisionId = subdivisionId;
+            SubdivisionActivityTypeId = activityId;
         }
     }
 }

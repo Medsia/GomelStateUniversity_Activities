@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace GomelStateUniversity_Activity.Controllers
@@ -94,7 +95,7 @@ namespace GomelStateUniversity_Activity.Controllers
         {
                 try
                 {
-                    await _applicationFormRepository.CreateApplicationFormAsync(form, viewModel.SubdivId, viewModel.ActivityId);
+                    await _applicationFormRepository.CreateApplicationFormAsync(form, viewModel.SubdivId, viewModel.ActivityId, User.FindFirstValue(ClaimTypes.NameIdentifier));
                     TempData["Message"] = "Заявка Отправлена ";
                     return RedirectToAction("MyEvents", "Event");
                 }
