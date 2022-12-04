@@ -21,7 +21,15 @@
                 @{
                     if (Model.ActivityTypes.Count != 0)
                         @Html.DropDownList("ActivityType", Model.ActivityTypes, "Выберите", new { @class = "form-control required" })
-                    else Html.Hidden("ActivityType", Model.ActivityTypeName, new { @class = "form-control" });
+                        else Html.Hidden("ActivityType", Model.ActivityTypeName, new { @class = "form-control" });
+                }
+                @if (Model.ActivityId == 2)
+                {
+                    <div class="form-group">
+                        <label class="control-label">Другое</label>
+                        <input asp-for=@Model.ActivityTypeName placeholder="Введите" class="form-control" required />
+                        <span asp-validation-for=@Model.ActivityTypeName class="text-danger"></span>
+                    </div>
                 }
 
             </div>

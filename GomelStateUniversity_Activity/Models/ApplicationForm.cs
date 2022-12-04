@@ -35,7 +35,7 @@ namespace GomelStateUniversity_Activity.Models
             if(subdivActivityType is SportType)
                 ApplicationParameters.Add("Спорт: ", form["ActivityType"]);
             else if (subdivActivityType is CreativityType)
-                ApplicationParameters.Add("Деятельность: ", form["ActivityType"]);
+                ApplicationParameters.Add("Деятельность: ", form["ActivityType"] + ": " + form["ActivityTypeName"]);
             else if (subdivActivityType is SubdivisionActivityType)
                 ApplicationParameters.Add("Деятельность: ", subdivActivityType.Name);
             else if (subdivActivityType is LaborDirection)
