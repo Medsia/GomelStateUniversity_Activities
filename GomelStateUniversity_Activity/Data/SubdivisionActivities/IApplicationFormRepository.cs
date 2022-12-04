@@ -9,7 +9,7 @@ namespace GomelStateUniversity_Activity.Data
     {
         public Task<IEnumerable<ApplicationForm>> GetApplicationFormsAsync();
         public Task<ApplicationForm> GetApplicationFormAsync(int id);
-        public Task CreateApplicationFormAsync(IFormCollection form, int subdivId, int activityId);
+        public Task CreateApplicationFormAsync(IFormCollection form, int subdivId, int activityId, string applicationUserId);
         public Task DeleteApplicationFormAsync(int id);
     }
 }

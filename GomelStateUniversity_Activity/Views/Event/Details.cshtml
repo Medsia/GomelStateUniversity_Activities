@@ -65,17 +65,30 @@
     </dl>
     
     <div class="form-group text-center col-sm-3 mt-4 mx-auto">
-        <a asp-action="Subscribe" asp-route-id="@Model.Id" class="text-info">Записаться</a><br>
-        <a asp-action="UnSubscribe" asp-route-id="@Model.Id" class="text-info">Отписаться</a><br>
-        <div id="GroupSubUnfoldable" style="display: none;">
-            <form asp-action="SubscribeGroup" method="post">
-                <input type="hidden" name="id" value="@Model.Id" />
-                <br><input type="number" min="1" name="ticketsAmount" placeholder="Количество" class="text-center col-md-7" /><br>
-                <a onclick="SubmitEvent" class="text-info">Записать группу</a><br>
-            </form>
-        </div>
-        <a id="UnfoldBtn" style="" class="text-info" onclick="Unfold()">Записать группу</a><br>
-        <a asp-action="UnSubscribe" asp-route-id="@Model.Id" class="text-info">Отписать группу</a>
+        @foreach (var eventsUsers in Model.EventUsers.Where(x => x.EventId == Model.Id))
+        {
+            @if (eventsUsers.ApplicationUser.UserName == User.Identity.Name)
+            {
+                <a asp-action="UnSubscribe" asp-route-id="@Model.Id" class="text-info">Отписаться</a><br>
+                <a asp-action="UnSubscribe" asp-route-id="@Model.Id" class="text-info">Отписать группу</a>
+            }
+
+            else
+            {
+                <a asp-action="Subscribe" asp-route-id="@Model.Id" class="text-info">Записаться</a><br>
+
+                <div id="GroupSubUnfoldable" style="display: none;">
+                    <form asp-action="SubscribeGroup" method="post">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <br><input type="number" min="1" name="ticketsAmount" placeholder="Количество" class="text-center col-md-7" /><br>
+                        <a onclick="SubmitEvent" class="text-info">Записать группу</a><br>
+                    </form>
+                </div>
+                <a id="UnfoldBtn" style="" class="text-info" onclick="Unfold()">Записать группу</a><br>
+            }
+        }
+
+
         <a class="btn btn-outline-primary text-center mt-4 mx-5" asp-route-eventId="@Model.Id"
            asp-area="Functionality" asp-page="/Review/CreateReview">Написать отзыв</a>
     </div>

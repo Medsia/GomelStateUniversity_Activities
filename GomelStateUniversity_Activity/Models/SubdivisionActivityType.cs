@@ -16,5 +16,6 @@ namespace GomelStateUniversity_Activity.Models
         public int SubdivisionId { get; set; }
 
         public virtual Subdivision Subdivision { get; set; }
+
     }
 }
