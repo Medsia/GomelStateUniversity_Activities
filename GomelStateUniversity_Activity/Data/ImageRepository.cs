@@ -14,9 +14,9 @@ namespace GomelStateUniversity_Activity.Data
             }
         }
 
-        public async Task EditImageAsync(IFormFile uploadedImage, string path)
+        public async Task EditImageAsync(IFormFile uploadedImage, string path, string oldPath)
         {
-            DeleteImage(path);
+            if(!string.IsNullOrWhiteSpace(oldPath)) DeleteImage(oldPath);
             await SaveImageAsync(uploadedImage, path);
         }
 
