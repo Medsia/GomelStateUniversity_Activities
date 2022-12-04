@@ -12,6 +12,7 @@ namespace GomelStateUniversity_Activity.ViewModels
         public Event Event {get;set;}
         public IList<SelectListItem> Subdivision = new List<SelectListItem>();
         public string SubdivisionName { get; set; }
+
         public EventViewModel(Event @event, IList<Subdivision> subdivisions)
         {
             Event = @event;
@@ -21,6 +22,7 @@ namespace GomelStateUniversity_Activity.ViewModels
                 Subdivision.Add(new SelectListItem() { Text = subdivision.Name });
             }
         }
+
         public EventViewModel(IList<Subdivision> subdivisions)
         {
             foreach (var subdivision in subdivisions)
@@ -28,6 +30,12 @@ namespace GomelStateUniversity_Activity.ViewModels
                 Subdivision.Add(new SelectListItem() { Text = subdivision.Name });
             }
         }
+
+        public EventViewModel(Subdivision subdivision)
+        {
+            Subdivision.Add(new SelectListItem() { Text = subdivision.Name });
+        }
+
         public EventViewModel()
         {
 
