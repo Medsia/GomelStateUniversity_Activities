@@ -4,14 +4,16 @@ using GomelStateUniversity_Activity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GomelStateUniversity_Activity.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221204152424_RolesUpdate")]
+    partial class RolesUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,17 +37,12 @@ namespace GomelStateUniversity_Activity.Data.Migrations
                     b.Property<string>("RecipientContacts")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SubdivisionActivityTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SubdivisionId")
+                    b.Property<int?>("SubdivisionId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("SubdivisionActivityTypeId");
 
                     b.HasIndex("SubdivisionId");
 
@@ -694,17 +691,9 @@ namespace GomelStateUniversity_Activity.Data.Migrations
                         .WithMany()
                         .HasForeignKey("ApplicationUserId");
 
-                    b.HasOne("GomelStateUniversity_Activity.Models.SubdivisionActivityType", "SubdivisionActivityType")
-                        .WithMany()
-                        .HasForeignKey("SubdivisionActivityTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("GomelStateUniversity_Activity.Models.Subdivision", "Subdivision")
                         .WithMany()
-                        .HasForeignKey("SubdivisionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SubdivisionId");
                 });
 
             modelBuilder.Entity("GomelStateUniversity_Activity.Models.Event", b =>

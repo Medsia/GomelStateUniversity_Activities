@@ -136,11 +136,11 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account
                 
                 var result = await _userManager.UpdateAsync(user);
 
-                if(Input.RoleName != "student")
+                if(Input.RoleName != "STUDENT")
                 {
-                    await _userManager.RemoveFromRoleAsync(user, "student");
+                    await _userManager.RemoveFromRoleAsync(user, "STUDENT");
                     await _userManager.AddToRoleAsync(user, Input.RoleName);
-                    await _userManager.AddToRoleAsync(user, "supervisor");
+                    await _userManager.AddToRoleAsync(user, "SUPERVISOR");
                 }
                 else
                 {

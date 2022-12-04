@@ -74,7 +74,7 @@ namespace GomelStateUniversity_Activity.Controllers
             {
                 string imgPath = "/Img/" + Guid.NewGuid().ToString() + PosterImage.FileName;
                 string fullPath = WebRootPath + imgPath;
-                await _imageRepository.SaveImageAsync(PosterImage, WebRootPath + fullPath);
+                await _imageRepository.SaveImageAsync(PosterImage, fullPath);
 
                 await _eventRepository.CreateEventAsync(form, imgPath);
 
@@ -111,11 +111,12 @@ namespace GomelStateUniversity_Activity.Controllers
             {
                 string imgPath = "/Img/" + Guid.NewGuid().ToString() + PosterImage.FileName;
                 string fullPath = WebRootPath + imgPath;
-                await _imageRepository.EditImageAsync(PosterImage, fullPath);
+                string oldPath = WebRootPath + form["Event.OldImg"];
+                await _imageRepository.EditImageAsync(PosterImage, fullPath, oldPath);
 
                 await _eventRepository.UpdateEventAsync(form, imgPath);
 
-                TempData["Message"] = "Данные для: " + form["Event.Name "] + "изменены.";
+                TempData["Message"] = "Данные для: " + form["Event.Name"] + "изменены.";
                 return RedirectToAction("Index");
             }
 

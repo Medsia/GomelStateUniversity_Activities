@@ -24,13 +24,13 @@
                 <select asp-for="Input.RoleName" class="form-control">
                     @foreach (var role in @Model.roles)
                     {
-                        if (role.Name == "admin" || role.Name == "supervisor") continue;
-                        if (UserManager.IsInRoleAsync(Model.user, role.Name).Result)
+                        if (role.NormalizedName == "ADMIN" || role.NormalizedName == "SUPERVISOR") continue;
+                        if (UserManager.IsInRoleAsync(Model.user, role.NormalizedName).Result)
                         {
-                            <option selected value="@role.Name">@role.Name</option>
+                            <option selected value="@role.NormalizedName">@role.Name</option>
                             continue;
                         }
-                        <option value="@role.Name">@role.Name</option>
+                        <option value="@role.NormalizedName">@role.Name</option>
                     }
                 </select>
                 <span asp-validation-for="Input.RoleName" class="text-danger"></span>

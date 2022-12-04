@@ -5,25 +5,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@*@{  WebImage photo = null;
-    var newFileName = "";
-    var imagePath = "";
-
-    if(IsPost){
-        photo = WebImage.GetImageFromRequest();
-        if(photo != null){
-            newFileName = Guid.NewGuid().ToString() + "_" +
-                Path.GetFileName(photo.FileName);
-            imagePath = @"images\" + newFileName;
-
-            photo.Save(@"~\" + imagePath);
-        }
-    }
-}*@
 
 @{
     string posterPath = @Model.Event.PosterPath;
     if (string.IsNullOrWhiteSpace(posterPath)) posterPath = "/Img/Empty.jpg";
+
+    string oldImg = @Model.Event.PosterPath;
 }
 
 
@@ -33,6 +20,10 @@
 
 <form asp-action="Edit" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @if (!string.IsNullOrWhiteSpace(oldImg))
+    {
+        <input type="hidden" name="Event.OldImg" value="@oldImg"/>
+    }
     <input type="hidden" asp-for="Event.Id" />
     <div class="row mb-3">
         <div class="col-md-5 col-md-auto mx-auto">
