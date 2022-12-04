@@ -11,10 +11,10 @@ namespace GomelStateUniversity_Activity.Data
     public class EventRepository : IEventRepository
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        public async Task CreateEventAsync(IFormCollection form)
+        public async Task CreateEventAsync(IFormCollection form, string imgPath)
         {
             var subdivisionName = form["Subdivision"].ToString();
-            Event newEvent = new Event(form, db.Subdivisions.FirstOrDefault(x => x.Name == subdivisionName ));
+            Event newEvent = new Event(form, db.Subdivisions.FirstOrDefault(x => x.Name == subdivisionName ), imgPath);
             db.Events.Add(newEvent);
             await db.SaveChangesAsync();
         }
@@ -65,14 +65,14 @@ namespace GomelStateUniversity_Activity.Data
                 .OrderByDescending(x => x.DateTime).ToListAsync();
         }
 
-        public async Task UpdateEventAsync(IFormCollection form)
+        public async Task UpdateEventAsync(IFormCollection form, string imgPath)
         {
 
             var subdivisionName = form["Subdivision"].ToString();
             var eventId = int.Parse(form["Event.Id"]);
             var eventToUpdate = db.Events.FirstOrDefault(x => x.Id == eventId);
             var subdivision = db.Subdivisions.FirstOrDefault(x => x.Name == subdivisionName);
-            eventToUpdate.UpdateEvent(form, subdivision);
+            eventToUpdate.UpdateEvent(form, subdivision, imgPath);
             db.Entry(eventToUpdate).State = EntityState.Modified;
             await db.SaveChangesAsync();
         }

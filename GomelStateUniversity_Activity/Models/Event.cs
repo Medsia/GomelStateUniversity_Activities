@@ -12,6 +12,7 @@ namespace GomelStateUniversity_Activity.Models
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
+        public string PosterPath { get; set; }
         public string Description { get; set; }
         public DateTime DateTime { get; set; }
         public int TicketsCount { get; set; }
@@ -24,18 +25,20 @@ namespace GomelStateUniversity_Activity.Models
         {
             
         }
-        public Event(IFormCollection form, Subdivision subdivision)
+        public Event(IFormCollection form, Subdivision subdivision, string imgPath)
         {
             Name = form["Event.Name"].ToString();
+            PosterPath = imgPath;
             Description = form["Event.Description"].ToString();
             DateTime = DateTime.Parse(form["Event.DateTime"].ToString());
             TicketsCount = int.Parse(form["Event.TicketsCount"].ToString());
             TicketPrice = double.Parse(form["Event.TicketPrice"].ToString());
             Subdivision = subdivision;
         }
-        public void UpdateEvent(IFormCollection form, Subdivision subdivision)
+        public void UpdateEvent(IFormCollection form, Subdivision subdivision, string imgPath)
         {
             Name = form["Event.Name"].ToString();
+            PosterPath = imgPath;
             Description = form["Event.Description"].ToString();
             DateTime = DateTime.Parse(form["Event.DateTime"].ToString());
             TicketsCount = int.Parse(form["Event.TicketsCount"].ToString());

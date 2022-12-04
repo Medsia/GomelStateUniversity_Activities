@@ -5,6 +5,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@{
+    string posterPath = @Model.PosterPath;
+    if (string.IsNullOrWhiteSpace(posterPath)) posterPath = "/Img/Empty.jpg";
+}
+
 <h4 class="text-center">@ViewData["Title"]</h4>
 <hr />
 
@@ -14,8 +19,12 @@
 }
 
 <div class="row box-shadow mb-3">
-    <br>
-    <dl class="row col-sm-9 mx-auto">
+    
+    <div class="col-sm-2 mx-auto">
+        <img class="img-thumbnail" height="200" width="200" src="@posterPath" />
+    </div>
+
+    <dl class="row col-sm-6 mx-auto">
         <dt class="col-sm-4">
             Название
         </dt>
@@ -67,7 +76,7 @@
         </div>
         <a id="UnfoldBtn" style="" class="text-info" onclick="Unfold()">Записать группу</a><br>
         <a asp-action="UnSubscribe" asp-route-id="@Model.Id" class="text-info">Отписать группу</a>
-        <a class="btn btn-outline-primary text-center mb-auto mx-5" asp-route-eventId="@Model.Id"
+        <a class="btn btn-outline-primary text-center mt-4 mx-5" asp-route-eventId="@Model.Id"
            asp-area="Functionality" asp-page="/Review/CreateReview">Написать отзыв</a>
     </div>
     <br>
