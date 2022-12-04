@@ -133,21 +133,21 @@ namespace GomelStateUniversity_Activity.Data
 
         public static readonly List<IdentityRole> RoleDtoList = new List<IdentityRole>
         {
-            new IdentityRole{   // Администратор - добавляет и редактирует мероприятия
+            new IdentityRole{   // Администратор
                 Id = "6aedd11d-510d-4017-b685-1c6b6fa92b91",
                 Name = "admin",
                 NormalizedName = "ADMIN",
                 ConcurrencyStamp = "bce813f4-7061-4267-b682-8efc78c965fc" },
 
-            new IdentityRole{   // Руководитель - получает уведомления о записавшихся и отписавшихся
+            new IdentityRole{   // Руководитель
                 Id = "15d32ce6-852a-4591-afeb-af0293974d8a",
                 Name = "supervisor",
                 NormalizedName = "SUPERVISOR",
                 ConcurrencyStamp = "5a8cecba-d1e6-4129-8381-92ceb11af503" },
 
-            new IdentityRole{   // Студент - просто челы
+            new IdentityRole{   // Студент
                 Id = "51781939-cf8c-4303-a65c-555397da7320",
-                Name = "student",
+                Name = "Студент",
                 NormalizedName = "STUDENT",
                 ConcurrencyStamp = "c743a1fb-70f1-4901-860c-2fe87dc7ca4a" },
 
@@ -155,37 +155,43 @@ namespace GomelStateUniversity_Activity.Data
 
             new IdentityRole{   // Отзывы
                 Id = "940f5024-7d9d-4750-a428-e4abd61b2ab9",
-                Name = "mod",
+                Name = "Модератор отзывов",
                 NormalizedName = "MOD",
                 ConcurrencyStamp = "bada6509-76ee-41ae-82da-cf7a264b1cce" },
 
             new IdentityRole{   // Культурно-досуговая деятельность
                 Id = "d9cfc45b-3396-45b8-a906-90c36d665399",
-                Name = "culture",
+                Name = "Культурно-досуговая деятельность",
                 NormalizedName = "CULTURE",
                 ConcurrencyStamp = "37331a44-91f5-49ae-ba6b-c0493802ee4d" },
 
             new IdentityRole{   // Спортивные мероприятия
                 Id = "d43a01de-f838-4de5-8324-4eabc4b2676d",
-                Name = "sports",
+                Name = "Спортивные мероприятия",
                 NormalizedName = "SPORTS",
                 ConcurrencyStamp = "8068469c-7c3e-41c7-9de4-1098d8b16178" },
 
             new IdentityRole{   // Волонтерская деятельность
                 Id = "5f3d63f0-61d5-4dd3-bf54-3b0a5c88c334",
-                Name = "volunteer",
+                Name = "Волонтерская деятельность",
                 NormalizedName = "VOLUNTEER",
                 ConcurrencyStamp = "d132befb-e09f-44aa-9ce7-12385584b790" },
 
+            new IdentityRole{   // Профсоюз
+                Id = "0ffad0f4-9d7d-457f-b2b8-db87739d1648",
+                Name = "Профсоюз",
+                NormalizedName = "UNION",
+                ConcurrencyStamp = "ba3d5fca-364b-412c-a4f4-966a63da1888" },
+
             new IdentityRole{   // Психолог
                 Id = "bf073d17-9c3f-4101-9bd7-b8d44a301cd5",
-                Name = "psychologist",
+                Name = "Психолог",
                 NormalizedName = "PSYCHOLOGIST",
                 ConcurrencyStamp = "f3237ebb-c8e8-453f-8cc7-513e50988e12" },
 
             new IdentityRole{   // Мероприятия и выставки
                 Id = "32f105f4-f03d-428b-be62-c5523bf60f90",
-                Name = "exhibition",
+                Name = "Мероприятия и выставки",
                 NormalizedName = "EXHIBITION",
                 ConcurrencyStamp = "b6be392d-87f2-465d-ac0e-2bcfce8ed5c4" }
         };
