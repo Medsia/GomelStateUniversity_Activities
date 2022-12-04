@@ -1,4 +1,7 @@
-﻿@model IEnumerable<GomelStateUniversity_Activity.Models.Event>
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> _userManager
+@inject RoleManager<IdentityRole> _roleManager
+@model IEnumerable<GomelStateUniversity_Activity.Models.Event>
 
 @{
     ViewData["Title"] = @ViewBag.PageName;
@@ -36,9 +39,39 @@
 
     }
 
-    @if (User.IsInRole("supervisor") || User.IsInRole("admin"))
+    @if (User.IsInRole("admin"))
     {
-        <a asp-action="Create" class="btn btn-outline-info ml-auto mr-3">Создать мероприятие</a>
+        <a asp-action="Create" asp-route-subdivId="@ViewBag.SubdivId" class="btn btn-outline-info ml-auto mr-3">Создать мероприятие</a>
+    }
+    else if (User.IsInRole("supervisor"))
+    {
+        switch (@ViewBag.SubdivId)
+        {
+            case 1:
+                if(User.IsInRole("Культурно-досуговая деятельность"))
+                {
+                    <a asp-action="Create" asp-route-subdivId="@ViewBag.SubdivId" class="btn btn-outline-info ml-auto mr-3">Создать мероприятие</a>
+                }
+                break;
+            case 2:
+                if(User.IsInRole("Спортивные мероприятия"))
+                {
+                    <a asp-action="Create" asp-route-subdivId="@ViewBag.SubdivId" class="btn btn-outline-info ml-auto mr-3">Создать мероприятие</a>
+                }
+                break;
+            case 3:
+                if(User.IsInRole("Мероприятия и выставки"))
+                {
+                    <a asp-action="Create" asp-route-subdivId="@ViewBag.SubdivId" class="btn btn-outline-info ml-auto mr-3">Создать мероприятие</a>
+                }
+                break;
+            case 4:
+                if(User.IsInRole("Волонтерская деятельность"))
+                {
+                    <a asp-action="Create" asp-route-subdivId="@ViewBag.SubdivId" class="btn btn-outline-info ml-auto mr-3">Создать мероприятие</a>
+                }
+                break;
+        }
     }
     else
     {

@@ -42,7 +42,9 @@ namespace GomelStateUniversity_Activity.Controllers
             else ViewBag.PageName = "Cписок мероприятий";
 
             ViewBag.Irrelevant = Irrelevant;
+
             var events = await _eventRepository.GetEventsAsync();
+
             if (Irrelevant)
                 return View(events.Where(x => x.DateTime < DateTime.Now));
             else
@@ -62,7 +64,11 @@ namespace GomelStateUniversity_Activity.Controllers
 
 
         [Authorize(Roles = "admin, supervisor")]
-        public IActionResult Create() => View(new EventViewModel(_subdivisionRepository.GetSubdivisionsAsync().Result.ToList()));
+        public IActionResult Create(int subdivId = 0)
+        {
+            if(subdivId == 0) return View(new EventViewModel(_subdivisionRepository.GetSubdivisionsAsync().Result.ToList()));
+            else return View(new EventViewModel(_subdivisionRepository.GetSubdivisionAsync(subdivId).Result));
+        }
 
 
         [Authorize(Roles = "admin, supervisor")]
@@ -72,13 +78,18 @@ namespace GomelStateUniversity_Activity.Controllers
         {
             try
             {
-                string imgPath = "/Img/" + Guid.NewGuid().ToString() + PosterImage.FileName;
-                string fullPath = WebRootPath + imgPath;
-                await _imageRepository.SaveImageAsync(PosterImage, fullPath);
+                string imgPath = "";
+                if (PosterImage != null)
+                {
+                    imgPath = "/Img/" + Guid.NewGuid().ToString() + PosterImage.FileName;
+                    string fullPath = WebRootPath + imgPath;
+                    await _imageRepository.SaveImageAsync(PosterImage, fullPath);
+                }
 
                 await _eventRepository.CreateEventAsync(form, imgPath);
 
                 TempData["Message"] = "Событие добавлено: " + form["Event.Name"];
+
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -109,10 +120,14 @@ namespace GomelStateUniversity_Activity.Controllers
         {
             try
             {
-                string imgPath = "/Img/" + Guid.NewGuid().ToString() + PosterImage.FileName;
-                string fullPath = WebRootPath + imgPath;
-                string oldPath = WebRootPath + form["Event.OldImg"];
-                await _imageRepository.EditImageAsync(PosterImage, fullPath, oldPath);
+                string imgPath = "";
+                if (PosterImage != null)
+                {
+                    imgPath = "/Img/" + Guid.NewGuid().ToString() + PosterImage.FileName;
+                    string fullPath = WebRootPath + imgPath;
+                    string oldPath = WebRootPath + form["Event.OldImg"];
+                    await _imageRepository.EditImageAsync(PosterImage, fullPath, oldPath);
+                }
 
                 await _eventRepository.UpdateEventAsync(form, imgPath);
 
@@ -146,6 +161,13 @@ namespace GomelStateUniversity_Activity.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var singleEvent = await _eventRepository.GetEventAsync(id);
+            if (!string.IsNullOrWhiteSpace(singleEvent.PosterPath))
+            {
+                string fullPath = WebRootPath + singleEvent.PosterPath;
+                _imageRepository.DeleteImage(fullPath);
+            }
+            
             await _eventRepository.DeleteEventAsync(id);
             TempData["Message"] = "Событие удалено. ";
             return RedirectToAction(nameof(Index));
