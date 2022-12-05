@@ -20,8 +20,10 @@
                 <label class="control-label">@Model.ActivityTypeName</label>
                 @{
                     if (Model.ActivityTypes.Count != 0)
+                    {
                         @Html.DropDownList("ActivityType", Model.ActivityTypes, "Выберите", new { @class = "form-control required" })
-                        else Html.Hidden("ActivityType", Model.ActivityTypeName, new { @class = "form-control" });
+                    }
+                    else Html.Hidden("ActivityType", Model.ActivityTypeName, new { @class = "form-control" });
                 }
                 @if (Model.ActivityId == 2)
                 {
