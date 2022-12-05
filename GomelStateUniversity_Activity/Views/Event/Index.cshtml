@@ -145,7 +145,7 @@
 
             <td class="text-center">
                 <a asp-action="Details" asp-route-id="@item.Id" class="text-info">Подробнее</a><br>
-                @if (!User.IsInRole("student"))
+                @if (User.IsInRole("admin") || User.IsInRole("supervisor"))
                 {
                     <a asp-action="Edit" asp-route-id="@item.Id" class="text-info">Редактировать</a><br>
                     <a asp-action="Delete" asp-route-id="@item.Id" class="text-info">Удалить</a><br>

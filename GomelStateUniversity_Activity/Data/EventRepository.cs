@@ -28,7 +28,10 @@ namespace GomelStateUniversity_Activity.Data
 
         public async Task<Event> GetEventAsync(int id)
         {
-            return await db.Events.Include(x => x.Subdivision)
+            return await db.Events
+                .Include(x => x.Subdivision)
+                .Include(x => x.EventUsers)
+                .ThenInclude(s => s.ApplicationUser)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
