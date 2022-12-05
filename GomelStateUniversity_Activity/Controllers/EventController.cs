@@ -125,9 +125,18 @@ namespace GomelStateUniversity_Activity.Controllers
                 {
                     imgPath = "/Img/" + Guid.NewGuid().ToString() + PosterImage.FileName;
                     string fullPath = WebRootPath + imgPath;
-                    string oldPath = WebRootPath + form["Event.OldImg"];
-                    await _imageRepository.EditImageAsync(PosterImage, fullPath, oldPath);
+
+                    if (string.IsNullOrWhiteSpace(form["Event.OldImg"]))
+                    {
+                        await _imageRepository.SaveImageAsync(PosterImage, fullPath);
+                    }
+                    else
+                    {
+                        string oldPath = WebRootPath + form["Event.OldImg"];
+                        await _imageRepository.EditImageAsync(PosterImage, fullPath, oldPath);
+                    }
                 }
+                else imgPath = form["Event.OldImg"];
 
                 await _eventRepository.UpdateEventAsync(form, imgPath);
 

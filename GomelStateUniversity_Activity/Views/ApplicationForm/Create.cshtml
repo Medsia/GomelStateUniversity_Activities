@@ -1,51 +1,82 @@
-﻿@model GomelStateUniversity_Activity.ViewModels.ApplicationFormViewModel
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> _userManager
+
+@model GomelStateUniversity_Activity.ViewModels.ApplicationFormViewModel
 
 @{
-    ViewData["Title"] = "Заявка";
+    ViewData["Title"] = "Участие в мероприятиях";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h4>@ViewData["Title"]</h4>
+<hr />
 
 @if (ViewData["Message"] != null)
 {
     <h3>@ViewData["Message"]</h3>
 }
-<hr />
+
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label class="control-label">@Model.ActivityTypeName</label>
                 @{
-                    if (Model.ActivityTypes.Count != 0)
-                    {
-                        @Html.DropDownList("ActivityType", Model.ActivityTypes, "Выберите", new { @class = "form-control required" })
-                    }
-                    else Html.Hidden("ActivityType", Model.ActivityTypeName, new { @class = "form-control" });
+                    string text = "Заявка на ";
+                    @if (Model.ActivityId == 1) text += "участие в организации мероприятий";
+                    @if (Model.ActivityId == 2) text += "участие в мероприятиях";
+                    @if (Model.ActivityId == 3) text += "вступление в спортивную секцию";
+                    @if (Model.ActivityId == 4) text += "вступление в профсоюз";
+                    @if (Model.ActivityId == 5) text += "работу в студенческом отряде";
                 }
+                <h5 class="mx-2">@text</h5>
+
+                @if (Model.ActivityTypes.Count != 0)
+                {
+                    @Html.DropDownList("ActivityType", Model.ActivityTypes, "Выберите", new { @class = "form-control required", @onchange="ToggleTextInput()" })
+                }
+                else Html.Hidden("ActivityType", Model.ActivityTypeName, new { @class = "form-control" });
+                
+                @if (Model.ActivityId == 1)
+                {
+                    <h5 class="mx-2">От: @_userManager.FindByNameAsync(User.Identity.Name).Result.FullName</h5>
+                }
+
                 @if (Model.ActivityId == 2)
                 {
-                    <div class="form-group">
-                        <label class="control-label">Другое</label>
-                        <input asp-for=@Model.ActivityTypeName placeholder="Введите" class="form-control" required />
+                    <div id="UnfoldableGroup" class="form-group" style="display: none;">
+                        <input asp-for=@Model.ActivityTypeName placeholder="Введите свой варант" class="form-control" required />
                         <span asp-validation-for=@Model.ActivityTypeName class="text-danger"></span>
                     </div>
                 }
 
             </div>
-            <div class="form-group">
+            <div class="mt-5">
                 <input type="submit" value="Отправить" class="btn btn-primary" asp-route-subdivId="@Model.SubdivId" asp-route-activityId="@Model.ActivityId" asp-route-activityTypeName="@Model.ActivityTypeName" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a href="javascript:history.back()" class="btn btn-outline-info ml-3 mr-3">Вернуться</a>
+<div class="my-3">
+    <a href="javascript:history.back()" class="btn btn-outline-danger">Вернуться</a>
 </div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<script type="text/javascript">
+    
+    function ToggleTextInput() {
+        let act = document.getElementById('ActivityType');
+        var text = act.options[act.selectedIndex].text;
+        if (text == "Другое") {
+            document.getElementById('UnfoldableGroup').setAttribute('style', '');
+        }
+        else {
+            document.getElementById('UnfoldableGroup').setAttribute('style', 'display: none;');
+        }
+    }
+</script>
