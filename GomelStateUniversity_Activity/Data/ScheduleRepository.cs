@@ -27,11 +27,12 @@ namespace GomelStateUniversity_Activity.Data
             await db.SaveChangesAsync();
         }
 
-        public async Task<ScheduleItem> GetItemBySubdivIdAsync(int subdivId)
+        public async Task<IEnumerable<ScheduleItem>> GetItemsBySubdivIdAsync(int subdivId)
         {
             return await db.Schedule.Include(z => z.ApplicationUser)
                                     .Include(z => z.Subdivision)
-                                    .FirstOrDefaultAsync(x => x.Subdivision.Id == subdivId);
+                                    .Where(x => x.Subdivision.Id == subdivId)
+                                    .ToListAsync();
         }
 
         public async Task<ScheduleItem> GetItemAsync(int id)
