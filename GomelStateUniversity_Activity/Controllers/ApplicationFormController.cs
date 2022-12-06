@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using static GomelStateUniversity_Activity.Data.ApplicationFormRepository;
+using static GomelStateUniversity_Activity.Data.SubdivisionRepository;
 
 namespace GomelStateUniversity_Activity.Controllers
 {
@@ -61,24 +63,24 @@ namespace GomelStateUniversity_Activity.Controllers
             {
                 ViewData["Message"] = TempData["Message"];
             }
-            if (subdivId == 1)
+            if (subdivId == (int)SubdivisionName.Culture)
             {
-                if(activityId == 1)
+                if(activityId == (int)Activity.Organizer)
                     return View(new ApplicationFormViewModel(_subdivisionActivityTypeRepository.GetSubdivisionActivityTypeAsync(activityId).Result.Name, subdivId, activityId));
-                else if (activityId == 2)
+                else if (activityId == (int)Activity.Participant)
                     return View(new ApplicationFormViewModel(_creativityTypeRepository.GetCreativityTypesAsync().Result.ToList(), subdivId, activityId));
                 else
                     return NotFound();
             }
                 
-            else if (subdivId == 2)
+            else if (subdivId == (int)SubdivisionName.Sport)
                 return View(new ApplicationFormViewModel(_sportTypeRepository.GetSportTypesAsync().Result.ToList(), subdivId, activityId));
 
-            else if (subdivId == 4)
+            else if (subdivId == (int)SubdivisionName.Labor)
             {
-                if (activityId == 4)
+                if (activityId == (int)Activity.Organizations)
                     return View(new ApplicationFormViewModel(Data.Data.Organization.organizationsData, subdivId, activityId));
-                else if (activityId == 5)
+                else if (activityId == (int)Activity.Labor)
                     return View(new ApplicationFormViewModel(_laborDirectionRepository.GetLaborDirectionsAsync().Result.ToList(), subdivId, activityId));
                 else
                     return NotFound();
