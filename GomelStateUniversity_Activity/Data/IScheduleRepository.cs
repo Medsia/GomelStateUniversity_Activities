@@ -13,5 +13,6 @@ namespace GomelStateUniversity_Activity.Data
         public Task<ScheduleItem> GetItemAsync(int id);
         public Task<IEnumerable<ScheduleItem>> GetItemsAsync();
         public Task UpdateItemAsync(IFormCollection form, DateTime dateTime);
+        public Task<ScheduleItem> GetItemBySubdivIdAsync(int subdivId);
     }
 }
