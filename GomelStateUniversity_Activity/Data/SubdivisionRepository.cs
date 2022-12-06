@@ -10,6 +10,14 @@ namespace GomelStateUniversity_Activity.Data
     public class SubdivisionRepository : ISubdivisionRepository
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+
+        public enum SubdivisionName
+        {
+            Culture = 1,
+            Sport,
+            Information,
+            Labor,
+        }
         public async Task UpdateSubdivisionAsync(Subdivision subdivision)
         {
             db.Subdivisions.Update(subdivision);

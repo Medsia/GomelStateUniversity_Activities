@@ -133,15 +133,17 @@
             <td>
                 <div class="text-center">@item.TicketsCount</div>
             </td>
-            @foreach (var eventsUsers in item.EventUsers.Where(x => x.EventId == item.Id))
-            {
-                @if (eventsUsers.ApplicationUser.UserName == User.Identity.Name)
+            @{
+                var evUser = item.EventUsers.Where(x => x.EventId == item.Id)
+                                              .Where(u => u.ApplicationUser.UserName == User.Identity.Name);
+                if (evUser.Count() != 0)
                 {
                     <td>
                         <div class="text-center">Вы записаны✅</div>
                     </td>
                 }
             }
+
 
             <td class="text-center">
                 <a asp-action="Details" asp-route-id="@item.Id" class="text-info">Подробнее</a><br>

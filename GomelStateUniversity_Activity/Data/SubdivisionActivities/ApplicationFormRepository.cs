@@ -4,39 +4,49 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static GomelStateUniversity_Activity.Data.SubdivisionRepository;
 
 namespace GomelStateUniversity_Activity.Data
 {
     public class ApplicationFormRepository : IApplicationFormRepository
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+
+        public enum Activity
+        {
+            Organizer = 1,
+            Participant,
+            Sport,
+            Organizations,
+            Labor
+        }
         public async Task CreateApplicationFormAsync(IFormCollection form, int subdivId, int activityId, string applicationUserId)
         {
             var ActivityTypeName = form["ActivityType"].ToString();
             ApplicationForm applicationForm = new ApplicationForm();
-            if (subdivId == 1)
+            if (subdivId == (int)SubdivisionName.Culture)
             {
-                if(activityId == 1)
+                if(activityId == (int)Activity.Organizer)
                     applicationForm = new ApplicationForm(form,
                         db.subdivisionActivityTypes.FirstOrDefault(x => x.Id == activityId),
                         applicationUserId, subdivId, activityId);
-                else if(activityId == 2)
+                else if(activityId == (int)Activity.Participant)
                     applicationForm = new ApplicationForm(form,
                         db.CreativityTypes.FirstOrDefault(x => x.Name == ActivityTypeName),
                         applicationUserId, subdivId, activityId);
             }
                 
-            else if (subdivId == 2)
+            else if (subdivId == (int)SubdivisionName.Sport)
                 applicationForm = new ApplicationForm(form,
                     db.SportTypes.FirstOrDefault(x => x.Name == ActivityTypeName),
                     applicationUserId, subdivId, activityId);
-            else if (subdivId == 4)
+            else if (subdivId == (int)SubdivisionName.Labor)
             {
-                if (activityId == 4)
+                if (activityId == (int)Activity.Organizations)
                     applicationForm = new ApplicationForm(form,
                         Data.Organization.organizationsData.FirstOrDefault(x => x.Name == ActivityTypeName),
                         applicationUserId, subdivId, activityId);
-                else if(activityId == 5)
+                else if(activityId == (int)Activity.Labor)
                     applicationForm = new ApplicationForm(form,
                         db.LaborDirections.FirstOrDefault(x => x.Name == ActivityTypeName),
                         applicationUserId, subdivId, activityId);
