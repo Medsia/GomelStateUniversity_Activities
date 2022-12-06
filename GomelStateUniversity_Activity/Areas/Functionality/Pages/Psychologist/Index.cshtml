@@ -48,7 +48,7 @@
                                     }
                                     else
                                     {
-                                        if (@Model.daySchedule.Single(x => x.DateTime.TimeOfDay.Hours == i && x.ApplicationUser.UserName == User.Identity.Name) != null)
+                                        if (@Model.daySchedule.SingleOrDefault(x => x.DateTime.TimeOfDay.Hours == i && x.ApplicationUser.UserName == User.Identity.Name) != null)
                                         {
                                             <option disabled class="bg-success text-light">@time</option>
                                         }

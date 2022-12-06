@@ -1,0 +1,76 @@
+﻿@page
+@model LaborApplicationFormsModel
+
+@inject UserManager<ApplicationUser> _userManager
+
+@{
+    ViewData["Title"] = "Заявки на волонтерство";
+    ViewData["ActivePage"] = ManageNavPages.LaborApplicationForms;
+}
+
+<h4>@ViewData["Title"]</h4>
+<hr />
+
+
+<div class="mb-5 row">
+    <div class="col-md-6">
+        <p class="text-center">Трудовое направление</p>
+        @foreach(var item in @Model.applicationForms)
+        {
+            @foreach(var keyValue in @item.ApplicationParameters)
+            {
+                if (keyValue.Key.Contains("Трудовое направление"))
+                {
+                    <div class="box-shadow mb-3">
+                        <div class="mx-3">
+                            <br>
+                            <div class="">Учащийся:</div>
+                            <div class="form-control">@_userManager.FindByIdAsync(@item.ApplicationUserId).Result.FullName</div>
+                            <br>
+                            <div class="">@keyValue.Key</div>
+                            <div class="form-control">@keyValue.Value</div>
+                            <br>
+                        </div>
+                    </div>
+                }
+                else break;
+            }
+        }
+    </div>
+
+    <div class="col-md-6">
+        <p class="text-center">Вступление в организацию</p>
+        @foreach(var item in @Model.applicationForms)
+        {
+            @foreach(var keyValue in @item.ApplicationParameters)
+            {
+                if (keyValue.Key.Contains("Организация"))
+                {
+                    <div class="box-shadow mb-3">
+                        <div class="mx-3">
+                            <br>
+                            <div class="">Учащийся:</div>
+                            <div class="form-control">@_userManager.FindByIdAsync(@item.ApplicationUserId).Result.FullName</div>
+                            <br>
+                            <div class="">@keyValue.Key</div>
+                            <div class="form-control">@keyValue.Value</div>
+                            <br>
+                        </div>
+                    </div>
+                }
+                else break;
+            }
+        }
+    </div>
+</div>
+
+
+<div class="col-md-6 mx-auto">
+    <a class="btn btn-outline-danger" href="javascript:history.back()">Вернуться</a>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
