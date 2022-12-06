@@ -24,6 +24,9 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account.Manage
         public static string SportApplicationForms => "SportApplicationForms";
         public static string LaborApplicationForms => "LaborApplicationForms";
 
+        public static string PsychologistsSchedule => "PsychologistsSchedule";
+        public static string ModReviews => "ModReviews";
+
 
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
 
@@ -40,6 +43,9 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account.Manage
         public static string CreativityApplicationFormsNavClass(ViewContext viewContext) => PageNavClass(viewContext, CreativityApplicationForms);
         public static string SportApplicationFormsNavClass(ViewContext viewContext) => PageNavClass(viewContext, SportApplicationForms);
         public static string LaborApplicationFormsNavClass(ViewContext viewContext) => PageNavClass(viewContext, LaborApplicationForms);
+
+        public static string PsychologistsScheduleNavClass(ViewContext viewContext) => PageNavClass(viewContext, PsychologistsSchedule);
+        public static string ModReviewsNavClass(ViewContext viewContext) => PageNavClass(viewContext, ModReviews);
 
         private static string PageNavClass(ViewContext viewContext, string page)
         {

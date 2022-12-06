@@ -1,0 +1,44 @@
+﻿@page
+@model ModReviewsModel
+
+@inject UserManager<ApplicationUser> _userManager
+
+@{
+    ViewData["Title"] = "Модерация отзывов";
+    ViewData["ActivePage"] = ManageNavPages.ModReviews;
+}
+
+<h4>@ViewData["Title"]</h4>
+<hr />
+
+
+<form class="col-md-9 form-inline mb-5" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+    @foreach(var review in @Model.reviews)
+    {
+        <div class="box-shadow">
+            <div class="mb-3">
+                <div class="form-group mr-3 ml-3">
+                    <p>@review.ApplicationUser.FullName</p>
+                    <hr>
+                    <p>@review.DateTime</p>
+                </div>
+                <div class="mr-3 ml-3">
+                    <p class="form-control">@review.Event.Name</p>
+                </div>
+                <div class="mr-3 ml-3">
+                    <textarea readonly rows="3" cols="100" class="form-control text-wrap mb-3" style="min-height: 40px; max-height: 200px;">@review.Text</textarea>
+                </div>
+            </div>
+        </div>
+    }
+</form>
+
+<div class="col-md-6 mx-auto">
+    <a class="btn btn-outline-danger" href="javascript:history.back()">Вернуться</a>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

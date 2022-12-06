@@ -23,23 +23,19 @@
     {
         <li class="nav-item"><a class="nav-link @ManageNavPages.SportApplicationFormsNavClass(ViewContext)" id="account-manager" asp-page="./SportApplicationForms">Заявки на вступление в секции</a></li>
     }
-    @if (User.IsInRole("Мероприятия и выставки") || User.IsInRole("admin"))
-    {
-        //---
-    }
     @if (User.IsInRole("Волонтерская деятельность") || User.IsInRole("admin"))
     {
         <li class="nav-item"><a class="nav-link @ManageNavPages.LaborApplicationFormsNavClass(ViewContext)" id="account-manager" asp-page="./LaborApplicationForms">Заявки на волонтерство</a></li>
     }
 
-    @*@if (User.IsInRole("Психолог") || User.IsInRole("admin"))
+    @if (User.IsInRole("Психолог") || User.IsInRole("admin"))
     {
-        <li class="nav-item"><a class="nav-link @ManageNavPages.ScheduleNavClass(ViewContext)" id="account-manager" asp-page="./Schedule">Записи на посещение</a></li>
+        <li class="nav-item"><a class="nav-link @ManageNavPages.PsychologistsScheduleNavClass(ViewContext)" id="account-manager" asp-page="./PsychologistsSchedule">Записи на посещение</a></li>
     }
     @if (User.IsInRole("Модератор отзывов") || User.IsInRole("admin"))
     {
         <li class="nav-item"><a class="nav-link @ManageNavPages.ModReviewsNavClass(ViewContext)" id="account-manager" asp-page="./ModReviews">Отзывы ожидающие проверки</a></li>
-    }*@
+    }
 
 
     @if (User.IsInRole("admin"))
