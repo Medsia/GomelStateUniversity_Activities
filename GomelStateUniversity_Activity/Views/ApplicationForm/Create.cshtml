@@ -4,7 +4,7 @@
 @model GomelStateUniversity_Activity.ViewModels.ApplicationFormViewModel
 
 @{
-    ViewData["Title"] = "Участие в мероприятиях";
+    ViewData["Title"] = "Заявка";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -33,26 +33,38 @@
 
                 @if (Model.ActivityTypes.Count != 0)
                 {
-                    @Html.DropDownList("ActivityType", Model.ActivityTypes, "Выберите", new { @class = "form-control required", @onchange="ToggleTextInput()" })
+                    @Html.DropDownList("ActivityType", Model.ActivityTypes, "Выберите", new { @class = "form-control", @required = true, @onchange = "ToggleTextInput()" })
+
                 }
 
-                
+
                 @if (Model.ActivityId == 1)
                 {
                     <h5 class="mx-2">От: @_userManager.FindByNameAsync(User.Identity.Name).Result.FullName</h5>
+                    <div class="form-group">
+                        <label asp-for="DateTime" class="control-label">Дата</label>
+                        <input asp-for="DateTime" class="form-control col-md-5" required />
+                        <span asp-validation-for="DateTime" class="text-danger"></span>
+                    </div>
                 }
 
                 @if (Model.ActivityId == 2)
                 {
+                    <div class="form-group">
+                        <label asp-for="DateTime" class="control-label">Дата</label>
+                        <input asp-for="DateTime" class="form-control col-md-5" required />
+                        <span asp-validation-for="DateTime" class="text-danger"></span>
+                    </div>
                     <div id="UnfoldableGroup" class="form-group" style="display: none;">
-                        <input asp-for=@Model.ActivityTypeName placeholder="Введите свой варант" class="form-control"/>
+                        <input asp-for=@Model.ActivityTypeName placeholder="Введите свой варант" class="form-control" />
                         <span asp-validation-for=@Model.ActivityTypeName class="text-danger"></span>
                     </div>
                 }
 
             </div>
             <div class="mt-5">
-                <input type="submit" value="Отправить" class="btn btn-primary" asp-route-subdivId="@Model.SubdivId" asp-route-activityId="@Model.ActivityId" asp-route-activityTypeName="@Model.ActivityTypeName" />
+                <input type="submit" value="Отправить" class="btn btn-primary" asp-route-subdivId="@Model.SubdivId"
+                       asp-route-activityId="@Model.ActivityId" asp-route-activityTypeName="@Model.ActivityTypeName" />
             </div>
         </form>
     </div>

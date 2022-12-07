@@ -1,6 +1,7 @@
 ﻿using GomelStateUniversity_Activity.Data;
 using GomelStateUniversity_Activity.Models;
 using GomelStateUniversity_Activity.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -41,20 +42,13 @@ namespace GomelStateUniversity_Activity.Controllers
             return View(await _applicationFormRepository.GetApplicationFormsAsync());
         }
 
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> UserApplications()
         {
-            if (id == null)
+            if (TempData["Message"] != null)
             {
-                return NotFound();
+                ViewData["Message"] = TempData["Message"];
             }
-
-            var applicationForm = await _applicationFormRepository.GetApplicationFormAsync((int)id);
-            if (applicationForm == null)
-            {
-                return NotFound();
-            }
-
-            return View(applicationForm);
+            return View(await _applicationFormRepository.GetApplicationFormsByUserIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)));
         }
 
         public IActionResult Create(int subdivId, int activityId)
@@ -97,7 +91,8 @@ namespace GomelStateUniversity_Activity.Controllers
         {
                 try
                 {
-                    await _applicationFormRepository.CreateApplicationFormAsync(form, viewModel.SubdivId, viewModel.ActivityId, User.FindFirstValue(ClaimTypes.NameIdentifier));
+                    await _applicationFormRepository.CreateApplicationFormAsync(form, viewModel.SubdivId,
+                        viewModel.ActivityId, User.FindFirstValue(ClaimTypes.NameIdentifier));
                     TempData["Message"] = "Заявка Отправлена ";
                     return RedirectToAction("MyEvents", "Event");
                 }
@@ -108,8 +103,42 @@ namespace GomelStateUniversity_Activity.Controllers
                 }
 
         }
+        public async Task<IActionResult> CancelParticipation(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            var applicationForm = await _applicationFormRepository.GetApplicationFormAsync((int)id);
+            if (applicationForm == null)
+            {
+                return NotFound();
+            }
 
+            return View(applicationForm);
+        }
+
+        [HttpPost, ActionName("CancelParticipation")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CancelParticipationConfirmed(int id, string reason)
+        {
+            try
+            {
+                await _applicationFormRepository.CancelParticipationAsync(id, 
+                    User.FindFirstValue(ClaimTypes.NameIdentifier), reason);
+                TempData["Message"] = "Ваше участие отменено.";                
+            }
+
+            catch (Exception ex)
+            {
+                TempData["Message"] = "Операция невозможна. " + ex.Message;
+            }
+
+            return RedirectToAction(nameof(UserApplications));
+        }
+
+        [Authorize(Roles = "admin, supervisor")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -126,15 +155,7 @@ namespace GomelStateUniversity_Activity.Controllers
             return View(applicationForm);
         }
 
-        public async Task<IActionResult> UserApplications()
-        {
-            if (TempData["Message"] != null)
-            {
-                ViewData["Message"] = TempData["Message"];
-            }
-            return View(await _applicationFormRepository.GetApplicationFormsByUserIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)));
-        }
-
+        [Authorize(Roles = "admin, supervisor")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -143,5 +164,7 @@ namespace GomelStateUniversity_Activity.Controllers
             TempData["Message"] = "Удалено.";
             return RedirectToAction(nameof(Index));
         }
+
+
     }
 }

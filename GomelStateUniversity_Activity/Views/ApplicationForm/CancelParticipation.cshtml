@@ -1,0 +1,17 @@
+﻿@model GomelStateUniversity_Activity.Models.ApplicationForm
+
+@{
+    ViewData["Title"] = "Отмена участия";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Введите краткую причину отмены</h3>
+<div>
+
+    <form asp-action="CancelParticipation">
+        <input type="hidden" asp-for="Id" />
+        <input name="reason" type="text" asp-route-reason="reason" class="form-control" required />
+        <input type="submit" value="Подтвердить" class="btn btn-danger" /> |
+        <a class="btn btn-outline-danger ml-4 mr-auto" href="javascript:history.back()">Вернуться</a>
+    </form>
+</div>

@@ -19,7 +19,7 @@ namespace GomelStateUniversity_Activity.Models
         public int SubdivisionActivityTypeId { get; set; }
 
         [NotMapped]
-        public ISubdivActivityType SubdivActivityType { get; set; }
+        private ISubdivActivityType SubdivActivityType { get; set; }
         public Dictionary<string, string> ApplicationParameters { get; set; } = new Dictionary<string, string>();
         public virtual ApplicationUser ApplicationUser { get; set; }
         public virtual Subdivision Subdivision { get; set; }
@@ -33,15 +33,21 @@ namespace GomelStateUniversity_Activity.Models
             string applicationUserId, int subdivisionId, int activityId)
         {
             if(subdivActivityType is SportType)
-                ApplicationParameters.Add("Спорт: ", form["ActivityType"]);
+                ApplicationParameters.Add("Спорт", form["ActivityType"]);
             else if (subdivActivityType is CreativityType)
-                ApplicationParameters.Add("Деятельность: ", form["ActivityType"] + ": " + form["ActivityTypeName"]);
-            else if (subdivActivityType is SubdivisionActivityType)
-                ApplicationParameters.Add("Деятельность: ", subdivActivityType.Name);
+            {
+                ApplicationParameters.Add("Деятельность", form["ActivityType"] + ": " + form["ActivityTypeName"]);
+                ApplicationParameters.Add("Дата", form["DateTime"]);
+            }
             else if (subdivActivityType is LaborDirection)
-                ApplicationParameters.Add("Трудовое направление: ", form["ActivityType"]);
+                ApplicationParameters.Add("Трудовое направление", form["ActivityType"]);
             else if (subdivActivityType is Data.Data.Organization)
-                ApplicationParameters.Add("Организация : ", form["ActivityType"]);
+                ApplicationParameters.Add("Организация", form["ActivityType"]);
+            else if (subdivActivityType is SubdivisionActivityType)
+            {
+                ApplicationParameters.Add("Деятельность", subdivActivityType.Name);
+                ApplicationParameters.Add("Дата", form["DateTime"]);
+            }
             SubdivActivityType = subdivActivityType;
             ApplicationUserId = applicationUserId;
             SubdivisionId = subdivisionId;

@@ -1,6 +1,7 @@
 ﻿using GomelStateUniversity_Activity.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ namespace GomelStateUniversity_Activity.Data
         }
         public async Task CreateApplicationFormAsync(IFormCollection form, int subdivId, int activityId, string applicationUserId)
         {
-            var ActivityTypeName = form["ActivityType"].ToString();
+            var activityTypeName = form["ActivityType"].ToString();
             ApplicationForm applicationForm = new ApplicationForm();
             if (subdivId == (int)SubdivisionName.Culture)
             {
@@ -32,23 +33,23 @@ namespace GomelStateUniversity_Activity.Data
                         applicationUserId, subdivId, activityId);
                 else if(activityId == (int)Activity.Participant)
                     applicationForm = new ApplicationForm(form,
-                        db.CreativityTypes.FirstOrDefault(x => x.Name == ActivityTypeName),
+                        db.CreativityTypes.FirstOrDefault(x => x.Name == activityTypeName),
                         applicationUserId, subdivId, activityId);
             }
                 
             else if (subdivId == (int)SubdivisionName.Sport)
                 applicationForm = new ApplicationForm(form,
-                    db.SportTypes.FirstOrDefault(x => x.Name == ActivityTypeName),
+                    db.SportTypes.FirstOrDefault(x => x.Name == activityTypeName),
                     applicationUserId, subdivId, activityId);
             else if (subdivId == (int)SubdivisionName.Labor)
             {
                 if (activityId == (int)Activity.Organizations)
                     applicationForm = new ApplicationForm(form,
-                        Data.Organization.organizationsData.FirstOrDefault(x => x.Name == ActivityTypeName),
+                        Data.Organization.organizationsData.FirstOrDefault(x => x.Name == activityTypeName),
                         applicationUserId, subdivId, activityId);
                 else if(activityId == (int)Activity.Labor)
                     applicationForm = new ApplicationForm(form,
-                        db.LaborDirections.FirstOrDefault(x => x.Name == ActivityTypeName),
+                        db.LaborDirections.FirstOrDefault(x => x.Name == activityTypeName),
                         applicationUserId, subdivId, activityId);
             }
                 
@@ -58,8 +59,8 @@ namespace GomelStateUniversity_Activity.Data
 
         public async Task DeleteApplicationFormAsync(int id)
         {
-            var ApplicationFormToDelete = db.ApplicationForms.FirstOrDefault(x => x.Id == id);
-            db.ApplicationForms.Remove(ApplicationFormToDelete);
+            var applicationFormToDelete = db.ApplicationForms.FirstOrDefault(x => x.Id == id);
+            db.ApplicationForms.Remove(applicationFormToDelete);
             await db.SaveChangesAsync();
         }
 
@@ -88,6 +89,23 @@ namespace GomelStateUniversity_Activity.Data
                 .Include(x => x.ApplicationUser)
                 .Include(x => x.SubdivisionActivityType)
                 .ToListAsync();
+        }
+
+        public async Task CancelParticipationAsync(int id, string userId, string reason)
+        {
+            var applicationFormToUpdate = db.ApplicationForms.FirstOrDefault(x => x.Id == id);
+            if(userId == applicationFormToUpdate.ApplicationUserId)
+            {
+                applicationFormToUpdate.ApplicationParameters.Add("Статус", "Отменен");
+                applicationFormToUpdate.ApplicationParameters.Add("Причина", reason);
+                db.Entry(applicationFormToUpdate).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+            }
+            else
+            {
+                throw new InvalidOperationException("Доступ запрещен");
+            }
+
         }
     }
 }
