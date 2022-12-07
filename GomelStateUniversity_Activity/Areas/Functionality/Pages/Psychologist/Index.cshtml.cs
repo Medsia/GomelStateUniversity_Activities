@@ -91,6 +91,7 @@ namespace GomelStateUniversity_Activity.Areas.Functionality.Pages.Psychologist
                     Dictionary<string, Microsoft.Extensions.Primitives.StringValues> formData = new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>
                     {
                         { "UserName", User.Identity.Name },
+                        { "SubdivId", "6" },
                     };
 
                     var selectedDateTime = Input.PrevDate;

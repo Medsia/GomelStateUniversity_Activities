@@ -6,6 +6,7 @@
 }
 
 @{
+    IEnumerable<ScheduleItem> daySchedule = ViewBag.DaySchedule;
     string posterPath = @Model.PosterPath;
     if (string.IsNullOrWhiteSpace(posterPath)) posterPath = "/Img/Empty.jpg";
 }
@@ -71,21 +72,79 @@
         }
         @if(evUser.Count() == 0)
         {
-            <a asp-action="Subscribe" asp-route-id="@Model.Id" class="text-info">Записаться</a><br>
-
-            <div id="GroupSubUnfoldable" style="display: none;">
+            @if(@Model.Subdivision.Id == 3){
+                <div id="SubUnfoldable" style="display: none;">
+                    <form asp-action="Subscribe" method="post">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <input type="hidden" name="subdivId" value="@Model.Subdivision.Id" />
+                        <select name="selectedHour" class="form-control text-center mx-auto mb-1 col-md-7" >
+                            @for(int i = 10; i < 17; i++)
+                            {
+                                string time = i.ToString("00") + ":00";
+                                @if (!(@daySchedule.Select(s => s.DateTime.Hour).AsEnumerable()).Contains(i))
+                                {
+                                    <option value="@i">@time</option>
+                                }
+                                else
+                                {
+                                    if (@daySchedule.SingleOrDefault(x => x.DateTime.TimeOfDay.Hours == i && x.ApplicationUser.UserName == User.Identity.Name) != null)
+                                    {
+                                        <option disabled class="bg-success text-light">@time</option>
+                                    }
+                                    else
+                                    {
+                                        <option disabled class="bg-warning text-light">@time</option>
+                                    }
+                                }
+                            }
+                        </select>
+                        <button type="submit" class="btn text-info">Записаться</button>
+                    </form>
+                </div>
+                <a id="UnfoldSubBtn" onclick="UnfoldSub()" class="text-info">Записаться</a><br>
+            }
+            else{
+                <a asp-action="Subscribe" asp-route-id="@Model.Id" class="text-info">Записаться</a><br>
+            }
+            
+            <div id="GroupSubUnfoldable" class="mt-5 mb-3" style="display: none;">
                 <form asp-action="SubscribeGroup" method="post">
                     <input type="hidden" name="id" value="@Model.Id" />
-                    <br><input type="number" min="1" name="ticketsAmount" placeholder="Количество" class="text-center col-md-7" /><br>
-                    <button onclick="SubmitEvent" class="text-info">Записать группу</button><br>
+                    <input type="hidden" name="subdivId" value="@Model.Subdivision.Id" />
+                    @if(@Model.Subdivision.Id == 3)
+                    {
+                        <select name="selectedHour" class="form-control text-center mx-auto mb-1 col-md-7" >
+                            @for(int i = 10; i < 17; i++)
+                            {
+                                string time = i.ToString("00") + ":00";
+                                @if (!(@daySchedule.Select(s => s.DateTime.Hour).AsEnumerable()).Contains(i))
+                                {
+                                    <option value="@i">@time</option>
+                                }
+                                else
+                                {
+                                    if (@daySchedule.SingleOrDefault(x => x.DateTime.TimeOfDay.Hours == i && x.ApplicationUser.UserName == User.Identity.Name) != null)
+                                    {
+                                        <option disabled class="bg-success text-light">@time</option>
+                                    }
+                                    else
+                                    {
+                                        <option disabled class="bg-warning text-light">@time</option>
+                                    }
+                                }
+                            }
+                        </select>
+                    }
+                    <input type="number" min="1" name="ticketsAmount" placeholder="Количество" class="text-center col-md-7 mb-1" /><br>
+                    <button type="submit" class="btn text-info">Записать группу</button>
                 </form>
             </div>
-            <a id="UnfoldBtn" style="" class="text-info" onclick="Unfold()">Записать группу</a><br>
+            <a id="UnfoldGroupSubBtn" style="" class="text-info" onclick="UnfoldGroupSub()">Записать группу</a><br>
         }
         else
         {
-            <a asp-action="UnSubscribe" asp-route-id="@Model.Id" class="text-info">Отписаться</a><br>
-            <a asp-action="UnSubscribe" asp-route-id="@Model.Id" class="text-info">Отписать группу</a>
+            <a asp-action="UnSubscribe" asp-route-id="@Model.Id" asp-route-subdivId="@Model.Subdivision.Id" class="text-info">Отписаться</a><br>
+            <a asp-action="UnSubscribe" asp-route-id="@Model.Id" asp-route-subdivId="@Model.Subdivision.Id" class="text-info">Отписать группу</a>
         }
         
 
@@ -103,8 +162,14 @@
 
 <script type="text/javascript">
     
-    function Unfold() {
-        document.getElementById('GroupSubUnfoldable').setAttribute('style', '');
-        document.getElementById('UnfoldBtn').setAttribute('style', 'display: none;');
+    function UnfoldSub() {
+        document.getElementById('SubUnfoldable').setAttribute('style', '');
+        document.getElementById('UnfoldSubBtn').setAttribute('style', 'display: none;');
     }
+
+    function UnfoldGroupSub() {
+        document.getElementById('GroupSubUnfoldable').setAttribute('style', '');
+        document.getElementById('UnfoldGroupSubBtn').setAttribute('style', 'display: none;');
+    }
+
 </script>
