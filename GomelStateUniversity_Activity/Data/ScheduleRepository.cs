@@ -49,6 +49,14 @@ namespace GomelStateUniversity_Activity.Data
                                     .ToListAsync();
         }
 
+        public async Task<IEnumerable<ScheduleItem>> GetItemsByDateAsync(DateTime dateTime)
+        {
+            return await db.Schedule.Include(z => z.ApplicationUser)
+                                    .Include(z => z.Subdivision)
+                                    .Where(x => x.DateTime.Day == dateTime.Day)
+                                    .ToListAsync();
+        }
+
         public async Task UpdateItemAsync(IFormCollection form, DateTime dateTime)
         {
             var itemToUpdate = db.Schedule.FirstOrDefault( x => x.Id == int.Parse( form["Id"] ) );
