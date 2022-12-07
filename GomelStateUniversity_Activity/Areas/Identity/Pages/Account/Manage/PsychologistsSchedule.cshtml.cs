@@ -47,14 +47,14 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account
         {
             ReturnUrl = returnUrl;
 
-            scheduleItems = await _scheduleRepository.GetItemsAsync();
+            scheduleItems = await _scheduleRepository.GetItemsBySubdivIdAsync(6);
         }
 
         public async void OnPost(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
 
-            scheduleItems = await _scheduleRepository.GetItemsAsync();
+            scheduleItems = await _scheduleRepository.GetItemsBySubdivIdAsync(6);
         }
     }
 }

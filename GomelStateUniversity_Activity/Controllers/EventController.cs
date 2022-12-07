@@ -20,17 +20,19 @@ namespace GomelStateUniversity_Activity.Controllers
         private readonly ISubdivisionRepository _subdivisionRepository;
         private readonly IEventUserRepository _eventUserRepository;
         private readonly IImageRepository _imageRepository;
+        private readonly IScheduleRepository _scheduleRepository;
         public string WebRootPath { private get; set; }
 
         public EventController(IEventRepository eventRepository, ISubdivisionRepository subdivisionRepository,
             IEventUserRepository eventUserRepository, IImageRepository imageRepository,
-            IWebHostEnvironment appEnvironment)
+            IWebHostEnvironment appEnvironment, IScheduleRepository scheduleRepository)
         {
             _eventRepository = eventRepository;
             _subdivisionRepository = subdivisionRepository;
             _eventUserRepository = eventUserRepository;
             _imageRepository = imageRepository;
             WebRootPath = appEnvironment.WebRootPath;
+            _scheduleRepository = scheduleRepository;
         }
 
 
@@ -58,6 +60,11 @@ namespace GomelStateUniversity_Activity.Controllers
 
             var @event = await _eventRepository.GetEventAsync((int)id);
             if (@event == null) return NotFound();
+
+            IEnumerable<ScheduleItem> daySchedule = await _scheduleRepository.GetItemsBySubdivIdAsync(3);
+            daySchedule = daySchedule.Where(x => x.DateTime.Day == @event.DateTime.Day);
+
+            ViewBag.DaySchedule = daySchedule;
 
             return View(@event);
         }
@@ -183,13 +190,30 @@ namespace GomelStateUniversity_Activity.Controllers
         }
 
 
-        public async Task<IActionResult> Subscribe(int? id)
+        public async Task<IActionResult> Subscribe(int? id, int subdivId, int selectedHour)
         {
             if (id == null) return NotFound();
 
             try
             {
                 await _eventUserRepository.SubscribeUserAsync((int)id, User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+                if(subdivId == 3)
+                {
+                    Dictionary<string, Microsoft.Extensions.Primitives.StringValues> formData = new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>
+                    {
+                        { "UserName", User.Identity.Name },
+                        { "SubdivId", "3" },
+                    };
+
+                    var selectedDateTime = (await _eventRepository.GetEventAsync((int)id)).DateTime.Date;
+                    selectedDateTime = selectedDateTime.AddHours(selectedHour);
+
+                    FormCollection form = new FormCollection(formData);
+
+                    await _scheduleRepository.CreateItemAsync(form, selectedDateTime);
+                }
+
                 TempData["Message"] = "Вы записались. ";
             }
             catch (Exception ex)
@@ -201,11 +225,20 @@ namespace GomelStateUniversity_Activity.Controllers
         }
 
 
-        public async Task<IActionResult> UnSubscribe(int? id)
+        public async Task<IActionResult> UnSubscribe(int? id, int subdivId)
         {
             if (id == null) return NotFound();
             try
             {
+                if (subdivId == 3)
+                {
+                    var selectedEvent = await _eventRepository.GetEventAsync((int)id);
+                    var items = await _scheduleRepository.GetItemsByDateAsync(selectedEvent.DateTime);
+                    var item = items.SingleOrDefault(i => i.ApplicationUser.UserName == User.Identity.Name);
+
+                    await _scheduleRepository.DeleteItemAsync(item.Id);
+                }
+
                 await _eventUserRepository.UnSubscribeUserAsync((int)id, User.FindFirstValue(ClaimTypes.NameIdentifier));
                 TempData["Message"] = "Вы отписались. ";
             }
@@ -219,13 +252,30 @@ namespace GomelStateUniversity_Activity.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> SubscribeGroup(int? id, int ticketsAmount)
+        public async Task<IActionResult> SubscribeGroup(int? id, int ticketsAmount, int subdivId, int selectedHour)
         {
             if (id == null) return NotFound();
 
             try
             {
                 await _eventUserRepository.SubscribeUserGroupAsync((int)id, User.FindFirstValue(ClaimTypes.NameIdentifier), ticketsAmount);
+
+                if (subdivId == 3)
+                {
+                    Dictionary<string, Microsoft.Extensions.Primitives.StringValues> formData = new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>
+                    {
+                        { "UserName", User.Identity.Name },
+                        { "SubdivId", "3" },
+                    };
+
+                    var selectedDateTime = (await _eventRepository.GetEventAsync((int)id)).DateTime.Date;
+                    selectedDateTime = selectedDateTime.AddHours(selectedHour);
+
+                    FormCollection form = new FormCollection(formData);
+
+                    await _scheduleRepository.CreateItemAsync(form, selectedDateTime);
+                }
+
                 TempData["Message"] = "Группа записана. ";
             }
             catch (Exception ex)

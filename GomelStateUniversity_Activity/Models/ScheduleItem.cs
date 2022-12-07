@@ -13,21 +13,24 @@ namespace GomelStateUniversity_Activity.Models
         public int Id { get; set; }
         public DateTime DateTime { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
+        public virtual Subdivision Subdivision { get; set; }
 
         public ScheduleItem()
         {
         }
 
-        public ScheduleItem(DateTime dateTime, ApplicationUser applicationUser)
+        public ScheduleItem(DateTime dateTime, ApplicationUser applicationUser, Subdivision subdivision)
         {
             DateTime = dateTime;
             ApplicationUser = applicationUser;
+            Subdivision = subdivision;
         }
 
-        public void UpdateScheduleItem(DateTime dateTime, ApplicationUser applicationUser)
+        public void UpdateScheduleItem(DateTime dateTime, ApplicationUser applicationUser, Subdivision subdivision)
         {
             DateTime = dateTime;
             ApplicationUser = applicationUser;
+            Subdivision = subdivision;
         }
     }
 }
