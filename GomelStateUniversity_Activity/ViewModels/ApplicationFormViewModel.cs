@@ -14,6 +14,7 @@ namespace GomelStateUniversity_Activity.ViewModels
         public string ActivityTypeName { get; set; }
         public int SubdivId { get; set; }
         public int ActivityId { get; set; }
+        public DateTime? DateTime { get; set; }
 
         public ApplicationFormViewModel(IList<SportType> subdivActivityTypes, int subdivId, int activityId)
         {
@@ -24,7 +25,8 @@ namespace GomelStateUniversity_Activity.ViewModels
             SubdivId = subdivId;
             ActivityId = activityId;
         }
-        public ApplicationFormViewModel(IList<CreativityType> subdivActivityTypes, int subdivId, int activityId)
+        public ApplicationFormViewModel(IList<CreativityType> subdivActivityTypes, int subdivId,
+            int activityId)
         {
             foreach (var subdivActivityType in subdivActivityTypes)
             {
