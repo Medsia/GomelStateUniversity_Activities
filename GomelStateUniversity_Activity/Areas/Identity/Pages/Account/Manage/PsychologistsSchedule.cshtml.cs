@@ -43,18 +43,20 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account
         public IEnumerable<ScheduleItem> scheduleItems { get; set; } = Enumerable.Empty<ScheduleItem>();
 
 
-        public async void OnGet(string returnUrl = null)
+        public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
 
             scheduleItems = await _scheduleRepository.GetItemsBySubdivIdAsync(6);
+            return Page();
         }
 
-        public async void OnPost(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
 
             scheduleItems = await _scheduleRepository.GetItemsBySubdivIdAsync(6);
+            return Page();
         }
     }
 }

@@ -34,23 +34,46 @@ namespace GomelStateUniversity_Activity.Areas.Functionality.Pages.Review
             _reviewsRepository = reviewsRepository;
         }
 
+        [BindProperty]
+        public InputModel Input { get; set; }
+
+
         public string ReturnUrl { get; set; }
 
         public IEnumerable<Models.Review> reviews { get; set; } = Enumerable.Empty<Models.Review>();
+
+        public class InputModel
+        {
+            [Required]
+            [HiddenInput]
+            public int ReviewId { get; set; }
+        }
 
 
         public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
 
-            reviews = await _reviewsRepository.GetReviewsAsync();
+            reviews = await _reviewsRepository.GetReviewsAsync(true);
 
             return Page();
         }
 
-        public void OnPost(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(bool isOnReview, string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
+
+            if (ModelState.IsValid)
+            {
+                if (isOnReview)
+                {
+                    var selectedReview = await _reviewsRepository.GetReviewAsync(Input.ReviewId);
+                    await _reviewsRepository.UpdateReviewAsync(selectedReview, false);
+                }
+            }
+
+            reviews = await _reviewsRepository.GetReviewsAsync(true);
+            return Page();
         }
     }
 }

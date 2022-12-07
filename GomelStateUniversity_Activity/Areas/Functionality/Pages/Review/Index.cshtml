@@ -23,9 +23,22 @@
                     <div class="mr-3 ml-3">
                         <p class="form-control">@review.Event.Name</p>
                     </div>
-                    <div class="mr-3 ml-3">
-                        <textarea readonly rows="3" cols="100" class="form-control text-wrap mb-3" style="min-height: 40px; max-height: 200px;">@review.Text</textarea>
-                    </div>
+                    @if (User.IsInRole("admin") || User.IsInRole("supervisor"))
+                    {
+                        <div class="row ml-3">
+                            <textarea readonly rows="3" cols="100" class="form-control text-wrap mb-3 col-md-8" style="min-height: 40px; max-height: 200px;">@review.Text</textarea>
+                            <div class="form-group col-md-3 ml-5 mr-auto">
+                                <input asp-for="Input.ReviewId" value="@review.Id"/>
+                                <button class="btn btn-outline-warning mb-3" type="submit" asp-route-isOnReview="@true">На проверку</button>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="mx-3">
+                            <textarea readonly rows="3" cols="100" class="form-control text-wrap mb-3" style="min-height: 40px; max-height: 200px;">@review.Text</textarea>
+                        </div>
+                    }
                 </div>
             </div>
         }

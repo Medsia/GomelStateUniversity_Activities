@@ -14,51 +14,51 @@
 
 <div class="mb-5 row">
     <div class="col-md-6">
-        <p class="text-center">Трудовое направление</p>
+        <p class="text-center">Вступление в организацию</p>
         @foreach(var item in @Model.applicationForms)
         {
-            @foreach(var keyValue in @item.ApplicationParameters)
+            @if(item.SubdivisionActivityTypeId == 4)
             {
-                if (keyValue.Key.Contains("Трудовое направление"))
+                @foreach(var keyValue in @item.ApplicationParameters)
                 {
                     <div class="box-shadow mb-3">
                         <div class="mx-3">
                             <br>
                             <div class="">Учащийся:</div>
-                            <div class="form-control">@_userManager.FindByIdAsync(@item.ApplicationUserId).Result.FullName</div>
+                            <div class="form-control">@item.ApplicationUser.FullName</div>
                             <br>
                             <div class="">@keyValue.Key</div>
                             <div class="form-control">@keyValue.Value</div>
                             <br>
                         </div>
                     </div>
+                    break;
                 }
-                else break;
             }
         }
     </div>
 
     <div class="col-md-6">
-        <p class="text-center">Вступление в организацию</p>
+        <p class="text-center">Трудовое направление</p>
         @foreach(var item in @Model.applicationForms)
         {
-            @foreach(var keyValue in @item.ApplicationParameters)
+            @if(item.SubdivisionActivityTypeId == 5)
             {
-                if (keyValue.Key.Contains("Организация"))
+                @foreach(var keyValue in @item.ApplicationParameters)
                 {
                     <div class="box-shadow mb-3">
                         <div class="mx-3">
                             <br>
                             <div class="">Учащийся:</div>
-                            <div class="form-control">@_userManager.FindByIdAsync(@item.ApplicationUserId).Result.FullName</div>
+                            <div class="form-control">@item.ApplicationUser.FullName</div>
                             <br>
                             <div class="">@keyValue.Key</div>
                             <div class="form-control">@keyValue.Value</div>
                             <br>
                         </div>
                     </div>
+                    break;
                 }
-                else break;
             }
         }
     </div>

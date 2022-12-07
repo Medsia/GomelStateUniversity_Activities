@@ -11,27 +11,31 @@
 <h4>@ViewData["Title"]</h4>
 <hr />
 
-
-<form class="col-md-9 form-inline mb-5" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-    @foreach(var review in @Model.reviews)
-    {
+@foreach(var review in @Model.reviews)
+{
+    <form class="col-md-9 form-inline mb-5" asp-route-returnUrl="@Model.ReturnUrl" method="post">
         <div class="box-shadow">
             <div class="mb-3">
-                <div class="form-group mr-3 ml-3">
+                <div class="form-group mr-3 ml-3 mt-3">
                     <p>@review.ApplicationUser.FullName</p>
                     <hr>
-                    <p>@review.DateTime</p>
+                    <p class="form-control">@review.DateTime</p>
                 </div>
                 <div class="mr-3 ml-3">
                     <p class="form-control">@review.Event.Name</p>
                 </div>
-                <div class="mr-3 ml-3">
-                    <textarea readonly rows="3" cols="100" class="form-control text-wrap mb-3" style="min-height: 40px; max-height: 200px;">@review.Text</textarea>
+                <div class="row mx-3">
+                    <textarea readonly rows="3" cols="100" class="form-control text-wrap mb-3 col-md-9" style="min-height: 40px; max-height: 200px;">@review.Text</textarea>
+                    <div class="form-group col-md-2 ml-5 mr-auto mb-3">
+                        <input asp-for="Input.ReviewId" value="@review.Id"/>
+                        <button class="btn btn-outline-success mb-1" type="submit" asp-route-isAccepted="@true">Разрешить</button>
+                        <button class="btn btn-outline-danger" type="submit" asp-route-isAccepted="@false">Отклонить</button>
+                    </div>
                 </div>
             </div>
         </div>
-    }
-</form>
+    </form>
+}
 
 <div class="col-md-6 mx-auto">
     <a class="btn btn-outline-danger" href="javascript:history.back()">Вернуться</a>
