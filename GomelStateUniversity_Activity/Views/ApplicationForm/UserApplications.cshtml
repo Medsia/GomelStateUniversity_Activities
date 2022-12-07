@@ -45,6 +45,14 @@
                     </div>
                 }
             </td>
+            <td>
+                @if((item.SubdivisionActivityType.Id == 2 || item.SubdivisionActivityType.Id == 1)
+                    && DateTime.Parse(item.ApplicationParameters["Дата"]) > DateTime.Now.AddHours(24)
+                    && (item.ApplicationParameters.ContainsValue("Отменен") != true)) // Participant, organizator activity
+                {
+                    <a asp-action="CancelParticipation" asp-route-id="@item.Id">Отменить участие</a>
+                }            
+            </td>
         </tr>
         }
     </tbody>
