@@ -144,10 +144,7 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    foreach(var role in roles)
-                    {
-                        await _userManager.RemoveFromRoleAsync(user, role.Name);
-                    }
+                    await _userManager.RemoveFromRolesAsync(user, roles.Select(r => r.NormalizedName));
                     await _userManager.AddToRoleAsync(user, "student");
                 }
 

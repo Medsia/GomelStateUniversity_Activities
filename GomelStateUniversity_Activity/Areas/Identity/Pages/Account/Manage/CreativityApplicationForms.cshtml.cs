@@ -43,18 +43,22 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account
         public IEnumerable<ApplicationForm> applicationForms { get; set; } = Enumerable.Empty<ApplicationForm>();
 
 
-        public async void OnGet(string returnUrl = null)
+        public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
 
             applicationForms = await _applicationFormRepository.GetApplicationFormsAsync();
+            applicationForms = applicationForms.Where(a => a.SubdivisionActivityTypeId == 1 || a.SubdivisionActivityTypeId == 2);
+            return Page();
         }
 
-        public async void OnPost(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
 
             applicationForms = await _applicationFormRepository.GetApplicationFormsAsync();
+            applicationForms = applicationForms.Where(a => a.SubdivisionActivityTypeId == 1 || a.SubdivisionActivityTypeId == 2);
+            return Page();
         }
     }
 }

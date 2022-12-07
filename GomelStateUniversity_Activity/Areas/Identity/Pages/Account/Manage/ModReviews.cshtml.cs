@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using UnidecodeSharpFork;
 using GomelStateUniversity_Activity.Data;
+using Microsoft.AspNetCore.Http;
 
 namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account
 {
@@ -37,24 +38,52 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account
             _reviewsRepository = reviewsRepository;
         }
 
+        [BindProperty]
+        public InputModel Input { get; set; }
+
         public string ReturnUrl { get; set; }
 
 
         public IEnumerable<Review> reviews { get; set; } = Enumerable.Empty<Review>();
 
 
-        public async void OnGet(string returnUrl = null)
+        public class InputModel
         {
-            ReturnUrl = returnUrl;
-
-            reviews = await _reviewsRepository.GetReviewsAsync();
+            [Required]
+            [HiddenInput]
+            public int ReviewId { get; set; }
         }
 
-        public async void OnPost(string returnUrl = null)
+
+        public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
 
-            reviews = await _reviewsRepository.GetReviewsAsync();
+            reviews = await _reviewsRepository.GetReviewsAsync(false);
+
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync(bool isAccepted, string returnUrl = null)
+        {
+            ReturnUrl = returnUrl;
+
+            if (ModelState.IsValid)
+            {
+                if (isAccepted)
+                {
+                    var selectedReview = await _reviewsRepository.GetReviewAsync(Input.ReviewId);
+                    await _reviewsRepository.UpdateReviewAsync(selectedReview, true);
+                }
+                else
+                {
+                    await _reviewsRepository.DeleteReviewAsync(Input.ReviewId);
+                }
+                
+            }
+
+            reviews = _reviewsRepository.GetReviewsAsync(false).Result;
+            return Page();
         }
     }
 }

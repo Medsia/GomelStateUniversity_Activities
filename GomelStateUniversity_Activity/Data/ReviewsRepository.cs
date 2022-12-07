@@ -27,14 +27,6 @@ namespace GomelStateUniversity_Activity.Data
             await db.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Review>> GetMyReviewsAsync(string userId)
-        {
-            return await db.Reviews.Include(z => z.Event)
-                                    .Include(c => c.ApplicationUser)
-                                    .Where(x => x.ApplicationUser.Id == userId)
-                                    .OrderByDescending(d => d).ToListAsync();
-        }
-
         public async Task<Review> GetReviewAsync(int id)
         {
             return await db.Reviews.Include(z => z.Event)
@@ -49,13 +41,33 @@ namespace GomelStateUniversity_Activity.Data
                                     .OrderByDescending(d => d).ToListAsync();
         }
 
-        public async Task UpdateReviewAsync(IFormCollection form)
+        public async Task<IEnumerable<Review>> GetReviewsAsync(bool isAccepted)
+        {
+            return await db.Reviews.Include(z => z.Event)
+                                    .Include(c => c.ApplicationUser)
+                                    .Where(r => r.IsAccepted == isAccepted)
+                                    .OrderByDescending(d => d).ToListAsync();
+        }
+
+        public async Task UpdateReviewAsync(IFormCollection form, bool isAccepted)
         {
             var reviewToUpdate = db.Reviews.FirstOrDefault(x => x.Id == int.Parse(form["Id"]));
             var singleEvent = db.Events.FirstOrDefault(x => x.Name == form["Event"].ToString());
             var appUser = db.Users.FirstOrDefault(x => x.UserName == form["User"].ToString());
 
-            reviewToUpdate.UpdateReview(form, DateTime.Now, singleEvent, appUser);
+            reviewToUpdate.UpdateReview(form, DateTime.Now, singleEvent, appUser, isAccepted);
+            db.Entry(reviewToUpdate).State = EntityState.Modified;
+            await db.SaveChangesAsync();
+        }
+
+        public async Task UpdateReviewAsync(Review reviewToUpdate, bool isAccepted)
+        {
+            var text = reviewToUpdate.Text;
+            var date = reviewToUpdate.DateTime;
+            var singleEvent = reviewToUpdate.Event;
+            var appUser = reviewToUpdate.ApplicationUser;
+
+            reviewToUpdate.UpdateReview(text, date, singleEvent, appUser, isAccepted);
             db.Entry(reviewToUpdate).State = EntityState.Modified;
             await db.SaveChangesAsync();
         }
