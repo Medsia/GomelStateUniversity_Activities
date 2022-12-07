@@ -126,6 +126,14 @@ namespace GomelStateUniversity_Activity.Controllers
             return View(applicationForm);
         }
 
+        public async Task<IActionResult> UserApplications()
+        {
+            if (TempData["Message"] != null)
+            {
+                ViewData["Message"] = TempData["Message"];
+            }
+            return View(await _applicationFormRepository.GetApplicationFormsByUserIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)));
+        }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

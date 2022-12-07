@@ -29,6 +29,7 @@
 </div>
 
 <div>
+    <a asp-controller="ApplicationForm" asp-action="UserApplications" class="btn btn-outline-info ml-3 mb-3">Мои заявки</a>
     @if (User.IsInRole("student"))
     {
         <a asp-controller="Event" asp-action="MyEvents" class="btn btn-outline-info ml-3 mb-3">Мои мероприятия</a>

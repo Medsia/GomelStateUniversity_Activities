@@ -1,0 +1,51 @@
+﻿@model IEnumerable<GomelStateUniversity_Activity.Models.ApplicationForm>
+
+@{
+    ViewData["Title"] = "Мои заявки";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (ViewData["Message"] != null)
+{
+    <h3>@ViewData["Message"]</h3>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <div class="text-center">Организация</div>
+            </th>
+            <th>
+                <div class="text-center">Тип заявки</div>
+            </th>
+            <th>
+                <div class="text-center">Заявка</div>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                <div class="text-center">@item.Subdivision.Name</div>
+            </td>
+            <td>
+                <div class="text-center">@item.SubdivisionActivityType.Name</div>
+            </td>
+            <td>
+                @foreach (var keyValue in @item.ApplicationParameters)
+                {
+                    <div class="text-center">
+                        @keyValue.Key;
+                        @keyValue.Value;
+                    </div>
+                }
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

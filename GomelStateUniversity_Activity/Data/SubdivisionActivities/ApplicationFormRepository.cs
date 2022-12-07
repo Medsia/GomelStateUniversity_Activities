@@ -65,12 +65,29 @@ namespace GomelStateUniversity_Activity.Data
 
         public async Task<ApplicationForm> GetApplicationFormAsync(int id)
         {
-            return await db.ApplicationForms.FirstOrDefaultAsync(x => x.Id == id);
+            return await db.ApplicationForms
+                .Include(x => x.Subdivision)
+                .Include(x => x.ApplicationUser)
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<IEnumerable<ApplicationForm>> GetApplicationFormsAsync()
         {
-            return await db.ApplicationForms.ToListAsync();
+            return await db.ApplicationForms
+                .Include(x => x.Subdivision)
+                .Include(x => x.ApplicationUser)
+                .Include(x => x.SubdivisionActivityType)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<ApplicationForm>> GetApplicationFormsByUserIdAsync(string userId)
+        {
+            return await db.ApplicationForms
+                .Where(x => x.ApplicationUserId == userId)
+                .Include(x => x.Subdivision)
+                .Include(x => x.ApplicationUser)
+                .Include(x => x.SubdivisionActivityType)
+                .ToListAsync();
         }
     }
 }
