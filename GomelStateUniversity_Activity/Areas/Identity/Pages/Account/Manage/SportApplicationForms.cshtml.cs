@@ -37,6 +37,9 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account
             _applicationFormRepository = applicationFormRepository;
         }
 
+
+        [BindProperty]
+        public InputModel Input { get; set; }
         public string ReturnUrl { get; set; }
 
 
@@ -45,12 +48,25 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account
         public int ActivityTypeIdSports { get; } = 3;
 
 
+        public class InputModel
+        {
+            [Required]
+            [HiddenInput]
+            public int FormId { get; set; }
+        }
+
+
+        private async Task GetForms()
+        {
+            applicationForms = await _applicationFormRepository.GetApplicationFormsAsync();
+            applicationForms = applicationForms.Where(a => a.SubdivisionActivityTypeId == ActivityTypeIdSports);
+        }
+
         public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
 
-            applicationForms = await _applicationFormRepository.GetApplicationFormsAsync();
-            applicationForms = applicationForms.Where(a => a.SubdivisionActivityTypeId == ActivityTypeIdSports);
+            await GetForms();
             return Page();
         }
 
@@ -58,8 +74,12 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account
         {
             ReturnUrl = returnUrl;
 
-            applicationForms = await _applicationFormRepository.GetApplicationFormsAsync();
-            applicationForms = applicationForms.Where(a => a.SubdivisionActivityTypeId == ActivityTypeIdSports);
+            if (ModelState.IsValid && Input.FormId != 0)
+            {
+                await _applicationFormRepository.DeleteApplicationFormAsync(Input.FormId);
+            }
+
+            await GetForms();
             return Page();
         }
     }

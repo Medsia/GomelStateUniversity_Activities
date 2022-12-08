@@ -11,8 +11,8 @@
 <h4>@ViewData["Title"]</h4>
 <hr />
 
-<div class="mx-auto mb-4">
-    <a asp-area="" asp-controller="CreativityType" asp-action="Index" class="btn btn-outline-info mx-3 my-2">Редактировать список активностей</a>
+<div class="text-center mb-4">
+    <a asp-area="" asp-controller="CreativityType" asp-action="Index" class="btn btn-outline-info my-2">Редактировать список активностей</a>
 </div>
 
 <div class="mb-5 row">
@@ -32,7 +32,10 @@
                             <br>
                             <div class="">@keyValue.Key</div>
                             <div class="form-control">@keyValue.Value</div>
-                            <br>
+                            <form asp-route-returnUrl="@Model.ReturnUrl" method="post" class="mt-2 text-center">
+                                <input asp-for="Input.FormId" value="@item.Id"/>
+                                <button class="btn text-danger" type="submit">Удалить</button>
+                            </form>
                         </div>
                     </div>
                     break;
@@ -57,6 +60,10 @@
                             <br>
                             <div class="">@keyValue.Key</div>
                             <div class="form-control">@keyValue.Value</div>
+                            <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                                <input asp-for="Input.FormId" value="@item.Id"/>
+                                <a onclick="SubmitEvent">Удалить</a>
+                            </form>
                             <br>
                         </div>
                     </div>

@@ -5,13 +5,22 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h3>Введите краткую причину отмены</h3>
+<h3 class="text-center mt-5 mb-2">Введите краткую причину отмены</h3>
+<hr />
+
 <div>
 
     <form asp-action="CancelParticipation">
         <input type="hidden" asp-for="Id" />
-        <input name="reason" type="text" asp-route-reason="reason" class="form-control" required />
-        <input type="submit" value="Подтвердить" class="btn btn-danger" /> |
-        <a class="btn btn-outline-danger ml-4 mr-auto" href="javascript:history.back()">Вернуться</a>
+        @*<input name="reason" type="text" asp-route-reason="reason" class="form-control" required />*@
+        <textarea required name="reason" asp-route-reason="reason" rows="3" cols="100" class="form-control text-wrap mb-3 col-8 mx-auto" style="min-height: 40px; max-height: 250px;"></textarea>
+        <div class="text-center my-3">
+            <input type="submit" value="Подтвердить отмену" class="btn btn-danger" />
+        </div>
     </form>
+
+    <div class="text-center my-2">
+        <a class="btn btn-outline-danger" href="javascript:history.back()">Вернуться</a>
+    </div>
+
 </div>
