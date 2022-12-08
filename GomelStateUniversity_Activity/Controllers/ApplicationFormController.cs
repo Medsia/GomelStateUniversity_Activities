@@ -1,8 +1,10 @@
 ﻿using GomelStateUniversity_Activity.Data;
 using GomelStateUniversity_Activity.Models;
+using GomelStateUniversity_Activity.Notifications;
 using GomelStateUniversity_Activity.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -22,15 +24,20 @@ namespace GomelStateUniversity_Activity.Controllers
         private readonly ICreativityTypeRepository _creativityTypeRepository;
         private readonly ILaborDirectionRepository _laborDirectionRepository;
         private readonly ISubdivisionActivityTypeRepository _subdivisionActivityTypeRepository;
+        private readonly INotificationService _notificationService;
+        private readonly UserManager<ApplicationUser> _userManager;
         public ApplicationFormController(IApplicationFormRepository applicationFormRepository, ISportTypeRepository sportTypeRepository,
             ICreativityTypeRepository creativityTypeRepository, ILaborDirectionRepository laborDirectionRepository,
-            ISubdivisionActivityTypeRepository subdivisionActivityTypeRepository)
+            ISubdivisionActivityTypeRepository subdivisionActivityTypeRepository, INotificationService notificationService,
+            UserManager<ApplicationUser> userManager)
         {
             _applicationFormRepository = applicationFormRepository;
             _creativityTypeRepository = creativityTypeRepository;
             _sportTypeRepository = sportTypeRepository;
             _laborDirectionRepository = laborDirectionRepository;
             _subdivisionActivityTypeRepository = subdivisionActivityTypeRepository;
+            _notificationService = notificationService;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
@@ -91,8 +98,66 @@ namespace GomelStateUniversity_Activity.Controllers
         {
                 try
                 {
+                    var user = _userManager.FindByNameAsync(User.Identity.Name).Result;
                     await _applicationFormRepository.CreateApplicationFormAsync(form, viewModel.SubdivId,
-                        viewModel.ActivityId, User.FindFirstValue(ClaimTypes.NameIdentifier));
+                        viewModel.ActivityId, user.Id);
+
+                    var recepientUsers = new List<ApplicationUser>();
+                    string messageText = string.Empty;
+
+                if (viewModel.SubdivId == (int)SubdivisionName.Culture)
+                {
+                    if (viewModel.ActivityId == (int)Activity.Participant)
+                        messageText += "Артист: ";
+
+                    recepientUsers = await _userManager.GetUsersInRoleAsync("CULTURE") as List<ApplicationUser>;
+                }
+                    
+
+                else if (viewModel.SubdivId == (int)SubdivisionName.Sport)
+                {
+                    recepientUsers = await _userManager.GetUsersInRoleAsync("SPORTS") as List<ApplicationUser>;
+                    messageText += "Запись в секцию: ";
+                }
+                    
+
+                else if (viewModel.SubdivId == (int)SubdivisionName.Labor)
+                {
+                    if(form["ActivityType"] == "Профсоюз")
+                    {
+                        recepientUsers = await _userManager.GetUsersInRoleAsync("UNION") as List<ApplicationUser>;
+                        messageText += "Заявка на вступление: ";
+                    }
+
+                    else
+                    {
+                        if (viewModel.ActivityId == (int)Activity.Labor)
+                            messageText += " Заявка на работу: ";
+                        else if (viewModel.ActivityId == (int)Activity.Organizations)
+                            messageText += "Заявка на вступление: ";
+                        recepientUsers = await _userManager.GetUsersInRoleAsync("VOLUNTEER") as List<ApplicationUser>;
+                    }               
+                }
+
+                messageText += form["ActivityType"] + '-';
+
+                if (viewModel.ActivityTypeName != null)
+                    messageText += viewModel.ActivityTypeName;
+
+                messageText += " Студент: " + user.FullName;
+                messageText += " Телефон: " + user.PhoneNumber;
+
+                if(viewModel.DateTime != null)
+                    messageText += " Дата: " + viewModel.DateTime;
+
+                foreach (ApplicationUser recepientUser in recepientUsers)
+                {
+                    if(recepientUser.Email != null)
+                        await _notificationService.SendAsync(recepientUser.Email,
+                            "Новая Заявка", messageText);
+                }
+
+
                     TempData["Message"] = "Заявка Отправлена ";
                     return RedirectToAction("MyEvents", "Event");
                 }

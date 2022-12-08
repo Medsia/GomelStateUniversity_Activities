@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace GomelStateUniversity_Activity.Notifications
 {
-    interface INotificationService
+    public interface INotificationService
     {
-        Task SendConfirmationCodeAsync(string cellPhone, int code);
+        public Task SendAsync(string recepientEmail, string messageSubject, string messageText);
     }
 }
