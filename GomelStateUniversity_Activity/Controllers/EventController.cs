@@ -1,5 +1,6 @@
 ﻿using GomelStateUniversity_Activity.Data;
 using GomelStateUniversity_Activity.Models;
+using GomelStateUniversity_Activity.Notifications;
 using GomelStateUniversity_Activity.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -21,11 +22,13 @@ namespace GomelStateUniversity_Activity.Controllers
         private readonly IEventUserRepository _eventUserRepository;
         private readonly IImageRepository _imageRepository;
         private readonly IScheduleRepository _scheduleRepository;
+        private readonly INotificationService _notificationService;
         public string WebRootPath { private get; set; }
 
         public EventController(IEventRepository eventRepository, ISubdivisionRepository subdivisionRepository,
             IEventUserRepository eventUserRepository, IImageRepository imageRepository,
-            IWebHostEnvironment appEnvironment, IScheduleRepository scheduleRepository)
+            IWebHostEnvironment appEnvironment, IScheduleRepository scheduleRepository,
+            INotificationService notificationService)
         {
             _eventRepository = eventRepository;
             _subdivisionRepository = subdivisionRepository;
@@ -33,6 +36,7 @@ namespace GomelStateUniversity_Activity.Controllers
             _imageRepository = imageRepository;
             WebRootPath = appEnvironment.WebRootPath;
             _scheduleRepository = scheduleRepository;
+            _notificationService = notificationService;
         }
 
 
@@ -183,8 +187,14 @@ namespace GomelStateUniversity_Activity.Controllers
                 string fullPath = WebRootPath + singleEvent.PosterPath;
                 _imageRepository.DeleteImage(fullPath);
             }
-            
+
+            var eventUsers = await _eventUserRepository.GetEventUsersByEventId(id);
             await _eventRepository.DeleteEventAsync(id);
+
+            foreach(EventUser eventUser in eventUsers)
+            {
+                await _notificationService.SendAsync(eventUser.ApplicationUser.Email, "Мероприятие отменено", eventUser.Event.Name + " отменено" );
+            }            
             TempData["Message"] = "Событие удалено. ";
             return RedirectToAction(nameof(Index));
         }
