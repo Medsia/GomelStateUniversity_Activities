@@ -37,7 +37,7 @@ namespace GomelStateUniversity_Activity.Notifications
             {
 
                 //var message = new MailMessage("gsu_activities@mail.ru", recepientEmail);
-                var message = new MailMessage("gsu_activities@mail.ru", "Medsia@mail.ru");
+                var message = new MailMessage("gsu_activities@mail.ru", "gsu_activities@mail.ru");
 
                 message.Subject = messageSubject;
 
