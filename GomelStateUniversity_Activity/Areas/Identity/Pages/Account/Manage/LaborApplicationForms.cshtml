@@ -11,10 +11,13 @@
 <h4>@ViewData["Title"]</h4>
 <hr />
 
+<div class="row mx-auto mb-4">
+    <a asp-area="" asp-controller="LaborDirection" asp-action="Index" class="btn btn-outline-info mx-3 my-2">Редактировать список работ студ. отряда</a>
+</div>
 
 <div class="mb-5 row">
     <div class="col-md-6">
-        <p class="text-center">Вступление в организацию</p>
+        <strong class="text-center">Вступление в организацию</strong>
         @foreach(var item in @Model.applicationForms)
         {
             @if(item.SubdivisionActivityTypeId == 4)
@@ -23,7 +26,7 @@
                 {
                     <div class="box-shadow mb-3">
                         <div class="mx-3">
-                            <br>
+                            <div class="my-2"></div>
                             <div class="">Учащийся:</div>
                             <div class="form-control">@item.ApplicationUser.FullName</div>
                             <br>
@@ -39,7 +42,7 @@
     </div>
 
     <div class="col-md-6">
-        <p class="text-center">Трудовое направление</p>
+        <strong class="text-center">Трудовое направление</strong>
         @foreach(var item in @Model.applicationForms)
         {
             @if(item.SubdivisionActivityTypeId == 5)
@@ -48,7 +51,7 @@
                 {
                     <div class="box-shadow mb-3">
                         <div class="mx-3">
-                            <br>
+                            <div class="my-2"></div>
                             <div class="">Учащийся:</div>
                             <div class="form-control">@item.ApplicationUser.FullName</div>
                             <br>

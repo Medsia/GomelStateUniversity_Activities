@@ -42,13 +42,15 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account
 
         public IEnumerable<ApplicationForm> applicationForms { get; set; } = Enumerable.Empty<ApplicationForm>();
 
+        public int ActivityTypeIdSports { get; } = 3;
+
 
         public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
 
             applicationForms = await _applicationFormRepository.GetApplicationFormsAsync();
-            applicationForms = applicationForms.Where(a => a.SubdivisionActivityTypeId == 3);
+            applicationForms = applicationForms.Where(a => a.SubdivisionActivityTypeId == ActivityTypeIdSports);
             return Page();
         }
 
@@ -57,7 +59,7 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
 
             applicationForms = await _applicationFormRepository.GetApplicationFormsAsync();
-            applicationForms = applicationForms.Where(a => a.SubdivisionActivityTypeId == 3);
+            applicationForms = applicationForms.Where(a => a.SubdivisionActivityTypeId == ActivityTypeIdSports);
             return Page();
         }
     }

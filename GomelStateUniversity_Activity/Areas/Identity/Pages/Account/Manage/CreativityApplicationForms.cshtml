@@ -11,10 +11,13 @@
 <h4>@ViewData["Title"]</h4>
 <hr />
 
+<div class="mx-auto mb-4">
+    <a asp-area="" asp-controller="CreativityType" asp-action="Index" class="btn btn-outline-info mx-3 my-2">Редактировать список активностей</a>
+</div>
 
 <div class="mb-5 row">
     <div class="col-md-6">
-        <p class="text-center">Организация</p>
+        <strong class="text-center">Организация</strong>
         @foreach(var item in @Model.applicationForms)
         {
             @if(item.SubdivisionActivityTypeId == 1)
@@ -23,7 +26,7 @@
                 {
                     <div class="box-shadow mb-3">
                         <div class="mx-3">
-                            <br>
+                            <div class="my-2"></div>
                             <div class="">Учащийся:</div>
                             <div class="form-control">@item.ApplicationUser.FullName</div>
                             <br>
@@ -39,7 +42,7 @@
     </div>
 
     <div class="col-md-6">
-        <p class="text-center">Участие</p>
+        <strong class="text-center">Участие</strong>
         @foreach(var item in @Model.applicationForms)
         {
             @if(item.SubdivisionActivityTypeId == 2)
@@ -48,7 +51,7 @@
                 {
                     <div class="box-shadow mb-3">
                         <div class="mx-3">
-                            <br>
+                            <div class="my-2"></div>
                             <div class="">Учащийся:</div>
                             <div class="form-control">@item.ApplicationUser.FullName</div>
                             <br>
