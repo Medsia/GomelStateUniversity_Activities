@@ -1,6 +1,8 @@
 ﻿using GomelStateUniversity_Activity.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GomelStateUniversity_Activity.Data
@@ -25,10 +27,11 @@ namespace GomelStateUniversity_Activity.Data
         }
         public async Task UnSubscribeUserAsync(int eventId, string userId)
         {
-            var eventToUpdate = db.Events.Find(eventId);
-            var eventUser = db.EventUsers.Find(eventId, userId);
             try
             {
+                var eventToUpdate = db.Events.Find(eventId);
+            var eventUser = db.EventUsers.Find(eventId, userId);
+
                 if (eventToUpdate == null || eventUser == null)
                     throw new InvalidOperationException("Вы не записаны");
 
@@ -60,5 +63,13 @@ namespace GomelStateUniversity_Activity.Data
             await db.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<EventUser>> GetEventUsersByEventId(int eventId)
+        {
+            return await db.EventUsers
+                .Where(x => x.EventId == eventId)
+                .Include(x => x.ApplicationUser)
+                .Include(x => x.Event)
+                .ToListAsync();
+        }
     }
 }

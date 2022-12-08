@@ -1,5 +1,6 @@
 using GomelStateUniversity_Activity.Data;
 using GomelStateUniversity_Activity.Models;
+using GomelStateUniversity_Activity.Notifications;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -47,7 +48,8 @@ namespace GomelStateUniversity_Activity
             services.AddSingleton<IReviewsRepository, ReviewsRepository>();
             services.AddSingleton<IScheduleRepository, ScheduleRepository>();
             services.AddSingleton<IImageRepository, ImageRepository>();
-        }
+            services.AddSingleton<INotificationService, NotificationService>();
+    }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
