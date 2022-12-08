@@ -11,6 +11,9 @@
 <h4>@ViewData["Title"]</h4>
 <hr />
 
+<div class="text-center mb-4">
+     <a asp-area="" asp-controller="SportType" asp-action="Index" class="btn btn-outline-info my-2">Редактировать список спортивных секций</a>
+</div>
 
 <div class="col-md-8">
     @foreach(var item in @Model.applicationForms)
@@ -19,13 +22,16 @@
         {
             <div class="box-shadow mb-3">
                 <div class="mx-3">
-                    <br>
+                    <div class="my-2"></div>
                     <div class="">Учащийся:</div>
                     <div class="form-control">@item.ApplicationUser.FullName</div>
                     <br>
                     <div class="">@keyValue.Key</div>
                     <div class="form-control">@keyValue.Value</div>
-                    <br>
+                    <form asp-route-returnUrl="@Model.ReturnUrl" method="post" class="mt-2 text-center">
+                        <input asp-for="Input.FormId" value="@item.Id"/>
+                        <button class="btn text-danger" type="submit">Удалить</button>
+                    </form>
                 </div>
             </div>
             break;
@@ -33,7 +39,7 @@
     }
 </div>
 
-<div class="col-md-6 mx-auto">
+<div class="text-center">
     <a class="btn btn-outline-danger" href="javascript:history.back()">Вернуться</a>
 </div>
 

@@ -5,36 +5,44 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h5 class="text-center">@ViewData["Title"]</h5>
 
 @if (ViewData["Message"] != null)
 {
     <h3>@ViewData["Message"]</h3>
 }
-<p>
-    <a asp-action="Create">Добавить</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Название
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<hr />
+
+<div class="row">
+    
+    <table class="table col-md-6">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">Подробнее</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
-                </td>
+                <th>
+                    <div class="">Название</div>
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td class="text-center">
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn text-info">Удалить</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="my-5 col-md-3 text-center">
+        <a asp-action="Create" class="btn btn-outline-info my-2">Добавить</a><br />
+        <a class="btn btn-outline-danger my-2" href="javascript:history.back()">Вернуться</a>
+    </div>
+
+</div>
+

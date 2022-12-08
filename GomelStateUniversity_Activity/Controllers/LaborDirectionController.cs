@@ -1,5 +1,6 @@
 ﻿using GomelStateUniversity_Activity.Data;
 using GomelStateUniversity_Activity.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace GomelStateUniversity_Activity.Controllers
 {
+    [Authorize(Roles = "admin, supervisor, Волонтерская деятельность")]
     public class LaborDirectionController : Controller
     {
         private readonly ILaborDirectionRepository _laborDirectionRepository;
@@ -24,22 +26,6 @@ namespace GomelStateUniversity_Activity.Controllers
                 ViewData["Message"] = TempData["Message"];
             }
             return View(await _laborDirectionRepository.GetLaborDirectionsAsync());
-        }
-
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var laborDirection = await _laborDirectionRepository.GetLaborDirectionAsync((int)id);
-            if (laborDirection == null)
-            {
-                return NotFound();
-            }
-
-            return View(laborDirection);
         }
 
         public IActionResult Create()

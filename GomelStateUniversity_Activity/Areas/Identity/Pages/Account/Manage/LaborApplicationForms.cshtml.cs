@@ -37,18 +37,38 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account
             _applicationFormRepository = applicationFormRepository;
         }
 
+
+        [BindProperty]
+        public InputModel Input { get; set; }
         public string ReturnUrl { get; set; }
 
 
         public IEnumerable<ApplicationForm> applicationForms { get; set; } = Enumerable.Empty<ApplicationForm>();
 
+        public int ActivityTypeIdJoinOrg { get; } = 4;
+        public int ActivityTypeIdWork { get; } = 5;
+
+
+        public class InputModel
+        {
+            [Required]
+            [HiddenInput]
+            public int FormId { get; set; }
+        }
+
+
+        private async Task GetForms()
+        {
+            applicationForms = await _applicationFormRepository.GetApplicationFormsAsync();
+            applicationForms = applicationForms.Where(a => a.SubdivisionActivityTypeId == ActivityTypeIdJoinOrg
+                                                        || a.SubdivisionActivityTypeId == ActivityTypeIdWork);
+        }
 
         public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
 
-            applicationForms = await _applicationFormRepository.GetApplicationFormsAsync();
-            applicationForms = applicationForms.Where(a => a.SubdivisionActivityTypeId == 4 || a.SubdivisionActivityTypeId == 5);
+            await GetForms();
             return Page();
         }
 
@@ -56,8 +76,12 @@ namespace GomelStateUniversity_Activity.Areas.Identity.Pages.Account
         {
             ReturnUrl = returnUrl;
 
-            applicationForms = await _applicationFormRepository.GetApplicationFormsAsync();
-            applicationForms = applicationForms.Where(a => a.SubdivisionActivityTypeId == 4 || a.SubdivisionActivityTypeId == 5);
+            if (ModelState.IsValid && Input.FormId != 0)
+            {
+                await _applicationFormRepository.DeleteApplicationFormAsync(Input.FormId);
+            }
+
+            await GetForms();
             return Page();
         }
     }

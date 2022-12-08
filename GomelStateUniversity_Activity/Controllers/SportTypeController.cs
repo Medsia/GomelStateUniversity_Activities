@@ -1,5 +1,6 @@
 ﻿using GomelStateUniversity_Activity.Data;
 using GomelStateUniversity_Activity.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace GomelStateUniversity_Activity.Controllers
 {
+    [Authorize(Roles = "admin, supervisor, Спортивные мероприятия")]
     public class SportTypeController : Controller
     {
         private readonly ISportTypeRepository _sportTypeRepository;
@@ -24,22 +26,6 @@ namespace GomelStateUniversity_Activity.Controllers
                 ViewData["Message"] = TempData["Message"];
             }
             return View(await _sportTypeRepository.GetSportTypesAsync());
-        }
-
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var sportType = await _sportTypeRepository.GetSportTypeAsync((int)id);
-            if (sportType == null)
-            {
-                return NotFound();
-            }
-
-            return View(sportType);
         }
 
         public IActionResult Create()

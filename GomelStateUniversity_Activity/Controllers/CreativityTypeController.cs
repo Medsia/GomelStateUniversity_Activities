@@ -1,5 +1,6 @@
 ﻿using GomelStateUniversity_Activity.Data;
 using GomelStateUniversity_Activity.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace GomelStateUniversity_Activity.Controllers
 {
+    [Authorize(Roles = "admin, supervisor, Культурно-досуговая деятельность")]
     public class CreativityTypeController : Controller
     {
         private readonly ICreativityTypeRepository _creativityTypeRepository;
@@ -24,22 +26,6 @@ namespace GomelStateUniversity_Activity.Controllers
                 ViewData["Message"] = TempData["Message"];
             }
             return View(await _creativityTypeRepository.GetCreativityTypesAsync());
-        }
-
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var creativityType = await _creativityTypeRepository.GetCreativityTypeAsync((int)id);
-            if (creativityType == null)
-            {
-                return NotFound();
-            }
-
-            return View(creativityType);
         }
 
         public IActionResult Create()
