@@ -96,7 +96,11 @@ namespace GomelStateUniversity_Activity.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ApplicationFormViewModel viewModel, IFormCollection form)
         {
-                try
+            if (TempData["Message"] != null)
+            {
+                ViewData["Message"] = TempData["Message"];
+            }
+            try
                 {
                     var user = _userManager.FindByNameAsync(User.Identity.Name).Result;
                     await _applicationFormRepository.CreateApplicationFormAsync(form, viewModel.SubdivId,
@@ -159,7 +163,7 @@ namespace GomelStateUniversity_Activity.Controllers
 
 
                     TempData["Message"] = "Заявка Отправлена ";
-                    return RedirectToAction("MyEvents", "Event");
+                    return RedirectToAction(nameof(UserApplications));
                 }
                 catch (Exception ex)
                 {
