@@ -73,8 +73,7 @@
                 break;
         }
     }
-    else
-    {
+
         @if (@ViewBag.SubdivId == 1) // Culture subdiv
         {
             <a asp-controller="ApplicationForm" asp-action="Create" asp-route-subdivId=@ViewBag.SubdivId asp-route-activityId=1 class="btn btn-outline-info ml-3 mb-3">Стать организатором</a>
@@ -89,7 +88,7 @@
             <a asp-controller="ApplicationForm" asp-action="Create" asp-route-subdivId=@ViewBag.SubdivId asp-route-activityId=4 class="btn btn-outline-info ml-3 mb-3">Вступить в организацию</a>
             <a asp-controller="ApplicationForm" asp-action="Create" asp-route-subdivId=@ViewBag.SubdivId asp-route-activityId=5 class="btn btn-outline-info ml-3 mb-3">Работа в студенческом отряде</a>
         }
-    }
+
 
     <div id='calendar'></div>
 </div>
