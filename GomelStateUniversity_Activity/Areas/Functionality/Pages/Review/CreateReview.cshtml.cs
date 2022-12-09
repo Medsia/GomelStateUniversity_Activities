@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using GomelStateUniversity_Activity.Data;
 using Microsoft.AspNetCore.Http;
+using GomelStateUniversity_Activity.Notifications;
 
 namespace GomelStateUniversity_Activity.Areas.Functionality.Pages.Review
 {
@@ -25,17 +26,20 @@ namespace GomelStateUniversity_Activity.Areas.Functionality.Pages.Review
         private readonly ILogger<IndexModel> _logger;
         private readonly IReviewsRepository _reviewsRepository;
         private readonly IEventRepository _eventRepository;
+        private readonly INotificationService _notificationService;
 
         public CreateReviewModel(
             UserManager<ApplicationUser> userManager,
             ILogger<IndexModel> logger,
             IReviewsRepository reviewsRepository,
-            IEventRepository eventRepository)
+            IEventRepository eventRepository,
+            INotificationService notificationService)
         {
             _userManager = userManager;
             _logger = logger;
             _reviewsRepository = reviewsRepository;
             _eventRepository = eventRepository;
+            _notificationService = notificationService;
         }
 
 
@@ -98,6 +102,17 @@ namespace GomelStateUniversity_Activity.Areas.Functionality.Pages.Review
                 FormCollection form = new FormCollection(formData);
                 
                 await _reviewsRepository.CreateReviewAsync(form);
+
+                var recepientUsers = await _userManager.GetUsersInRoleAsync("MOD") as List<ApplicationUser>;
+                var user = _userManager.FindByNameAsync(User.Identity.Name).Result;
+
+                foreach (ApplicationUser recepientUser in recepientUsers)
+                {
+                    if (recepientUser.Email != null)
+                        await _notificationService.SendAsync(recepientUser.Email,
+                            "Новый отзыв", DateTime.Now + " Данные студента: " + user.FullName + user.PhoneNumber
+                            + " Текст отзыва студента: " + formData["Text"]);
+                }
 
                 _logger.LogInformation("User created a new review.");
             }

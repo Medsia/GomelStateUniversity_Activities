@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using GomelStateUniversity_Activity.Data;
 using Microsoft.AspNetCore.Http;
+using GomelStateUniversity_Activity.Notifications;
 
 namespace GomelStateUniversity_Activity.Areas.Functionality.Pages.Psychologist
 {
@@ -24,15 +25,18 @@ namespace GomelStateUniversity_Activity.Areas.Functionality.Pages.Psychologist
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<IndexModel> _logger;
         private readonly IScheduleRepository _scheduleRepository;
+        private readonly INotificationService _notificationService;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
             ILogger<IndexModel> logger,
-            IScheduleRepository scheduleRepository)
+            IScheduleRepository scheduleRepository,
+            INotificationService notificationService)
         {
             _userManager = userManager;
             _logger = logger;
             _scheduleRepository = scheduleRepository;
+            _notificationService = notificationService;
         }
 
         [BindProperty]
@@ -70,7 +74,7 @@ namespace GomelStateUniversity_Activity.Areas.Functionality.Pages.Psychologist
         }
 
 
-        public async void OnPostAsync(bool dateUpdated, bool timeSelected, string returnUrl = null)
+        public async Task OnPostAsync(bool dateUpdated, bool timeSelected, string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
 
@@ -101,7 +105,16 @@ namespace GomelStateUniversity_Activity.Areas.Functionality.Pages.Psychologist
 
                     await _scheduleRepository.CreateItemAsync(form, selectedDateTime);
 
-                    //TODO добавить отправку уведомления на почту
+                    var recepientUsers = await _userManager.GetUsersInRoleAsync("PSYCHOLOGIST");
+                    var user = _userManager.FindByNameAsync(User.Identity.Name).Result;
+
+                    foreach (ApplicationUser recepientUser in recepientUsers)
+                    {
+                        if (recepientUser.Email != null)
+                            await _notificationService.SendAsync(recepientUser.Email,
+                                "Запись на консультацию", " Данные студента: " + user.FullName + user.PhoneNumber
+                                + user.Email ?? "" + " Дата консультации: " + selectedDateTime);
+                    }
                 }
             }
         }
