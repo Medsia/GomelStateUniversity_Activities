@@ -8,4 +8,5 @@ events and provide feedback in the form of event reviews.
 The ability to scale the application must be implemented,
 administration function, distribution of user roles.
 
-# Admin Login/Password - Administrator/QWErty123!
+# Admin Login - Administrator
+# Admin/Supervisors passwords - QWErty123!
