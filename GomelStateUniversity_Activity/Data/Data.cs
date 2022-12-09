@@ -203,6 +203,7 @@ namespace GomelStateUniversity_Activity.Data
             new ApplicationUser{
                 Id = "e9c84823-8e52-4bce-aeab-5c3435059c5c",
                 UserName = "Administrator",
+                Name = "Administrator",
                 NormalizedUserName = "ADMINISTRATOR",
                 ConcurrencyStamp = "23d875e1-2d80-4905-a52d-8584ecb37f37",
                 SecurityStamp = "d434d335-e0c7-4433-b3b7-3dfba101a15f",

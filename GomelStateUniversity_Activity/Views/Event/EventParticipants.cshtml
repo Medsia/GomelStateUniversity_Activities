@@ -1,0 +1,38 @@
+﻿@model IEnumerable<GomelStateUniversity_Activity.Models.EventUser>
+
+@{
+    ViewData["Title"] = "Список участников";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@if (ViewData["Message"] != null)
+{
+    <h3>@ViewData["Message"]</h3>
+}
+<hr />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <div class="text-center">Участники</div>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <div class="text-center">@item.ApplicationUser.FullName</div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="text-center my-5 col-11">
+    <a class="btn btn-outline-danger" href="javascript:history.back()">Вернуться</a>
+</div>
+

@@ -328,5 +328,16 @@ namespace GomelStateUniversity_Activity.Controllers
                 return View("Index", events.Where(x => x.DateTime > DateTime.Now));
         }
 
+        [Authorize(Roles = "admin, supervisor")]
+        public async Task<IActionResult> EventParticipants(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var @eventUsers = await _eventUserRepository.GetEventUsersByEventId((int)id);
+            if (@eventUsers == null) return NotFound();
+
+            return View(@eventUsers);
+        }
+
     }
 }

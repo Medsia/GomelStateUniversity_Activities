@@ -144,14 +144,15 @@
             }
 
 
-            <td class="text-center">
-                <a asp-action="Details" asp-route-id="@item.Id" class="text-info">Подробнее</a><br>
-                @if (User.IsInRole("admin") || User.IsInRole("supervisor"))
-                {
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="text-info">Редактировать</a><br>
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="text-info">Удалить</a><br>
-                }
-            </td>
+        <td class="text-center">
+            <a asp-action="Details" asp-route-id="@item.Id" class="text-info">Подробнее</a><br>
+            @if (User.IsInRole("admin") || User.IsInRole("supervisor"))
+            {
+                <a asp-action="Edit" asp-route-id="@item.Id" class="text-info">Редактировать</a><br>
+                <a asp-action="EventParticipants" asp-route-id="@item.Id" class="text-info">Список участников</a><br>
+                <a asp-action="Delete" asp-route-id="@item.Id" class="text-info">Удалить</a><br>
+            }
+        </td>
         </tr>
         }
     </tbody>
