@@ -23,21 +23,22 @@ namespace GomelStateUniversity_Activity.Notifications
 
         }
 
+        //debug
         private void SendDebug(string recepientEmail, string messageSubject, string messageText)
         {
             Debug.WriteLine($"Получатель: {recepientEmail}");
             Debug.WriteLine($"Тема: {messageSubject}");
             Debug.WriteLine($"Сообщение: {messageText}");
         }
-
+        //release
         private void Send(string recepientEmail, string messageSubject, string messageText)
         {
 
             using (var smtpClient = new SmtpClient("smtp.mail.ru", 587))
             {
 
-                //var message = new MailMessage("gsu_activities@mail.ru", recepientEmail);
-                var message = new MailMessage("gsu_activities@mail.ru", "gsu_activities@mail.ru");
+                //var message = new MailMessage("gsu_activities@mail.ru", recepientEmail); //release
+                var message = new MailMessage("gsu_activities@mail.ru", "gsu_activities@mail.ru"); //debug
 
                 message.Subject = messageSubject;
 
