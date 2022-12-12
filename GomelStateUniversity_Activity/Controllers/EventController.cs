@@ -5,6 +5,7 @@ using GomelStateUniversity_Activity.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -23,12 +24,13 @@ namespace GomelStateUniversity_Activity.Controllers
         private readonly IImageRepository _imageRepository;
         private readonly IScheduleRepository _scheduleRepository;
         private readonly INotificationService _notificationService;
+        private readonly UserManager<ApplicationUser> _userManager;
         public string WebRootPath { private get; set; }
 
         public EventController(IEventRepository eventRepository, ISubdivisionRepository subdivisionRepository,
             IEventUserRepository eventUserRepository, IImageRepository imageRepository,
             IWebHostEnvironment appEnvironment, IScheduleRepository scheduleRepository,
-            INotificationService notificationService)
+            INotificationService notificationService, UserManager<ApplicationUser> userManager)
         {
             _eventRepository = eventRepository;
             _subdivisionRepository = subdivisionRepository;
@@ -37,6 +39,7 @@ namespace GomelStateUniversity_Activity.Controllers
             WebRootPath = appEnvironment.WebRootPath;
             _scheduleRepository = scheduleRepository;
             _notificationService = notificationService;
+            _userManager = userManager;
         }
 
 
@@ -57,6 +60,17 @@ namespace GomelStateUniversity_Activity.Controllers
                 return View(events.Where(x => x.DateTime > DateTime.Now));
         }
 
+        public async Task<IActionResult> Exhibitions()
+        {
+            if (TempData["Message"] != null) ViewData["Message"] = TempData["Message"];
+
+            ViewBag.PageName = "Выставки";
+
+            var exhibitions = await _eventRepository.GetExhibitionsAsync();
+
+            return View(exhibitions);
+        }
+
 
         public async Task<IActionResult> Details(int? id)
         {
@@ -65,12 +79,21 @@ namespace GomelStateUniversity_Activity.Controllers
             var @event = await _eventRepository.GetEventAsync((int)id);
             if (@event == null) return NotFound();
 
+            return View(@event);
+        }
+        public async Task<IActionResult> ExhibitionDetails(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var exhibition = await _eventRepository.GetEventAsync((int)id);
+            if (exhibition == null) return NotFound();
+
             IEnumerable<ScheduleItem> daySchedule = await _scheduleRepository.GetItemsBySubdivIdAsync(3);
-            daySchedule = daySchedule.Where(x => x.DateTime.Day == @event.DateTime.Day);
+            daySchedule = daySchedule.Where(x => x.DateTime.Day == exhibition.DateTime.Day);
 
             ViewBag.DaySchedule = daySchedule;
 
-            return View(@event);
+            return View(exhibition);
         }
 
 
@@ -110,6 +133,45 @@ namespace GomelStateUniversity_Activity.Controllers
             }
         }
 
+        [Authorize(Roles = "admin, supervisor")]
+        public IActionResult CreateExhibition(int subdivId = 0)
+        {
+            if (subdivId == 0) return View(new EventViewModel(_subdivisionRepository.GetSubdivisionsAsync().Result.ToList()));
+            else return View(new EventViewModel(_subdivisionRepository.GetSubdivisionAsync(subdivId).Result));
+        }
+
+        [Authorize(Roles = "admin, supervisor")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateExhibition(EventViewModel viewModel, IFormCollection form, IFormFile PosterImage, 
+            string location, string openingTime, DateTime dateTimeEnd, string description)
+        {
+            try
+            {
+                string imgPath = "";
+                if (PosterImage != null)
+                {
+                    imgPath = "/Img/" + Guid.NewGuid().ToString() + PosterImage.FileName;
+                    string fullPath = WebRootPath + imgPath;
+                    await _imageRepository.SaveImageAsync(PosterImage, fullPath);
+                }
+
+                description += " Место проведения: " + location ;
+                description += " Время открытия: " + openingTime;
+                description += " Дата окончания: " + dateTimeEnd;
+
+                await _eventRepository.CreateEventAsync(form, imgPath, description);
+
+                TempData["Message"] = "Выставка добавлена: " + form["Event.Name"];
+
+                return RedirectToAction(nameof(Exhibitions));
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] = "Произошла ошибка: " + ex.Message;
+                return View(viewModel);
+            }
+        }
 
         [Authorize(Roles = "admin, supervisor")]
         public async Task<IActionResult> Edit(int? id)
@@ -208,21 +270,6 @@ namespace GomelStateUniversity_Activity.Controllers
             {
                 await _eventUserRepository.SubscribeUserAsync((int)id, User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-                if(subdivId == 3)
-                {
-                    Dictionary<string, Microsoft.Extensions.Primitives.StringValues> formData = new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>
-                    {
-                        { "UserName", User.Identity.Name },
-                        { "SubdivId", "3" },
-                    };
-
-                    var selectedDateTime = (await _eventRepository.GetEventAsync((int)id)).DateTime.Date;
-                    selectedDateTime = selectedDateTime.AddHours(selectedHour);
-
-                    FormCollection form = new FormCollection(formData);
-
-                    await _scheduleRepository.CreateItemAsync(form, selectedDateTime);
-                }
 
                 TempData["Message"] = "Вы записались. ";
             }
@@ -231,7 +278,7 @@ namespace GomelStateUniversity_Activity.Controllers
                 TempData["Message"] = "Операция невозможна. " + ex.Message;
             }
 
-            return RedirectToAction(nameof(MyEvents));
+            return RedirectToAction(nameof(Index));
         }
 
 
@@ -240,14 +287,6 @@ namespace GomelStateUniversity_Activity.Controllers
             if (id == null) return NotFound();
             try
             {
-                if (subdivId == 3)
-                {
-                    var selectedEvent = await _eventRepository.GetEventAsync((int)id);
-                    var items = await _scheduleRepository.GetItemsByDateAsync(selectedEvent.DateTime);
-                    var item = items.SingleOrDefault(i => i.ApplicationUser.UserName == User.Identity.Name);
-
-                    await _scheduleRepository.DeleteItemAsync(item.Id);
-                }
 
                 await _eventUserRepository.UnSubscribeUserAsync((int)id, User.FindFirstValue(ClaimTypes.NameIdentifier));
                 TempData["Message"] = "Вы отписались. ";
@@ -257,7 +296,7 @@ namespace GomelStateUniversity_Activity.Controllers
                 TempData["Message"] = "Операция невозможна. " + ex.Message;
             }
 
-            return RedirectToAction(nameof(MyEvents));
+            return RedirectToAction(nameof(Index));
         }
 
 
@@ -270,6 +309,22 @@ namespace GomelStateUniversity_Activity.Controllers
             {
                 await _eventUserRepository.SubscribeUserGroupAsync((int)id, User.FindFirstValue(ClaimTypes.NameIdentifier), ticketsAmount);
 
+                TempData["Message"] = "Группа записана. ";
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] = "Операция невозможна. " + ex.Message;
+            }
+            return RedirectToAction(nameof(Index));
+        }
+        public async Task<IActionResult> SubscribeOnExhibition(int? id, int subdivId, int selectedHour)
+        {
+            if (id == null) return NotFound();
+
+            try
+            {
+                await _eventUserRepository.SubscribeUserOnExhibitionAsync((int)id, User.FindFirstValue(ClaimTypes.NameIdentifier));
+
                 if (subdivId == 3)
                 {
                     Dictionary<string, Microsoft.Extensions.Primitives.StringValues> formData = new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>
@@ -286,15 +341,98 @@ namespace GomelStateUniversity_Activity.Controllers
                     await _scheduleRepository.CreateItemAsync(form, selectedDateTime);
                 }
 
+                var recepientUsers = await _userManager.GetUsersInRoleAsync("EXHIBITION");
+
+                var student = _userManager.FindByNameAsync(User.Identity.Name).Result;
+
+                var @event = await _eventRepository.GetEventAsync((int)id);
+
+                foreach (ApplicationUser recepientUser in recepientUsers)
+                {
+                    await _notificationService.SendAsync(recepientUser.Email, "Запись на выставку",
+                        @event.Name + " Данные студента: " + student.FullName + student.PhoneNumber + " записался");
+                }
+                TempData["Message"] = "Вы записались. ";
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] = "Операция невозможна. " + ex.Message;
+            }
+
+            return RedirectToAction(nameof(Exhibitions));
+        }
+
+
+        public async Task<IActionResult> UnSubscribeFromExhibition(int? id, int subdivId)
+        {
+            if (id == null) return NotFound();
+            try
+            {
+                if (subdivId == 3)
+                {
+                    var selectedEvent = await _eventRepository.GetEventAsync((int)id);
+                    var items = await _scheduleRepository.GetItemsByDateAsync(selectedEvent.DateTime);
+                    var item = items.SingleOrDefault(i => i.ApplicationUser.UserName == User.Identity.Name);
+
+                    if(item != null)
+                        await _scheduleRepository.DeleteItemAsync(item.Id);
+                }
+
+                await _eventUserRepository.UnSubscribeUserFromExhibitionAsync((int)id, User.FindFirstValue(ClaimTypes.NameIdentifier));
+                TempData["Message"] = "Вы отписались. ";
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] = "Операция невозможна. " + ex.Message;
+            }
+
+            return RedirectToAction(nameof(Exhibitions));
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> SubscribeGroupOnExhibition(int? id, int ticketsAmount, int subdivId, int selectedHour)
+        {
+            if (id == null) return NotFound();
+
+            try
+            {
+                await _eventUserRepository.SubscribeUserGroupOnExhibitionAsync((int)id, User.FindFirstValue(ClaimTypes.NameIdentifier), ticketsAmount);
+
+                if (subdivId == 3)
+                {
+                    Dictionary<string, Microsoft.Extensions.Primitives.StringValues> formData = new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>
+                    {
+                        { "UserName", User.Identity.Name },
+                        { "SubdivId", "3" },
+                    };
+
+                    var selectedDateTime = (await _eventRepository.GetEventAsync((int)id)).DateTime.Date;
+                    selectedDateTime = selectedDateTime.AddHours(selectedHour);
+
+                    FormCollection form = new FormCollection(formData);
+
+                    await _scheduleRepository.CreateItemAsync(form, selectedDateTime);
+                }
+                var recepientUsers = await _userManager.GetUsersInRoleAsync("EXHIBITION");
+
+                var student = _userManager.FindByNameAsync(User.Identity.Name).Result;
+
+                var @event = await _eventRepository.GetEventAsync((int)id);
+
+                foreach (ApplicationUser recepientUser in recepientUsers)
+                {
+                    await _notificationService.SendAsync(recepientUser.Email, "Запись на выставку",
+                        @event.Name + " Данные студента: " + student.FullName + student.PhoneNumber + " Количество: " + ticketsAmount);
+                }
                 TempData["Message"] = "Группа записана. ";
             }
             catch (Exception ex)
             {
                 TempData["Message"] = "Операция невозможна. " + ex.Message;
             }
-            return RedirectToAction(nameof(MyEvents));
+            return RedirectToAction(nameof(Exhibitions));
         }
-
 
         public async Task<IActionResult> MyEvents()
         {

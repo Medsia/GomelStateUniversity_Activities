@@ -18,6 +18,13 @@ namespace GomelStateUniversity_Activity.Data
             db.Events.Add(newEvent);
             await db.SaveChangesAsync();
         }
+        public async Task CreateEventAsync(IFormCollection form, string imgPath, string description)
+        {
+            var subdivisionName = form["Subdivision"].ToString();
+            Event newEvent = new Event(form, db.Subdivisions.FirstOrDefault(x => x.Name == subdivisionName), imgPath, description);
+            db.Events.Add(newEvent);
+            await db.SaveChangesAsync();
+        }
 
         public async Task DeleteEventAsync(int id)
         {
@@ -79,6 +86,18 @@ namespace GomelStateUniversity_Activity.Data
             db.Entry(eventToUpdate).State = EntityState.Modified;
             await db.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<Event>> GetExhibitionsAsync()
+        {
+            return await db.Events
+                .OrderByDescending(x => x.DateTime)
+                .Include(x => x.Subdivision)
+                .Include(x => x.EventUsers)
+                .ThenInclude(s => s.ApplicationUser)
+                .Where(x => x.TicketsCount == 0)
+                .ToListAsync();
+        }
+
 
     }
 }

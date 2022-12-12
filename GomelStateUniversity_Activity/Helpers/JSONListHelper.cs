@@ -12,15 +12,14 @@ namespace GomelStateUniversity_Activity.Helpers
             var calendarEventList = new List<Event>();
             foreach (var model in events)
             {
-                var myEVent = new Event()
+                var myEvent = new Event()
                 {
                     id = model.Id,
                     title = model.Name,
                     description = model.Description,
                     start = model.DateTime,
-                    resourceId = model.Subdivision.Id
                 };
-                calendarEventList.Add(myEVent);
+                calendarEventList.Add(myEvent);
             }
             return System.Text.Json.JsonSerializer.Serialize(calendarEventList);
         }

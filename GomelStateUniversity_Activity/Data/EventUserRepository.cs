@@ -62,6 +62,42 @@ namespace GomelStateUniversity_Activity.Data
 
             await db.SaveChangesAsync();
         }
+        public async Task SubscribeUserGroupOnExhibitionAsync(int eventId, string userId, int amount)
+        {
+
+            EventUser eventUser = new EventUser(eventId, userId, amount);
+            db.EventUsers.Add(eventUser);
+
+            await db.SaveChangesAsync();
+        }
+        public async Task SubscribeUserOnExhibitionAsync(int eventId, string userId)
+        {
+
+            EventUser eventUser = new EventUser(eventId, userId);
+            db.EventUsers.Add(eventUser);
+
+            await db.SaveChangesAsync();
+        }
+        public async Task UnSubscribeUserFromExhibitionAsync(int eventId, string userId)
+        {
+            try
+            {
+
+                var eventUser = db.EventUsers.Find(eventId, userId);
+
+                if (eventUser == null)
+                    throw new InvalidOperationException("Вы не записаны");
+
+                db.EventUsers.Remove(eventUser);
+
+                await db.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
 
         public async Task<IEnumerable<EventUser>> GetEventUsersByEventId(int eventId)
         {

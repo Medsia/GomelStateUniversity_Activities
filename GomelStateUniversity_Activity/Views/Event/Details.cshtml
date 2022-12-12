@@ -72,69 +72,15 @@
         }
         @if(evUser.Count() == 0)
         {
-            @if(@Model.Subdivision.Id == 3){
-                <div id="SubUnfoldable" style="display: none;">
-                    <form asp-action="Subscribe" method="post">
-                        <input type="hidden" name="id" value="@Model.Id" />
-                        <input type="hidden" name="subdivId" value="@Model.Subdivision.Id" />
-                        <select name="selectedHour" class="form-control text-center mx-auto mb-1 col-md-7" >
-                            @for(int i = 10; i < 17; i++)
-                            {
-                                string time = i.ToString("00") + ":00";
-                                @if (!(@daySchedule.Select(s => s.DateTime.Hour).AsEnumerable()).Contains(i))
-                                {
-                                    <option value="@i">@time</option>
-                                }
-                                else
-                                {
-                                    if (@daySchedule.SingleOrDefault(x => x.DateTime.TimeOfDay.Hours == i && x.ApplicationUser.UserName == User.Identity.Name) != null)
-                                    {
-                                        <option disabled class="bg-success text-light">@time</option>
-                                    }
-                                    else
-                                    {
-                                        <option disabled class="bg-warning text-light">@time</option>
-                                    }
-                                }
-                            }
-                        </select>
-                        <button type="submit" class="btn text-info">Записаться</button>
-                    </form>
-                </div>
-                <a id="UnfoldSubBtn" onclick="UnfoldSub()" class="text-info">Записаться</a><br>
-            }
-            else{
-                <a asp-action="Subscribe" asp-route-id="@Model.Id" class="text-info">Записаться</a><br>
-            }
+ 
+            <a asp-action="Subscribe" asp-route-id="@Model.Id" class="text-info">Записаться</a><br>
+            
             
             <div id="GroupSubUnfoldable" class="mt-5 mb-3" style="display: none;">
                 <form asp-action="SubscribeGroup" method="post">
                     <input type="hidden" name="id" value="@Model.Id" />
                     <input type="hidden" name="subdivId" value="@Model.Subdivision.Id" />
-                    @if(@Model.Subdivision.Id == 3)
-                    {
-                        <select name="selectedHour" class="form-control text-center mx-auto mb-1 col-md-7" >
-                            @for(int i = 10; i < 17; i++)
-                            {
-                                string time = i.ToString("00") + ":00";
-                                @if (!(@daySchedule.Select(s => s.DateTime.Hour).AsEnumerable()).Contains(i))
-                                {
-                                    <option value="@i">@time</option>
-                                }
-                                else
-                                {
-                                    if (@daySchedule.SingleOrDefault(x => x.DateTime.TimeOfDay.Hours == i && x.ApplicationUser.UserName == User.Identity.Name) != null)
-                                    {
-                                        <option disabled class="bg-success text-light">@time</option>
-                                    }
-                                    else
-                                    {
-                                        <option disabled class="bg-warning text-light">@time</option>
-                                    }
-                                }
-                            }
-                        </select>
-                    }
+                    
                     <input type="number" min="1" name="ticketsAmount" placeholder="Количество" class="text-center col-md-7 mb-1" /><br>
                     <button type="submit" class="btn text-info">Записать группу</button>
                 </form>

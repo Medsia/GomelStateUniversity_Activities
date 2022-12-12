@@ -1,0 +1,148 @@
+﻿@model GomelStateUniversity_Activity.Models.Event
+
+@{
+    ViewData["Title"] = "Подробности мероприятия";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    IEnumerable<ScheduleItem> daySchedule = ViewBag.DaySchedule;
+    string posterPath = @Model.PosterPath;
+    if (string.IsNullOrWhiteSpace(posterPath)) posterPath = "/Img/Empty.jpg";
+}
+
+<h4 class="text-center">@ViewData["Title"]</h4>
+<hr />
+
+@if (ViewData["Message"] != null)
+{
+    <h3>@ViewData["Message"]</h3>
+}
+
+<div class="row box-shadow mb-3">
+    
+    <div class="col-sm-2 mx-auto">
+        <img class="img-thumbnail" height="200" width="200" src="@posterPath" />
+    </div>
+
+    <dl class="row col-sm-6 mx-auto">
+        <dt class="col-sm-4">
+            Название
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-4">
+            Дата
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.DateTime)
+        </dd>
+        <dt class="col-sm-4">
+            Описание
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+    </dl>
+    
+    <div class="form-group text-center col-sm-3 mt-4 mx-auto">
+        @{
+            var evUser = Model.EventUsers.Where(x => x.EventId == Model.Id)
+                                          .Where(u => u.ApplicationUser.UserName == User.Identity.Name);
+        }
+        @if(evUser.Count() == 0)
+        {
+                <div id="SubUnfoldable" style="display: none;">
+                    <form asp-action="SubscribeOnExhibition" method="post">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <select name="selectedHour" class="form-control text-center mx-auto mb-1 col-md-7" >
+                            @for(int i = 10; i < 17; i++)
+                            {
+                                string time = i.ToString("00") + ":00";
+                                @if (!(@daySchedule.Select(s => s.DateTime.Hour).AsEnumerable()).Contains(i))
+                                {
+                                    <option value="@i">@time</option>
+                                }
+                                else
+                                {
+                                    if (@daySchedule.SingleOrDefault(x => x.DateTime.TimeOfDay.Hours == i && x.ApplicationUser.UserName == User.Identity.Name) != null)
+                                    {
+                                        <option disabled class="bg-success text-light">@time</option>
+                                    }
+                                    else
+                                    {
+                                        <option disabled class="bg-warning text-light">@time</option>
+                                    }
+                                }
+                            }
+                        </select>
+                        <button type="submit" class="btn text-info">Записаться</button>
+                    </form>
+                </div>
+                <a id="UnfoldSubBtn" onclick="UnfoldSub()" class="text-info">Записаться</a><br>
+            
+            <div id="GroupSubUnfoldable" class="mt-5 mb-3" style="display: none;">
+                <form asp-action="SubscribeGroupOnExhibition" method="post">
+                    <input type="hidden" name="id" value="@Model.Id" />
+
+                        <select name="selectedHour" class="form-control text-center mx-auto mb-1 col-md-7" >
+                            @for(int i = 10; i < 17; i++)
+                            {
+                                string time = i.ToString("00") + ":00";
+                                @if (!(@daySchedule.Select(s => s.DateTime.Hour).AsEnumerable()).Contains(i))
+                                {
+                                    <option value="@i">@time</option>
+                                }
+                                else
+                                {
+                                    if (@daySchedule.SingleOrDefault(x => x.DateTime.TimeOfDay.Hours == i && x.ApplicationUser.UserName == User.Identity.Name) != null)
+                                    {
+                                        <option disabled class="bg-success text-light">@time</option>
+                                    }
+                                    else
+                                    {
+                                        <option disabled class="bg-warning text-light">@time</option>
+                                    }
+                                }
+                            }
+                        </select>
+                    
+                    <input type="number" min="1" name="ticketsAmount" placeholder="Количество" class="text-center col-md-7 mb-1" /><br>
+                    <button type="submit" class="btn text-info">Записать группу</button>
+                </form>
+            </div>
+            <a id="UnfoldGroupSubBtn" style="" class="text-info" onclick="UnfoldGroupSub()">Записать группу</a><br>
+        }
+        else
+        {
+            <a asp-action="UnSubscribeFromExhibition" asp-route-id="@Model.Id" asp-route-subdivId="@Model.Subdivision.Id" class="text-info">Отписаться</a><br>
+            <a asp-action="UnSubscribeFromExhibition" asp-route-id="@Model.Id" asp-route-subdivId="@Model.Subdivision.Id" class="text-info">Отписать группу</a>
+        }
+        
+
+
+        <a class="btn btn-outline-primary text-center mt-4 mx-5" asp-route-eventId="@Model.Id"
+           asp-area="Functionality" asp-page="/Review/CreateReview">Написать отзыв</a>
+    </div>
+    <br>
+</div>
+
+<div>
+    <a class="btn btn-outline-danger" href="javascript:history.back()">Вернуться</a>
+</div>
+
+
+<script type="text/javascript">
+    
+    function UnfoldSub() {
+        document.getElementById('SubUnfoldable').setAttribute('style', '');
+        document.getElementById('UnfoldSubBtn').setAttribute('style', 'display: none;');
+    }
+
+    function UnfoldGroupSub() {
+        document.getElementById('GroupSubUnfoldable').setAttribute('style', '');
+        document.getElementById('UnfoldGroupSubBtn').setAttribute('style', 'display: none;');
+    }
+
+</script>

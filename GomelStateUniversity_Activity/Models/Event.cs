@@ -35,6 +35,14 @@ namespace GomelStateUniversity_Activity.Models
             TicketPrice = double.Parse(form["Event.TicketPrice"].ToString());
             Subdivision = subdivision;
         }
+        public Event(IFormCollection form, Subdivision subdivision, string imgPath, string description)
+        {
+            Name = form["Event.Name"].ToString();
+            PosterPath = imgPath;
+            Description = description;
+            DateTime = DateTime.Parse(form["Event.DateTime"].ToString());
+            Subdivision = subdivision;
+        }
         public void UpdateEvent(IFormCollection form, Subdivision subdivision, string imgPath)
         {
             Name = form["Event.Name"].ToString();

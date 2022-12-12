@@ -1,0 +1,84 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> _userManager
+@inject RoleManager<IdentityRole> _roleManager
+@model IEnumerable<GomelStateUniversity_Activity.Models.Event>
+
+@{
+    ViewData["Title"] = @ViewBag.PageName;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4 class="text-center">@ViewBag.PageName</h4>
+<hr />
+
+@if(ViewData["Message"] != null)
+{
+    <p class="text-center text-info">@ViewData["Message"]</p>
+}
+
+<div class="form-inline mb-3">
+
+        <a href="javascript:history.back()" class="btn btn-outline-info ml-3 mr-3">Вернуться</a>    
+
+    @if (User.IsInRole("admin") || User.IsInRole("supervisor"))
+    {
+        <a asp-action="CreateExhibition" asp-route-subdivId="3" class="btn btn-outline-info ml-auto mr-3">Добавить выставку</a>
+    }
+
+    <div id='calendar'></div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <div class="ml-5">Постер/Афиша</div>
+            </th>
+            <th>
+                <div class="text-center">Название</div>
+            </th>
+            <th>
+                <div class="text-center">Дата</div>
+            </th>
+            <th>
+                <div class="text-center">Описание</div>
+            </th>
+            <th>
+                <div class="text-center"></div>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        string posterPath = @item.PosterPath;
+        if (string.IsNullOrWhiteSpace(posterPath)) posterPath = "/Img/Empty.jpg";
+
+        <tr class="box-shadow">
+            <td>
+                <img class="img-thumbnail" height="200" width="200" src="@posterPath" />
+            </td>
+            <td>
+                <div class="text-center">@item.Name</div>
+            </td>
+            <td>
+                <div class="text-center">@item.DateTime</div>
+            </td>
+            <td>
+                <div class="text-center">@item.Description</div>
+            </td>
+
+            <td class="text-center">
+                <a asp-action="ExhibitionDetails" asp-route-id="@item.Id" class="text-info">Подробнее</a><br>
+                @if (User.IsInRole("admin") || User.IsInRole("supervisor"))
+                {
+                    <a asp-action="EventParticipants" asp-route-id="@item.Id" class="text-info">Список участников</a><br>
+                }
+
+            </td>
+
+        </tr>
+        }
+    </tbody>
+</table>
+
