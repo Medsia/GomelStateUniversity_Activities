@@ -48,25 +48,25 @@
         switch (@ViewBag.SubdivId)
         {
             case 1:
-                if(User.IsInRole("Культурно-досуговая деятельность"))
+                if (User.IsInRole("Культурно-досуговая деятельность"))
                 {
                     <a asp-action="Create" asp-route-subdivId="@ViewBag.SubdivId" class="btn btn-outline-info ml-auto mr-3">Создать мероприятие</a>
                 }
                 break;
             case 2:
-                if(User.IsInRole("Спортивные мероприятия"))
+                if (User.IsInRole("Спортивные мероприятия"))
                 {
                     <a asp-action="Create" asp-route-subdivId="@ViewBag.SubdivId" class="btn btn-outline-info ml-auto mr-3">Создать мероприятие</a>
                 }
                 break;
             case 3:
-                if(User.IsInRole("Мероприятия и выставки"))
+                if (User.IsInRole("Мероприятия и выставки"))
                 {
                     <a asp-action="Create" asp-route-subdivId="@ViewBag.SubdivId" class="btn btn-outline-info ml-auto mr-3">Создать мероприятие</a>
                 }
                 break;
             case 4:
-                if(User.IsInRole("Волонтерская деятельность"))
+                if (User.IsInRole("Волонтерская деятельность"))
                 {
                     <a asp-action="Create" asp-route-subdivId="@ViewBag.SubdivId" class="btn btn-outline-info ml-auto mr-3">Создать мероприятие</a>
                 }
@@ -74,20 +74,24 @@
         }
     }
 
-        @if (@ViewBag.SubdivId == 1) // Culture subdiv
-        {
-            <a asp-controller="ApplicationForm" asp-action="Create" asp-route-subdivId=@ViewBag.SubdivId asp-route-activityId=1 class="btn btn-outline-info ml-3 mb-3">Стать организатором</a>
-            <a asp-controller="ApplicationForm" asp-action="Create" asp-route-subdivId=@ViewBag.SubdivId asp-route-activityId=2 class="btn btn-outline-info ml-3 mb-3">Стать артистом</a>
-        }
-        @if (@ViewBag.SubdivId == 2) // Sport subdiv
-        {
-            <a asp-controller="ApplicationForm" asp-action="Create" asp-route-subdivId=@ViewBag.SubdivId asp-route-activityId=3 class="btn btn-outline-info ml-3 mb-3">Записаться в секцию</a>
-        }
-        @if (@ViewBag.SubdivId == 4) // Labor subdiv
-        {
-            <a asp-controller="ApplicationForm" asp-action="Create" asp-route-subdivId=@ViewBag.SubdivId asp-route-activityId=4 class="btn btn-outline-info ml-3 mb-3">Вступить в организацию</a>
-            <a asp-controller="ApplicationForm" asp-action="Create" asp-route-subdivId=@ViewBag.SubdivId asp-route-activityId=5 class="btn btn-outline-info ml-3 mb-3">Работа в студенческом отряде</a>
-        }
+    @if (@ViewBag.SubdivId == 1) // Culture subdiv
+    {
+        <a asp-controller="ApplicationForm" asp-action="Create" asp-route-subdivId=@ViewBag.SubdivId asp-route-activityId=1 class="btn btn-outline-info ml-3 mb-3">Стать организатором</a>
+        <a asp-controller="ApplicationForm" asp-action="Create" asp-route-subdivId=@ViewBag.SubdivId asp-route-activityId=2 class="btn btn-outline-info ml-3 mb-3">Стать артистом</a>
+    }
+    @if (@ViewBag.SubdivId == 2) // Sport subdiv
+    {
+        <a asp-controller="ApplicationForm" asp-action="Create" asp-route-subdivId=@ViewBag.SubdivId asp-route-activityId=3 class="btn btn-outline-info ml-3 mb-3">Записаться в секцию</a>
+    }
+    @if (@ViewBag.SubdivId == 3) // MassEvents subdiv
+    {
+        <a asp-action="Exhibitions" asp-route-subdivId=@ViewBag.SubdivId class="btn btn-outline-info ml-3 mb-3">Выставки</a>
+    }
+    @if (@ViewBag.SubdivId == 4) // Labor subdiv
+    {
+        <a asp-controller="ApplicationForm" asp-action="Create" asp-route-subdivId=@ViewBag.SubdivId asp-route-activityId=4 class="btn btn-outline-info ml-3 mb-3">Вступить в организацию</a>
+        <a asp-controller="ApplicationForm" asp-action="Create" asp-route-subdivId=@ViewBag.SubdivId asp-route-activityId=5 class="btn btn-outline-info ml-3 mb-3">Работа в студенческом отряде</a>
+    }
 
 
     <div id='calendar'></div>
@@ -148,7 +152,10 @@
             <a asp-action="Details" asp-route-id="@item.Id" class="text-info">Подробнее</a><br>
             @if (User.IsInRole("admin") || User.IsInRole("supervisor"))
             {
-                <a asp-action="Edit" asp-route-id="@item.Id" class="text-info">Редактировать</a><br>
+                if (item.TicketsCount != 0)
+                {
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="text-info">Редактировать</a><br>
+                }
                 <a asp-action="EventParticipants" asp-route-id="@item.Id" class="text-info">Список участников</a><br>
                 <a asp-action="Delete" asp-route-id="@item.Id" class="text-info">Удалить</a><br>
             }

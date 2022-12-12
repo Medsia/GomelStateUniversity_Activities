@@ -55,6 +55,12 @@
     <Compile Remove="Data\Migrations\20221204142210_ApplicationFormActivityTypeId.Designer.cs" />
     <Compile Remove="Data\Migrations\20221204142509_ApplicationFormActivityTypeId.cs" />
     <Compile Remove="Data\Migrations\20221204142509_ApplicationFormActivityTypeId.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221211220148_Exhibitions.cs" />
+    <Compile Remove="Data\Migrations\20221211220148_Exhibitions.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221211220336_Exhibitions.cs" />
+    <Compile Remove="Data\Migrations\20221211220336_Exhibitions.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221212001701_Exhibition.cs" />
+    <Compile Remove="Data\Migrations\20221212001701_Exhibition.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
