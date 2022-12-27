@@ -10,3 +10,4 @@ administration function, distribution of user roles.
 
 # Admin Login - Administrator
 # Admin/Supervisors passwords - QWErty123!
+# ! update MS SQL SERVER migrations(UPDATE-DATABASE) before using
