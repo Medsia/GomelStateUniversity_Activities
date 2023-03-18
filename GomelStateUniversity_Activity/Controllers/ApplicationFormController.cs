@@ -49,13 +49,25 @@ namespace GomelStateUniversity_Activity.Controllers
             return View(await _applicationFormRepository.GetApplicationFormsAsync());
         }
 
-        public async Task<IActionResult> UserApplications()
+        public async Task<IActionResult> UserApplications(int page = 0)
         {
+            const int PageSize = 3;
+
             if (TempData["Message"] != null)
             {
                 ViewData["Message"] = TempData["Message"];
             }
-            return View(await _applicationFormRepository.GetApplicationFormsByUserIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)));
+            var userApplications = await _applicationFormRepository.GetApplicationFormsByUserIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var count = userApplications.Count();
+
+            var pagedUserApplications = userApplications.Skip(page * PageSize).Take(PageSize).ToList();
+
+            ViewBag.MaxPage = (count / PageSize) - (count % PageSize == 0 ? 1 : 0);
+
+            ViewBag.Page = page;
+
+            return View(pagedUserApplications);
         }
 
         public IActionResult Create(int subdivId, int activityId)

@@ -30,35 +30,48 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                <div class="text-center">@item.Subdivision.Name</div>
-            </td>
-            <td>
-                <div class="text-center">@item.SubdivisionActivityType.Name</div>
-            </td>
-            <td>
-                @foreach (var keyValue in @item.ApplicationParameters)
-                {
-                    <div class="text-center">
-                        @keyValue.Key;
-                        @keyValue.Value;
-                    </div>
-                }
-            </td>
-            <td>
-                @if((item.SubdivisionActivityType.Id == 2 || item.SubdivisionActivityType.Id == 1)
-                    && DateTime.Parse(item.ApplicationParameters["Дата"]) > DateTime.Now.AddHours(24)
-                    && (item.ApplicationParameters.ContainsValue("Отменен") != true)) // Participant, organizator activity
-                {
-                    <a asp-action="CancelParticipation" asp-route-id="@item.Id" class="text-info">Отменить участие</a>
-                }            
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    <div class="text-center">@item.Subdivision.Name</div>
+                </td>
+                <td>
+                    <div class="text-center">@item.SubdivisionActivityType.Name</div>
+                </td>
+                <td>
+                    @foreach (var keyValue in @item.ApplicationParameters)
+                    {
+                        <div class="text-center">
+                            @keyValue.Key;
+                            @keyValue.Value;
+                        </div>
+                    }
+                </td>
+                <td>
+                    @if ((item.SubdivisionActivityType.Id == 2 || item.SubdivisionActivityType.Id == 1)
+                       && DateTime.Parse(item.ApplicationParameters["Дата"]) > DateTime.Now.AddHours(24)
+                       && (item.ApplicationParameters.ContainsValue("Отменен") != true)) // Participant, organizator activity
+                    {
+                        <a asp-action="CancelParticipation" asp-route-id="@item.Id" class="text-info">Отменить участие</a>
+                    }
+                </td>
+            </tr>
         }
     </tbody>
 </table>
-
+@if (ViewBag.Page > 0)
+{
+<a href="@Url.Action("UserApplications", new { page = ViewBag.Page - 1 })"
+   class="btn btn-default text-center">
+    &laquo; Предыдущая
+</a>
+}
+@if (ViewBag.Page < ViewBag.MaxPage)
+{
+    <a href="@Url.Action("UserApplications", new { page = ViewBag.Page + 1 })"
+       class="btn btn-default text-center">
+        Следующая &raquo;
+    </a>
+}
 <div class="text-center my-5 col-11">
-    <a class="btn btn-outline-danger" href="javascript:history.back()">Вернуться</a>
+    <a class="btn btn-outline-danger" href="@Url.Action("Index", "Home")">Вернуться</a>
 </div>
