@@ -1,6 +1,8 @@
-﻿
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
 @{
-    ViewData["Title"] = "Календарь мероприятий";
+    ViewData["Title"] = @Localizer["Title"];
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -9,7 +11,7 @@
       document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
           var calendar = new FullCalendar.Calendar(calendarEl, {
-            locale: 'ru',
+            locale: '@Localizer["CalendarLocale"]',
             initialView: 'dayGridMonth',
             events: @Html.Raw(ViewData["Events"]),
             resources: @Html.Raw(ViewData["Resources"]),
@@ -25,11 +27,11 @@
 </script>
 
 <div class="text-center">
-    <h4 class="display-4">Гомельский Государственный Университет Имени Франциска Скорины</h4><br>
+    <h4 class="display-4">@Localizer["University"]</h4><br>
 </div>
 
 <div>
-    <a asp-controller="ApplicationForm" asp-action="UserApplications" class="btn btn-outline-info ml-3 mb-3">Мои заявки</a>
+    <a asp-controller="ApplicationForm" asp-action="UserApplications" class="btn btn-outline-info ml-3 mb-3">@Localizer["ApplicationsButton"]</a>
 
     <div id='calendar' class="text-center"></div>
 </div>
